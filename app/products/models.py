@@ -1,5 +1,6 @@
 # Import the database object (db)
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 
 from app.database import Base
 
@@ -10,10 +11,11 @@ class Product(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(128),  nullable=False, unique=True)
 
-    #relationship with Demands
-    #relationship with product family
+    product_family_id = Column(Integer, ForeignKey('product_families.id'))
+    product_family = relationship("ProductFamily", back_populates='products')
+
+    #TODO relationship with Demands
     #relationship with process
-    #db.relationship('Nome', backref='name_table' ...)
 
     def __repr__(self):
         return '<Product %r>' % (self.name)
@@ -28,9 +30,8 @@ class ProductFamily(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(128),  nullable=False, unique=True)
 
-    #relationship with product
-    #relationship with process
-    #db.relationship('Nome', backref='name_table' ...)
+    products = relationship("Product", back_populates='product_family')
+    #TODO relationship with process
 
     def __repr__(self):
         return '<Product Family %r>' % (self.name)

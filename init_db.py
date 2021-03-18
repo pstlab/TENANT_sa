@@ -27,11 +27,19 @@ ar2 = sf_mod.AggregateResource(name = 'Station 2', resources = [r3, r4])
 #products
 p1 = prod_mod.Product(name = 'Mosaico')
 
+p2 = prod_mod.Product(name = 'Row 1')
+p3 = prod_mod.Product(name = 'Row 2')
+p4 = prod_mod.Product(name = 'Row 3')
+p5 = prod_mod.Product(name = 'Row 4')
+p6 = prod_mod.Product(name = 'Row 5')
+
+#product families
+pf1 = prod_mod.ProductFamily(name = 'Rows', products = [p2, p3, p4, p5, p6])
 
 #add all
-db.add_all([r1, r2, r3, r4, r5])
+db.add_all([r1, r2, r3, r4, r5, ar1, ar2])
 
-db.add_all([p1])
+db.add_all([p1, p2, p3, p4, p5, p6, pf1])
 
 #commit and close
 db.commit()

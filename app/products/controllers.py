@@ -15,3 +15,7 @@ def hello():
 @mod_products.route('/newProd/')
 def new():
     return render_template("products/newProd.html")
+
+@mod_products.route('/newPF/')
+def newPF():
+    return render_template("products/newPF.html")
