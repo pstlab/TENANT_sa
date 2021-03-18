@@ -27,9 +27,11 @@
         {% for element in resources %}
             <div class="row">
                 <h3>{{element.name}}</h3>
+                <h2>{{element.aggregate_resource.name}}</h2>
                 <button>Edit</button>
                 <button>Remove</button>
             </div>
+            <hr size="2" color="black">
         {% endfor %}
     </div>
 </div>

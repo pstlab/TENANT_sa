@@ -21,6 +21,8 @@ r4 = sf_mod.Resource(name = 'Human Operator')
 r5 = sf_mod.Resource(name = 'Cobot')
 
 #aggregate resources
+ar1 = sf_mod.AggregateResource(name = 'Station 1', resources = [r2, r5])
+ar2 = sf_mod.AggregateResource(name = 'Station 2', resources = [r3, r4])
 
 #products
 p1 = prod_mod.Product(name = 'Mosaico')
