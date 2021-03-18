@@ -1,12 +1,14 @@
 # Import the database object (db)
-from app import db
+from sqlalchemy import Column, Integer, String
+
+from app.database import Base
 
 # Define a general resource model
-class Resource(db.Model):
+class Resource(Base):
     __tablename__ = 'resources'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128),  nullable=False, unique=True)
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(128),  nullable=False, unique=True)
 
     #isATool
     #isAnOperator

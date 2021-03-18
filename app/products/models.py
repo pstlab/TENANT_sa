@@ -1,12 +1,14 @@
 # Import the database object (db)
-from app import db
+from sqlalchemy import Column, Integer, String
+
+from app.database import Base
 
 # Define a product model
-class Product(db.Model):
+class Product(Base):
     __tablename__ = 'products'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128),  nullable=False, unique=True)
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(128),  nullable=False, unique=True)
 
     #relationship with Demands
     #relationship with product family
@@ -20,11 +22,11 @@ class Product(db.Model):
         return self.name
 
 #Define a product family model
-class ProductFamily(db.Model):
+class ProductFamily(Base):
     __tablename__ = 'product_families'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128),  nullable=False, unique=True)
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(128),  nullable=False, unique=True)
 
     #relationship with product
     #relationship with process
