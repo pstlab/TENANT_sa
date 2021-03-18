@@ -14,8 +14,8 @@ class Product(Base):
     product_family_id = Column(Integer, ForeignKey('product_families.id'))
     product_family = relationship("ProductFamily", back_populates='products')
 
-    #TODO relationship with Demands
-    #relationship with process
+    demands = relationship("Demand", back_populates='product')
+    #TODO relationship with process
 
     def __repr__(self):
         return '<Product %r>' % (self.name)
