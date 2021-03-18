@@ -1,59 +1,34 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
 
-  <head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css" />
+{% block title %} Interface {% endblock %}
 
-    <title>Interface</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block content %}
+<div class="section-title">
+    Choose what you want to manage
+</div>
 
-    <!-- include jQuery library -->
-    <script src="{{ url_for('static', filename='lib/jquery-3.4.1.js') }}"></script>
-
-    <!-- custom library -->
-
-  </head>
-
-  <body>
-    <div id="header">
-      <img class="logo" src="{{ url_for('static', filename='img/Sharework_logo_color.png') }}" />
-    </div>
-
-    <div id="content">
-      <div class="section">
-        <div class="section-title">
-          Choose what you want to manage
-        </div>
-
-        <div class="section-content">
-          <div class="section-item">
-            <div class="process">
-              <div class="navbar">
+<div class="section-content">
+    <div class="section-item">
+        <div class="process">
+            <div class="navbar">
                 <button class="navbarB">
-                  <a href="/resource">Shopfloor (resources)</a>
+                    <a href="/sf">Shopfloor (resources)</a>
                 </button>
                 <button class="navbarB">
-                  <a href="/products">Products</a>
+                    <a href="/products">Products</a>
                 </button>
                 <button class="navbarB">
-                  <a href="/demands">Demands</a>
+                    <a href="/demands">Demands</a>
                 </button>
                 <button class="navbarB">
-                  <a href="/process">Process</a>
+                    <a href="/process">Process</a>
                 </button>
                 <button class="navbarB">
-                  <a href="/operations">Operations</a>
+                    <a href="/operations">Operations</a>
                 </button>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </body>
+</div>
 
-  <div id="footer">
-  </div>
-
-</html>
+{% endblock %}
