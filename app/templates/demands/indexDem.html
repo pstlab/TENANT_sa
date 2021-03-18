@@ -21,7 +21,7 @@
     <div class="process">
         {% for element in demands %}
             <div class="row">
-                <h3>{{element.name}} <h5>Quantity: {{element.quantity}} Product: {{element.product.name}}</h5></h3>
+                <h3>{{element.name}} Type:{{element.typeDem}}<h5>Quantity: {{element.quantity}} Product: {{element.product.name}}</h5></h3>
                 <button>Edit</button>
                 <button>Remove</button>
             </div>

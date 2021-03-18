@@ -16,12 +16,12 @@ prod_mod.Base.metadata.create_all(bind=engine)
 dem_mod.Base.metadata.create_all(bind=engine)
 
 #resources
-r1 = sf_mod.Resource(name = 'blueCube')
-r2 = sf_mod.Resource(name = 'orangeCube')
-r3 = sf_mod.Resource(name = 'whiteCube')
+r1 = sf_mod.Resource(name = 'blueCube', typeRes='Tool')
+r2 = sf_mod.Resource(name = 'orangeCube', typeRes='Tool')
+r3 = sf_mod.Resource(name = 'whiteCube', typeRes='Tool')
 
-r4 = sf_mod.Resource(name = 'Human Operator')
-r5 = sf_mod.Resource(name = 'Cobot')
+r4 = sf_mod.Resource(name = 'Human Operator', typeRes='Operator')
+r5 = sf_mod.Resource(name = 'Cobot', typeRes='Operator')
 
 #aggregate resources
 ar1 = sf_mod.AggregateResource(name = 'Station 1', resources = [r2, r5])
@@ -40,7 +40,7 @@ p6 = prod_mod.Product(name = 'Row 5')
 pf1 = prod_mod.ProductFamily(name = 'Rows', products = [p2, p3, p4, p5, p6])
 
 #demand
-d1 = dem_mod.Demand(name = 'Mosaic', quantity = 1, product = p1)
+d1 = dem_mod.Demand(name = 'Mosaic', quantity = 1, product = p1, typeDem='StockOrder')
 
 #add all
 db.add_all([r1, r2, r3, r4, r5, ar1, ar2])
