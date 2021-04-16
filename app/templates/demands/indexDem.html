@@ -2,16 +2,41 @@
 
 {% block title %} Demands {% endblock %}
 
+{% block lib %}
+<script src="{{ url_for('static', filename='lib/custom/indexDem.js') }}"></script>
+{% endblock %}
+
 {% block content %}
 <div class="section-title">
-    Choose an operation
+    Enter the data of a new demand
 </div>
 
 <div class="section-content">
     <div class="section-item">
         <div class="process">
             <div class="navbar">
-                <h2> FORM </h2>
+                <div class='form'>
+                    <div class='demand-form'>
+                            <input type="text" id="new-demandname" placeholder="Enter the name of the demand" />
+                            <label>Demand type</label>
+                            <select id="new-demandtype">
+                                <option selected disabled></option>
+                                <option>CustomerOrder</option>
+                                <option>EngineeringWorkOrder</option>
+                                <option>StockOrder</option>
+                            </select>
+                            <label>Product</label>
+                            <select id="new-demandproduct">
+                                <option selected disabled></option>
+                                <option>Prova</option>
+                            </select>
+                            <label>Quantity </label>
+                            <input type="number" id="new-demandquantity"/>
+                    </div> 
+                </div>
+            </div>
+            <div class="navbar">
+                <button type="button" id="sub">Save demand</button>
             </div>
         </div>
     </div>
@@ -21,9 +46,12 @@
     <div class="process">
         {% for element in demands %}
             <div class="row">
-                <h3>{{element.name}} Type:{{element.typeDem}}<h5>Quantity: {{element.quantity}} Product: {{element.product.name}}</h5></h3>
-                <button>Edit</button>
-                <button>Remove</button>
+                <label class="el-name">{{element.name}}</label>
+                <h3>Type:{{element.typeDem}}<h5>Quantity: {{element.quantity}} Product: {{element.product.name}}</h5></h3>
+                
+                <button class="editDem">Edit</button>
+                
+                <button class='removeDem'>Remove</button>
             </div>
             <hr size="2" color="black">
         {% endfor %}
