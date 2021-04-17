@@ -9,6 +9,8 @@ from app.products import models as prod_mod
 # Define the blueprint: 'demands', set its url prefix: app.url/demands
 mod_demands = Blueprint('demands', __name__, url_prefix='/demands')
 
+#welcome page of the demands. Display the list and a form from which add a new demand(post request), 
+#remove a demand(post request with id), modify a demand(new page)
 @mod_demands.route('/', methods=['GET'])
 def hello():
     dem = app.session.query(Demand).all()
@@ -29,6 +31,7 @@ def new():
         demand = Demand(name = name, quantity = quantity, product=p1, typeDem=typeDem)
         app.session.add(demand)
 
+    #remove a demand
     if(data[-1] == "removeDem"):
         demId = data[0]
         app.session.query(Demand).filter_by(id=demId).delete()
@@ -37,6 +40,7 @@ def new():
     dem = app.session.query(Demand).all()
     return render_template("demands/indexDem.html", demands=dem)
 
+#edit a demand in the db. welcome page and request (post) after the user data input
 @mod_demands.route('/editDem/<demId>', methods=['GET'])
 def edit(demId):
     dem = app.session.query(Demand).filter_by(id=demId).first()
