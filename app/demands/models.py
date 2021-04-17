@@ -13,7 +13,9 @@ class Demand(Base):
     quantity = Column(Integer)
     typeDem = Column(Enum('CustomerOrder', 'EngineeringWorkOrder', 'StockOrder'))
     
+    # ManyToOne
     product_id = Column(Integer, ForeignKey('products.id'))
     product = relationship("Product", back_populates='demands')
-
-    #TODO relationship col processo
+    # ManyToOne without bidirectional behavior
+    #process_id = Column(Integer, ForeignKey('processes.id'))
+    #process = relationship("Process")

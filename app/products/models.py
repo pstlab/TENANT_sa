@@ -11,11 +11,13 @@ class Product(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(128),  nullable=False, unique=True)
 
+    # ManyToOne
     product_family_id = Column(Integer, ForeignKey('product_families.id'))
     product_family = relationship("ProductFamily", back_populates='products')
-
+    # OneToMay
     demands = relationship("Demand", back_populates='product')
-    #TODO relationship with process
+    # OneToMany
+    processes = relationship("Process", back_populates='product')
 
     def __repr__(self):
         return '<Product %r>' % (self.name)
@@ -30,8 +32,11 @@ class ProductFamily(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(128),  nullable=False, unique=True)
 
+    # OneToMany
     products = relationship("Product", back_populates='product_family')
-    #TODO relationship with process
+    # OneToOne
+    process_id = Column(Integer, ForeignKey('processes.id'))
+    process = relationship("Process", back_populates='product_family')
 
     def __repr__(self):
         return '<Product Family %r>' % (self.name)
