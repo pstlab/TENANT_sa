@@ -8,7 +8,7 @@
 
 {% block content %}
 <div class="section-title">
-  Enter the data of the new product
+  Modify the data of the product
 </div>
 
 <div class="section-content">
@@ -19,14 +19,15 @@
                 <div class='form'>
                     <div class='product-form'>
     -->
+    <input id="productid" hidden value={{product.id}}></input>
     <div>
         <label>Product name</label>
-        <input type="text" id="new-productname" />
+        <input type="text" id="productname" value={{product.name}} />
     </div>
     <div>
         <label>Product family</label>
-        <select id="new-productfamily">
-            <option selected disabled></option>
+        <select id="productfamily">
+            <option selected disabled>{{product.product_family}}</option>
             <option>Prova</option>
         </select>
     </div>
@@ -39,7 +40,7 @@
 <a href='/products/'>
 <button>Back</button>
 </a>
-<button type="button" id="sub">Save product</button>
+<button type="button" id="edit">Save product</button>
 <!--
 </div>
 </div>

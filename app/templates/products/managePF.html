@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %} Product Families {% endblock %}
+
+{% block lib %}
+<script src="{{ url_for('static', filename='lib/custom/indexProdFamilies.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="section-title">
+  Add a new product family
+</div>
+<div class="section-content">
+  <div class="section-item">
+    <div class="process">
+      <div class="navbar">
+        <div class='form'>
+          <div class='demand-form'>
+            <label>Product Family name</label>
+            <input type="text" id="new-pfname" />
+            <label>Default process</label>
+            <select id="new-defaultpf">
+              <option selected disabled></option>
+              <option>CustomerOrder</option>
+              <option>EngineeringWorkOrder</option>
+              <option>StockOrder</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="navbar">
+        <button type="button" id="sub">Save product family</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-item">
+  <div class="process">
+      {% for element in families %}
+          <div class="row">
+            <label>Product family name</label>
+            <input type="text" class="pfname" value={{element.name}} />
+            <label>Default process</label>
+            <select class="defaultpf">
+              <!--TODO <option selected disabled>{{element.process}}</option> -->
+              <option selected disabled></option>
+              <option>CustomerOrder</option>
+              <option>EngineeringWorkOrder</option>
+              <option>StockOrder</option>
+            </select>
+
+            <label class="id" hidden>{{element.id}}</label>
+            <button class='removePF'>Remove</button>
+          </div>
+          <hr size="2" color="black">
+      {% endfor %}
+  </div>
+</div>
+{% endblock %}

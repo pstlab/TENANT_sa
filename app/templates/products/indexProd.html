@@ -2,6 +2,10 @@
 
 {% block title %} Products {% endblock %}
 
+{% block lib %}
+<script src="{{ url_for('static', filename='lib/custom/indexProd.js') }}"></script>
+{% endblock %}
+
 {% block content %}
 <div class="section-title">
     Choose an operation
@@ -15,7 +19,7 @@
                     <a href="/products/newProd">Add a new product</a>
                 </button>
                 <button class="navbarB">
-                    <a href="/products/newPF">Add a new product family</a>
+                    <a href="/products/PF">Manage product families</a>
                 </button>
             </div>
         </div>
@@ -27,9 +31,14 @@
         {% for element in products %}
             <div class="row">
                 <h3>{{element.name}}</h3>
+                {% if element.product_family is not none %}
                 <h4>Product Family: {{element.product_family.name}}</h4>
-                <button>Edit</button>
-                <button>Remove</button>
+                {% endif %}
+                <label class="id" hidden>{{element.id}}</label>
+                <a href='/products/editProd/{{element.id}}'>
+                    <button>Edit</button>
+                </a>
+                <button class='removeProd'>Remove</button>
             </div>
             <hr size="2" color="black">
         {% endfor %}
