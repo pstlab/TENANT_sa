@@ -24,7 +24,7 @@ $(document).ready(function() {
         else {
             var data = [];
             data.push({'name':demandName, 'type':type, 'product':product, 'quantity':quantity});
-            data.push('new')
+            data.push('new');
             //create the json data
             var js_data = JSON.stringify(data);
             $.ajax({                        
@@ -43,9 +43,9 @@ $(document).ready(function() {
     *   Delete a demand
     ***************************************/
     $(".removeDem").click(function() {
-        var demName = $(this).siblings(".el-name").html();
+        var demId = $(this).siblings(".id").html();
 
-        var tmp =[demName, "removeDem"];
+        var tmp =[demId, "removeDem"];
         //create the json data
         var js_data = JSON.stringify(tmp);
         $.ajax({                        
@@ -62,21 +62,37 @@ $(document).ready(function() {
     /**************************************
     *   Edit a demand
     ***************************************/
-     $(".editDem").click(function() {
-        var demName = $(this).siblings(".el-name").html();
+     $("#edit").click(function() {
+        //take the elements
+        var demandId = document.getElementById('demandid').value;
 
-        var tmp =[demName, "editDem"];
-        //create the json data
-        var js_data = JSON.stringify(tmp);
-        $.ajax({                        
-            url: '/demands/',
-            type : 'post',
-            contentType: 'application/json; charset=utf-8',
-            dataType : 'json',
-            data : js_data
-        }).always(function() {
-            location.href = "/demands/editDem/";
-        });
+        var demandName = document.getElementById('demandname').value;
+        var type = document.getElementById('demandtype').value;
+        var product = document.getElementById('demandproduct').value;
+        var quantity = document.getElementById('demandquantity').value;
+
+        if (demandName === "" || type === "" || product === "" || quantity === "") {
+            window.alert("Enter all the information of the demand!");
+        }
+
+        else {
+            var data = [];
+            data.push(demandId)
+            data.push({'name':demandName, 'type':type, 'product':product, 'quantity':quantity});
+
+            var myurl = '/demands/editDem/' + demandId;
+            //create the json data
+            var js_data = JSON.stringify(data);
+            $.ajax({                        
+                url: myurl,
+                type : 'POST',
+                contentType: 'application/json; charset=utf-8',
+                dataType : 'json',
+                data : js_data
+            }).always(function(){
+                location.replace("/demands/");
+            });
+        }
     });
 
     

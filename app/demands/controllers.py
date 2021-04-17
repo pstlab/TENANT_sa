@@ -30,19 +30,37 @@ def new():
         app.session.add(demand)
 
     if(data[-1] == "removeDem"):
-        name = data[0]
-        app.session.query(Demand).filter_by(name=name).delete()
-
-    if(data[-1] == "editDem"):
-        name = data[0]
-        dem = app.session.query(Demand).filter_by(name=name).first()
-        return redirect(url_for('demands.edit', demand = dem))
-
+        demId = data[0]
+        app.session.query(Demand).filter_by(id=demId).delete()
+        
     app.session.commit()
     dem = app.session.query(Demand).all()
     return render_template("demands/indexDem.html", demands=dem)
 
-@mod_demands.route('/editDem/')
-def edit():
-    dem = request.args.get('demand', None)
+@mod_demands.route('/editDem/<demId>', methods=['GET'])
+def edit(demId):
+    dem = app.session.query(Demand).filter_by(id=demId).first()
     return render_template("demands/modDem.html", demand=dem)
+
+@mod_demands.route('/editDem/<demId>', methods=['POST'])
+def editDem(demId):
+    #get the data from user input
+    data = request.json
+    # Get the new values
+    name = data[1]['name']
+    typeDem = data[1]['type']
+    product = data[1]['product']
+    quantity = data[1]['quantity']
+    demandId = data[0]
+
+    #get the database values and update them
+    dem = app.session.query(Demand).filter_by(id=demandId).first()
+    dem.name = name
+    dem.quantity = quantity
+    #TODO il cazzo di prodotto
+    #dem.product = product
+    dem.typeDem = typeDem
+
+    app.session.commit()
+    dems = app.session.query(Demand).all()
+    return render_template("demands/indexDem.html", demands=dems)

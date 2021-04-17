@@ -48,9 +48,11 @@
             <div class="row">
                 <label class="el-name">{{element.name}}</label>
                 <h3>Type:{{element.typeDem}}<h5>Quantity: {{element.quantity}} Product: {{element.product.name}}</h5></h3>
-                
-                <button class="editDem">Edit</button>
-                
+                <label class="id" hidden>{{element.id}}</label>
+
+                <a href='/demands/editDem/{{element.id}}'>
+                    <button>Edit</button>
+                </a>
                 <button class='removeDem'>Remove</button>
             </div>
             <hr size="2" color="black">
