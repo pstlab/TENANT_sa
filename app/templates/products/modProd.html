@@ -27,7 +27,7 @@
     <div>
         <label>Product family</label>
         <select id="productfamily">
-            <option selected disabled>{{product.product_family}}</option>
+            <option selected disabled value={{product.product_family.id}}>{{product.product_family}}</option>
         </select>
     </div>
         <!-- 
@@ -54,5 +54,6 @@
     '{% for element in prodfamilies %}'
         $('#productfamily').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
     '{% endfor %}'
+    $('#productfamily').append('<option value=none> None </option>');
 </script>
 {% endblock %}

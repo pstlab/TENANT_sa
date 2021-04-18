@@ -1,11 +1,5 @@
 // function to execute on page load
 $(document).ready(function() {
-
-    /**************************************
-    *   Add the processes to the list
-    ***************************************/
-   //TODO
-    
         
     /**************************************
     *   Submit a product family

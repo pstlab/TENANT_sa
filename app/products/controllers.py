@@ -68,7 +68,7 @@ def editP(prodId):
     prod = app.session.query(Product).filter_by(id=productId).first()
     prod.name = name
     pf = app.session.query(ProductFamily).filter_by(id=pfId).first()
-    prod.product_family = productFamily
+    prod.product_family = pf
 
     app.session.commit()
     prods = app.session.query(Product).all()
