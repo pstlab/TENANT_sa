@@ -1,12 +1,6 @@
 // function to execute on page load
 $(document).ready(function() {
-
-    /**************************************
-    *   Add the product families to the list
-    ***************************************/
-   //TODO
     
-        
     /**************************************
     *   Submit a product
     ***************************************/

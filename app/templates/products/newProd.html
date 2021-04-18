@@ -27,7 +27,6 @@
         <label>Product family</label>
         <select id="new-productfamily">
             <option selected disabled></option>
-            <option>Prova</option>
         </select>
     </div>
         <!-- 
@@ -46,4 +45,13 @@
 </div>
 -->
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $("#new-productfamily").find("option:gt(0)").remove();
+    '{% for element in prodfamilies %}'
+        $('#new-productfamily').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+    '{% endfor %}'
+</script>
 {% endblock %}

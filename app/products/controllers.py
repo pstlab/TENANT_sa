@@ -29,18 +29,18 @@ def remove():
 #add a new product to the db. welcome page and request (post) after the user data input
 @mod_products.route('/newProd/', methods=['GET'])
 def new():
-    return render_template("products/newProd.html")
+    pf = app.session.query(ProductFamily).all()
+    return render_template("products/newProd.html", prodfamilies=pf)
 
 @mod_products.route('/newProd/', methods=['POST'])
 def newP():
     data = request.json
     # Add a new product
     name = data[0]['name']
-    productFamily = data[0]['productfamily']
+    pfId = data[0]['productfamily']
     
-    # TODO cambiare la product family con la lista vera
-    product = Product(name = name)
-    print(product)
+    pf = app.session.query(ProductFamily).filter_by(id=pfId).first()
+    product = Product(name = name, product_family = pf)
     app.session.add(product)
     
     app.session.commit()
@@ -52,7 +52,8 @@ def newP():
 @mod_products.route('/editProd/<prodId>', methods=['GET'])
 def edit(prodId):
     prod = app.session.query(Product).filter_by(id=prodId).first()
-    return render_template("products/modProd.html", product = prod)
+    pf = app.session.query(ProductFamily).all()
+    return render_template("products/modProd.html", product = prod, prodfamilies=pf)
 
 @mod_products.route('/editProd/<prodId>', methods=['POST'])
 def editP(prodId):
@@ -60,14 +61,14 @@ def editP(prodId):
     data = request.json
     # Get the new values
     name = data[1]['name']
-    productFamily = data[1]['productfamily']
+    pfId = data[1]['productfamily']
     productId = data[0]
 
     #get the database values and update them
     prod = app.session.query(Product).filter_by(id=productId).first()
     prod.name = name
-    #TODO la product family
-    #prod.productfamily = productFamily
+    pf = app.session.query(ProductFamily).filter_by(id=pfId).first()
+    prod.product_family = productFamily
 
     app.session.commit()
     prods = app.session.query(Product).all()
