@@ -37,7 +37,6 @@
                             <label>Product</label>
                             <select id="demandproduct">
                                 <option selected disabled>{{demand.product.name}}</option>
-                                <option>Prova</option>
                             </select>
                         </div>
                         <div>
@@ -60,4 +59,13 @@
     </div>
     -->
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $("#demandproduct").find("option:gt(0)").remove();
+    '{% for element in products %}'
+        $('#demandproduct').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+    '{% endfor %}'
+</script>
 {% endblock %}

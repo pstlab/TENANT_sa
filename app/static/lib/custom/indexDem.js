@@ -1,11 +1,5 @@
 // function to execute on page load
-$(document).ready(function() {
-
-    /**************************************
-    *   Add the products to the list
-    ***************************************/
-   //TODO
-    
+$(document).ready(function() {    
         
     /**************************************
     *   Submit a demand
