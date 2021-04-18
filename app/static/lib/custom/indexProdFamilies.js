@@ -7,7 +7,7 @@ $(document).ready(function() {
     $("#sub").click(function(){
         //take the elements
         var pfName = document.getElementById('new-pfname').value;
-        //TODO aggiungere il processo di default
+        var defaultP = document.getElementById('new-defaultpf').value;
 
         if (pfName === "") {
             window.alert("Enter all the information of the product family!");
@@ -15,7 +15,7 @@ $(document).ready(function() {
 
         else {
             var data = [];
-            data.push({'name':pfName});
+            data.push({'name':pfName, 'defaultp':defaultP});
             data.push('new');
             //create the json data
             var js_data = JSON.stringify(data);
@@ -62,7 +62,7 @@ $(document).ready(function() {
         var defProcess = $(this).siblings(".defaultpf")[0].value;
 
         if (name === "") {
-            window.alert("Enter all the information of the product!");
+            window.alert("Enter all the information of the product family!");
         }
 
         else {
@@ -84,4 +84,32 @@ $(document).ready(function() {
         }
     });
     //Change the process
+    $(".defaultpf").change(function(){
+        //Take the elements
+        var pfId = $(this).siblings(".id").html();
+        var name = $(this).siblings(".pfname").val();
+        var defProcess = this.value;
+
+        if (name === "") {
+            window.alert("Enter all the information of the product family!");
+        }
+
+        else {
+            var data = [];
+            data.push(pfId);
+            data.push({'name':name, 'process':defProcess});
+            data.push('edit')
+            //create the json data
+            var js_data = JSON.stringify(data);
+            $.ajax({                        
+                url: '/products/PF/',
+                type : 'post',
+                contentType: 'application/json; charset=utf-8',
+                dataType : 'json',
+                data : js_data
+            }).always(function() {
+                location.replace("/products/PF/");
+            });
+        }
+    });
 });

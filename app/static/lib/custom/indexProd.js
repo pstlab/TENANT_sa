@@ -8,7 +8,6 @@ $(document).ready(function() {
         //take the elements
         var productName = document.getElementById('new-productname').value;
         var productFamily = document.getElementById('new-productfamily').value;
-        //TODO aggiungere le product families
 
         if (productName === "") {
             window.alert("Enter all the information of the product!");

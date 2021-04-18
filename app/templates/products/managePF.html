@@ -21,9 +21,6 @@
             <label>Default process</label>
             <select id="new-defaultpf">
               <option selected disabled></option>
-              <option>CustomerOrder</option>
-              <option>EngineeringWorkOrder</option>
-              <option>StockOrder</option>
             </select>
           </div>
         </div>
@@ -43,11 +40,7 @@
             <input type="text" class="pfname" value={{element.name}} />
             <label>Default process</label>
             <select class="defaultpf">
-              <!--TODO <option selected disabled>{{element.process}}</option> -->
-              <option selected disabled></option>
-              <option>CustomerOrder</option>
-              <option>EngineeringWorkOrder</option>
-              <option>StockOrder</option>
+              <option selected disabled value={{element.process.id}}>{{element.process}}</option>
             </select>
 
             <label class="id" hidden>{{element.id}}</label>
@@ -57,4 +50,17 @@
       {% endfor %}
   </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $("#new-defaultpf").find("option:gt(0)").remove();
+    $(".defaultpf").find("option:gt(0)").remove();
+    '{% for element in processes %}'
+        $('#new-defaultpf').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+        $('.defaultpf').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+    '{% endfor %}'
+    $('#new-defaultpf').append('<option value=none> None </option>');
+    $('.defaultpf').append('<option value=none> None </option>');
+</script>
 {% endblock %}

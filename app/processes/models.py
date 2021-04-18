@@ -24,3 +24,6 @@ class Process(Base):
     product_family = relationship("ProductFamily", uselist=False, back_populates='process')
 
     #TODO operazioni
+
+    def __str__(self):
+        return self.name

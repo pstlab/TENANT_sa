@@ -4,6 +4,8 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from .models import Product, ProductFamily
 from app import app
 
+from app.processes.models import Process
+
 # Define the blueprint: 'products', set its url prefix: app.url/products
 mod_products = Blueprint('products', __name__, url_prefix='/products')
 
@@ -81,7 +83,8 @@ def editP(prodId):
 @mod_products.route('/PF/', methods=['GET'])
 def manage():
     prodFs = app.session.query(ProductFamily).all()
-    return render_template("products/managePF.html", families = prodFs)
+    procs = app.session.query(Process).all()
+    return render_template("products/managePF.html", families = prodFs, processes = procs)
 
 @mod_products.route('/PF/', methods=['POST'])
 def managePF():
@@ -89,8 +92,10 @@ def managePF():
     # Add a new product family
     if(data[-1] == "new"):
         name = data[-2]['name']
+        defaultP = data[-2]['defaultp']
 
-        family = ProductFamily(name = name)
+        p = app.session.query(Process).filter_by(id=defaultP).first()
+        family = ProductFamily(name = name, process=p)
         app.session.add(family)
 
     #remove a product family
@@ -102,14 +107,16 @@ def managePF():
     if(data[-1] == "edit"):
         #get data from input
         name = data[1]['name']
-        #process = data[1]['process']
+        process = data[1]['process']
         #get the database values and update them
         pfId = data[0]
         pf = app.session.query(ProductFamily).filter_by(id=pfId).first()
+        p = app.session.query(Process).filter_by(id=process).first()
 
         pf.name = name
-        #pf.process = process
+        pf.process = p
         
     app.session.commit()
     prodFs = app.session.query(ProductFamily).all()
-    return render_template("products/managePF.html", families = prodFs)
+    procs = app.session.query(Process).all()
+    return render_template("products/managePF.html", families = prodFs, processes = procs)
