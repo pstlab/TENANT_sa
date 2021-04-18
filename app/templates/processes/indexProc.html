@@ -2,6 +2,10 @@
 
 {% block title %} Processes {% endblock %}
 
+{% block lib %}
+<script src="{{ url_for('static', filename='lib/custom/indexProc.js') }}"></script>
+{% endblock %}
+
 {% block content %}
 <div class="section-title">
     Choose an operation
@@ -24,9 +28,11 @@
         {% for element in processes %}
             <div class="row">
                 <h3>{{element.name}} <h5> Product: {{element.product.name}}</h5></h3>
-                <button>Detail</button>
-                <button>Edit</button>
-                <button>Remove</button>
+                <label class="id" hidden>{{element.id}}</label>
+                <a href='/process/viewProc/{{element.id}}'>
+                    <button>Detail</button>
+                </a>
+                <button class='removeProc'>Remove</button>
             </div>
             <hr size="2" color="black">
         {% endfor %}

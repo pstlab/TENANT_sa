@@ -2,18 +2,41 @@
 
 {% block title %} New Process {% endblock %}
 
-{% block content %}
-        <div class="section-title">
-            Enter the data of the new process
-        </div>
+{% block lib %}
+<script src="{{ url_for('static', filename='lib/custom/indexProc.js') }}"></script>
+{% endblock %}
 
-        <div class="section-content">
-          <div class="section-item">
-            <div class="process">
-              <div class="navbar">
-                <h2>FORM</h2>
-              </div>
-            </div>
-          </div>
-        </div>
-        {% endblock %}
+{% block content %}
+<div class="section-title">
+  Enter the data of the new process
+</div>
+
+<div class="section-content">
+  <div>
+    <label>Process name</label>
+    <input type="text" id="new-processname" />
+</div>
+<div>
+  <label>It refers to the product</label>
+  <select id="new-processproduct">
+    <option selected disabled></option>
+</select>
+</div>
+<div>
+    <label>Add task (complex or simple)</label>
+</div>
+<a href='/process/'>
+  <button>Back</button>
+  </a>
+  <button type="button" id="sub">Save process</button>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $("#new-processproduct").find("option:gt(0)").remove();
+    '{% for element in products %}'
+        $('#new-processproduct').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+    '{% endfor %}'
+</script>
+{% endblock %}
