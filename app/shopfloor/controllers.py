@@ -76,6 +76,50 @@ def editR(resId):
     res = app.session.query(Resource).all()
     return render_template("shopfloor/indexSF.html", resources=res)
 
-@mod_shopfloor.route('/newAggr/')
-def newAggr():
-    return render_template("shopfloor/newAggr.html")
+#manage the aggregate resources in the db. Display the list and a form from which add
+#a new aggregate resource(post request), remove an aggregate resource(post request with id),
+#modify the name, add or remove a resource of an aggregate resource(post request)
+@mod_shopfloor.route('/manageAggr/', methods=['GET'])
+def manage():
+    ar = app.session.query(AggregateResource).all()
+    return render_template("shopfloor/manageRes.html", aResources=ar)
+
+@mod_shopfloor.route('/manageAggr/', methods=['POST'])
+def newAR():
+    data = request.json
+    # Add a new aggregate resource
+    if(data[-1] == "new"):
+        name = data[-2]['name']
+        #TODO list of resources
+
+        ar = AggregateResource(name = name)
+        app.session.add(ar)
+
+    #remove an aggregate resource
+    if(data[-1] == "remove"):
+        arId = data[0]
+        app.session.query(AggregateResource).filter_by(id=arId).delete()
+
+    #modify a product family
+    if(data[-1] == "edit"):
+        #get data from input
+        name = data[1]['name']
+        #get the database values and update them
+        arId = data[0]
+        ar = app.session.query(AggregateResource).filter_by(id=arId).first()
+
+        ar.name = name
+
+    #remove a resource from the aggregate resource
+    if(data[-1] == 'removeRes'):
+        #get data
+        arId = data[0]['aggrRes']
+        resId = data[0]['resId']
+
+        res = app.session.query(Resource).filter_by(id=resId).first()
+        ar = app.session.query(AggregateResource).filter_by(id=arId).first()
+        ar.resources.remove(res)
+        
+    app.session.commit()
+    ars = app.session.query(AggregateResource).all()
+    return render_template("shopfloor/manageRes.html", aResources=ars)
