@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} Add a Product {% endblock %}
+{% block title %} Edit a Product {% endblock %}
 
 {% block lib %}
 <script src="{{ url_for('static', filename='lib/custom/indexProd.js') }}"></script>
@@ -25,7 +25,7 @@
         <input type="text" id="productname" value={{product.name}} />
     </div>
     <div>
-        <label>Product family</label>
+        <label>Product family (Optional)</label>
         <select id="productfamily">
             <option selected disabled value={{product.product_family.id}}>{{product.product_family}}</option>
         </select>
