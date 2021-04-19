@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %} Edit a Resource {% endblock %}
+
+{% block lib %}
+<script src="{{ url_for('static', filename='lib/custom/indexRes.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="section-title">
+    Edit the data of the resource
+</div>
+
+<div class="section-content">
+    <input id="resourceid" hidden value={{resource.id}}></input>
+    <div>
+        <label>Resource name</label>
+        <input type="text" id="resourcename" value={{resource.name}} />
+    </div>
+    <div>
+        <label>Resource type</label>
+        <select id="resourcetype">
+            <option selected disabled value={{resource.typeRes}}>{{resource.typeRes}}</option>
+            <option>Tool</option>
+            <option>Operator</option>
+            <option>AGV</option>
+        </select>
+    </div>
+    <div>
+        <label>Aggregate Resource (Optional)</label>
+        <select id="aggregate_resource">
+            <option selected disabled value={{resource.aggregate_resource.id}}>{{resource.aggregate_resource}}</option>
+        </select>
+    </div>
+
+    <a href='/sf/'>
+        <button>Back</button>
+    </a>
+    <button type="button" id="edit">Save resource</button>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $("#aggregate_resource").find("option:gt(0)").remove();
+    '{% for element in aggregates %}'
+    $('#aggregate_resource').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+    '{% endfor %}'
+    $('#aggregate_resource').append('<option value=none> None </option>');
+</script>
+{% endblock %}

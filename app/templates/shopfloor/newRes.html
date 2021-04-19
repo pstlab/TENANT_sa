@@ -2,18 +2,49 @@
 
 {% block title %} Add a resource {% endblock %}
 
-{% block content %}
-        <div class="section-title">
-            Enter the data of the new resource
-        </div>
+{% block lib %}
+<script src="{{ url_for('static', filename='lib/custom/indexRes.js') }}"></script>
+{% endblock %}
 
-        <div class="section-content">
-          <div class="section-item">
-            <div class="process">
-              <div class="navbar">
-                <h2>FORM</h2>
-              </div>
-            </div>
-          </div>
-        </div>
-        {% endblock %}
+{% block content %}
+<div class="section-title">
+  Enter the data of the new resource
+</div>
+
+<div class="section-content">
+  <div>
+    <label>Resource name</label>
+    <input type="text" id="new-resourcename" />
+  </div>
+  <div>
+    <label>Resource type</label>
+    <select id="new-resourcetype">
+      <option selected disabled></option>
+      <option>Tool</option>
+      <option>Operator</option>
+      <option>AGV</option>
+    </select>
+  </div>
+  <div>
+    <label>Aggregate Resource (Optional)</label>
+    <select id="new-aggregate_resource">
+      <option selected disabled></option>
+    </select>
+  </div>
+
+  <a href='/sf/'>
+    <button>Back</button>
+    </a>
+    <button type="button" id="sub">Save resource</button>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $("#new-aggregate_resource").find("option:gt(0)").remove();
+    '{% for element in aggregates %}'
+        $('#new-aggregate_resource').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+    '{% endfor %}'
+    $('#new-aggregate_resource').append('<option value=none> None </option>');
+</script>
+{% endblock %}
