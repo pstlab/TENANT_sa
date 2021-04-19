@@ -30,10 +30,16 @@
     <div class="process">
         {% for element in products %}
             <div class="row">
-                <h3>{{element.name}}</h3>
-                {% if element.product_family is not none %}
-                <h4>Product Family: {{element.product_family.name}}</h4>
-                {% endif %}
+                <div>
+                    <h3>{{element.name}}</h3>
+                    {% if element.product_family is not none %}
+                    <label>Product Family: {{element.product_family.name}}</label>
+                    {% endif %}
+                    {% for dem in element.demands %}
+                    <label>Associate demand: {{dem}}</label>
+                    {% endfor %}
+                    <!--TODO <label>Associate process</label>-->
+                </div>
                 <label class="id" hidden>{{element.id}}</label>
                 <a href='/products/editProd/{{element.id}}'>
                     <button>Edit</button>
