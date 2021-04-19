@@ -17,8 +17,8 @@ class Demand(Base):
     product_id = Column(Integer, ForeignKey('products.id'))
     product = relationship("Product", back_populates='demands')
     # ManyToOne without bidirectional behavior
-    #process_id = Column(Integer, ForeignKey('processes.id'))
-    #process = relationship("Process")
+    process_id = Column(Integer, ForeignKey('processes.id'))
+    process = relationship("Process")
 
     def __str__(self):
         return self.name

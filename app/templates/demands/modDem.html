@@ -36,7 +36,11 @@
                         <div>
                             <label>Product</label>
                             <select id="demandproduct">
-                                <option selected disabled>{{demand.product.name}}</option>
+                                <option selected disabled value="{{demand.product.id}}">{{demand.product}}</option>
+                            </select>
+                            <label>Through process:</label>
+                            <select id="demandprocess">
+                                <option selected disabled value="{{demand.process.id}}">{{demand.process}}</option>
                             </select>
                         </div>
                         <div>
@@ -50,7 +54,7 @@
             <div class="navbar">
                 -->
                 <a href='/demands/'>
-                    <button>Back</button>
+                    <button class='links'>Back</button>
                 </a>
                 <button type="button" id="edit">Save demand</button>
                 <!--
@@ -67,5 +71,16 @@
     '{% for element in products %}'
         $('#demandproduct').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
     '{% endfor %}'
+
+    $("#demandprocess").find("option:gt(0)").remove();
+    '{% for element in processes %}'
+    $('#demandprocess').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+    '{% endfor %}'
+    $('#demandprocess').append('<option value=none> None </option>');
+
+    if (sessionStorage.getItem('selectedtem')) {
+        $('#demandproduct').val(sessionStorage.getItem('selectedtem'));
+        $("#demandprocess").val('None');
+    }
 </script>
 {% endblock %}
