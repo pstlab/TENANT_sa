@@ -79,7 +79,7 @@ def editP(prodId):
 
 #manage the product families in the db. Display the list and a form from which add
 #a new product family(post request), remove a product family(post request with id),
-#modify the name of a product family(post request)
+#modify the name, the default process or remove a product of a product family(post request)
 @mod_products.route('/PF/', methods=['GET'])
 def manage():
     prodFs = app.session.query(ProductFamily).all()
@@ -115,6 +115,16 @@ def managePF():
 
         pf.name = name
         pf.process = p
+
+    #remove a product from the product family
+    if(data[-1] == 'removeProd'):
+        #get data
+        pfId = data[0]['prodFamily']
+        prodId = data[0]['prodId']
+        p = app.session.query(Product).filter_by(id=prodId).first()
+        pf = app.session.query(ProductFamily).filter_by(id=pfId).first()
+        print(pf.products)
+        pf.products.remove(p)
         
     app.session.commit()
     prodFs = app.session.query(ProductFamily).all()

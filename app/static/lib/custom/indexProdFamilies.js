@@ -54,7 +54,7 @@ $(document).ready(function() {
     /**************************************
     *   Edit a product family
     **************************************/
-    //Change the name
+    // Change the name
     $(".pfname").change(function(){
         //Take the elements
         var pfId = $(this).siblings(".id").html();
@@ -83,7 +83,7 @@ $(document).ready(function() {
             });
         }
     });
-    //Change the process
+    // Change the process
     $(".defaultpf").change(function(){
         //Take the elements
         var pfId = $(this).siblings(".id").html();
@@ -111,5 +111,25 @@ $(document).ready(function() {
                 location.replace("/products/PF/");
             });
         }
+    });
+    // Delete a product from the family
+     $(".removeP").click(function() {
+        var pfId = $(this).parent().siblings('.mainproperties').children(".id").html();
+        var prodId = $(this).siblings(".prodid").html();
+        var tmp = [];
+        tmp.push({'prodFamily':pfId, 'prodId':prodId});
+        tmp.push('removeProd')
+
+        //create the json data
+        var js_data = JSON.stringify(tmp);
+        $.ajax({                        
+            url: '/products/PF/',
+            type : 'post',
+            contentType: 'application/json; charset=utf-8',
+            dataType : 'json',
+            data : js_data
+        }).always(function() {
+            location.replace("/products/PF/");
+        });
     });
 });
