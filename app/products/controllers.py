@@ -123,7 +123,6 @@ def managePF():
         prodId = data[0]['prodId']
         p = app.session.query(Product).filter_by(id=prodId).first()
         pf = app.session.query(ProductFamily).filter_by(id=pfId).first()
-        print(pf.products)
         pf.products.remove(p)
         
     app.session.commit()
