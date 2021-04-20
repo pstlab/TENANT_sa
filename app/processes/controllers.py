@@ -1,7 +1,7 @@
 # Import flask dependencies
 from flask import Blueprint, render_template, request, redirect, url_for
 
-from .models import Process
+from .models import Process, ComplexTask
 from app import app
 
 from app.products.models import Product
@@ -36,17 +36,51 @@ def new():
 @mod_process.route('/newProc/', methods=['POST'])
 def newP():
     data = request.json
-    # Add a new product
+    # Add a new process
     name = data[0]['name']
     pId = data[0]['product']
     p = app.session.query(Product).filter_by(id=pId).first()
-    process = Process(name=name, product=p)
+
+    tasks = data[0]['tasks']
+    cT = addTask(tasks)
+
+    process = Process(name=name, product=p, complex_tasks=cT)
 
     app.session.add(process)
     app.session.commit()
 
     proc = app.session.query(Process).all()
     return render_template("processes/indexProc.html", processes = proc)
+
+#AUXILIARY FUNCTIONS to define the complex tasks objects
+# and associate all to the process
+def addTask(tasks):
+    data = []
+    for i in range(len(tasks)):
+        #take the values
+        name = tasks[i]['name']
+        ttype = tasks[i]['type']
+        if(ttype == 'complex'):
+            c = ComplexTask(name=name)
+            data.append(c)
+            subT = tasks[i]['list']
+            tmp = addTaskAux(c, subT, [])
+            data.extend(tmp)
+    return data
+            
+def addTaskAux(parent, subT, res):
+    if(not subT):
+        return []
+    for i in range(len(subT)):
+        name = subT[i]['name']
+        c = ComplexTask(name=name, parent=parent)
+        res.append(c)
+        tmp = addTaskAux(c, subT[i]['list'], [])
+        if (tmp):
+            res.extend(tmp)
+    return res
+
+
 
 #edit a process in the db. welcome page to view it and request (post) after the user data input
 @mod_process.route('/viewProc/<procId>', methods=['GET'])

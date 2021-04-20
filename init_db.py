@@ -42,8 +42,12 @@ p6 = prod_mod.Product(name = 'Row 5')
 #product families
 pf1 = prod_mod.ProductFamily(name = 'Rows', products = [p2, p3, p4, p5, p6])
 
+#complex tasks
+c1 = proc_mod.ComplexTask(name='one')
+c2 = proc_mod.ComplexTask(name='two', parent=c1)
+
 #process
-proc = proc_mod.Process(name='Do mosaic', product=p1)
+proc = proc_mod.Process(name='Do mosaic', product=p1, complex_tasks = [c1, c2])
 
 #demand
 d1 = dem_mod.Demand(name = 'Mosaic', quantity = 1, product = p1, typeDem='StockOrder', process=proc)
@@ -52,6 +56,7 @@ d1 = dem_mod.Demand(name = 'Mosaic', quantity = 1, product = p1, typeDem='StockO
 db.add_all([r1, r2, r3, r4, r5, ar1, ar2])
 db.add_all([p1, p2, p3, p4, p5, p6, pf1])
 db.add(proc)
+db.add_all([c1, c2])
 db.add(d1)
 
 #commit and close

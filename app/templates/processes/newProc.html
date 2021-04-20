@@ -23,7 +23,20 @@
 </select>
 </div>
 <div>
-    <label>Add task (complex or simple)</label>
+  <div id="result"></div>
+
+  <button id='complex'>Add a new complex task</button>
+  <button id='simple'>Add a new simple task</button>
+
+  <div class='containComplex'>
+    <label>Task name: </label>
+    <input type="text" id="new-taskname" />
+  </div>
+
+  <div class='containComplex'><button type="reset" id="doneComplex">Done</button></div>
+
+  <div id='containSimple'>
+  </div>
 </div>
 <a href='/process/'>
   <button>Back</button>
