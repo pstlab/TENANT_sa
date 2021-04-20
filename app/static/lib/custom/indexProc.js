@@ -16,15 +16,25 @@ $(document).ready(function() {
         }
     };
 
+    var SimpleTask = class SimpleTask {
+        constructor(id, name, modality) {
+            this.id = id;
+            this.name = name;
+            this.modality = modality;
+            this.type = 'simple'
+        }
+
+    };
+
     $(".containComplex").hide();
-    $("#containSimple").hide();
+    $(".containSimple").hide();
 
     /*******************************************
      *  Show the form for each complex task     
     ******************************************/
    $("#complex").click(function() {
     $(".containComplex").show();
-    $("#containSimple").hide();
+    $(".containSimple").hide();
    });
 
    /*******************************************
@@ -32,7 +42,7 @@ $(document).ready(function() {
     ******************************************/
     $("#simple").click(function() {
         $(".containComplex").hide();
-        $("#containSimple").show();
+        $(".containSimple").show();
     });
 
     /*******************************************
@@ -43,9 +53,21 @@ $(document).ready(function() {
         tmp = $(this).siblings(".ctaskid").html();
         specialID = Number(tmp)
         $(".containComplex").show();
-        $("#containSimple").hide();
+        $(".containSimple").hide();
     });
 
+    /*******************************************
+     *  Show the form for a simple task 
+     * to be added from another (complex) task     
+    ******************************************/
+     $(document).on("click", ".simpleST", function() {
+        tmp = $(this).siblings(".ctaskid").html();
+        specialID = Number(tmp)
+        $(".containComplex").hide();
+        $(".containSimple").show();
+    });
+
+    //TODO Refactor per unire i due metodi che cambiano di poche istruzioni
     /*******************************************
      *  Add a complex task to the list     
     ******************************************/
@@ -53,13 +75,13 @@ $(document).ready(function() {
    var specialID = 0
    $("#doneComplex").click(function() {
        //take the element
-       var name = document.getElementById("new-taskname").value;
-       document.getElementById("new-taskname").value = '';
+       var name = document.getElementById("new-Ctaskname").value;
        
        if(name === "") {
            window.alert("Enter all the information of the task!")
        }
        else {
+            document.getElementById("new-Ctaskname").value = '';
            //build the task object
            var tmp = new ComplexTask(generalID, name, []);
 
@@ -98,6 +120,56 @@ $(document).ready(function() {
            $(".containComplex").hide();
        }
    });  
+   /*******************************************
+     *  Add a simple task to the list     
+    ******************************************/
+    $("#doneSimple").click(function() {
+        //take the element
+        var name = document.getElementById("new-Staskname").value;
+        var mod = document.getElementById("new-Staskmode").value;
+        
+        if(name === "" || mod === "") {
+            window.alert("Enter all the information of the task!")
+        }
+        else {
+            document.getElementById("new-Staskname").value = '';
+            document.getElementById("new-Staskmode").value = '';
+            //build the task object
+            var tmp = new SimpleTask(generalID, name, mod);
+ 
+            //higher level task
+            if(specialID === 0) {
+                tasks.push(tmp);
+            }
+            //from an existent task
+            else {
+                //TODO refactor in a more efficient way
+                checkOthers(tmp, tasks);
+             }
+            
+ 
+            //Built the string to append to display the task
+            var res = '';
+            res += ("<div id=contain" + generalID + ">");
+            res += ("<label class='staskid' hidden>"+ generalID +'</label>');
+            if(specialID !== 0) {
+                res += ('&nbsp;&nbsp;');
+             }
+            res += ("<label> Simple task name: " + name + "</label> &nbsp;");
+            if(specialID === 0) {
+                 $("#result").append(res);
+            }
+            else {
+                var el = '#contain' + specialID;
+                $(el).append(res);
+            }
+ 
+            //reset the variables for the next task
+            generalID += 1;
+            specialID = 0;
+            $(".containSimple").hide();
+        }
+    });
 
    //AUXILIARY FUNCTION to push the sub-task in the right list
    function checkOthers(tmp, itemList) {
@@ -119,7 +191,6 @@ $(document).ready(function() {
         //take the elements
         var processName = document.getElementById('new-processname').value;
         var processProduct = document.getElementById('new-processproduct').value;
-        //TODO aggiungere i task probabilmente li tieni qui temporanei e poi mandi tutto
 
         if (processName === "" || processProduct === "") {
             window.alert("Enter all the information of the process!");

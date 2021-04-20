@@ -24,7 +24,8 @@ class Process(Base):
     product_family = relationship("ProductFamily", uselist=False, back_populates='process')
     # OneToMany
     complex_tasks = relationship("ComplexTask", back_populates='process', cascade="all, delete-orphan")
-    #TODO operazioni
+    # OneToMany
+    simple_tasks = relationship("SimpleTask", back_populates='process', cascade='all, delete-orphan')
 
     def __str__(self):
         return self.name
@@ -38,16 +39,34 @@ class ComplexTask(Base):
     # ManyToOne
     process_id = Column(Integer, ForeignKey('processes.id'))
     process = relationship("Process", back_populates='complex_tasks')
-
     # OneToMany with other complex tasks
     parent_id = Column(Integer, ForeignKey('complex_tasks.id'))
     parent = relationship('ComplexTask', remote_side=[id], back_populates='children')
     children = relationship('ComplexTask', back_populates='parent', cascade="all, delete-orphan")
-
     # OneToMany
-    #simpleTasks = relationship("SimpleTask", back_populates='complexTask')
+    simple_tasks = relationship("SimpleTask", back_populates='parent', cascade="all, delete-orphan")
 
     def __str__(self):
         return self.name
     def __repr__(self):
         return '<Complex Task %r>' % (self.name)
+
+class SimpleTask(Base):
+    __tablename__ = 'simple_task'
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(128), nullable=False, unique=False)
+    modality = Column(Enum('Independent', 'Synchronous', 'Simultaneous', 'Supportive'), nullable=False)
+
+    # ManyToOne
+    process_id = Column(Integer, ForeignKey('processes.id'))
+    process = relationship("Process", back_populates='simple_tasks')
+    # ManyToOne
+    parent_id = Column(Integer, ForeignKey('complex_tasks.id'))
+    parent = relationship("ComplexTask", back_populates='simple_tasks')
+    #Operations
+
+    def __str__(self):
+        return self.name
+    def __repr__(self):
+        return '<Simple Task %r>' % (self.name)

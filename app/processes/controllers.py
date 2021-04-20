@@ -1,7 +1,7 @@
 # Import flask dependencies
 from flask import Blueprint, render_template, request, redirect, url_for
 
-from .models import Process, ComplexTask
+from .models import Process, ComplexTask, SimpleTask
 from app import app
 
 from app.products.models import Product
@@ -42,9 +42,9 @@ def newP():
     p = app.session.query(Product).filter_by(id=pId).first()
 
     tasks = data[0]['tasks']
-    cT = addTask(tasks)
+    cT, sT = addTask(tasks)
 
-    process = Process(name=name, product=p, complex_tasks=cT)
+    process = Process(name=name, product=p, complex_tasks=cT, simple_tasks=sT)
 
     app.session.add(process)
     app.session.commit()
@@ -55,30 +55,48 @@ def newP():
 #AUXILIARY FUNCTIONS to define the complex tasks objects
 # and associate all to the process
 def addTask(tasks):
-    data = []
+    complexs = []
+    simples = []
     for i in range(len(tasks)):
         #take the values
         name = tasks[i]['name']
         ttype = tasks[i]['type']
+        #If the task it's at the higher level, simply add it to the list
         if(ttype == 'complex'):
             c = ComplexTask(name=name)
-            data.append(c)
+            complexs.append(c)
             subT = tasks[i]['list']
-            tmp = addTaskAux(c, subT, [])
-            data.extend(tmp)
-    return data
+            #then iterate on its subtasks, but iff it's a complex one
+            tmpC, tmpS = addTaskAux(c, subT, [], [])
+            complexs.extend(tmpC)
+            simples.extend(tmpS)
+        elif(ttype == 'simple'):
+            mode = tasks[i]['modality']
+            s = SimpleTask(name=name, modality=mode)
+            simples.append(s)
+    
+    return complexs, simples
             
-def addTaskAux(parent, subT, res):
+def addTaskAux(parent, subT, resC, resS):
     if(not subT):
-        return []
+        return [], []
     for i in range(len(subT)):
         name = subT[i]['name']
-        c = ComplexTask(name=name, parent=parent)
-        res.append(c)
-        tmp = addTaskAux(c, subT[i]['list'], [])
-        if (tmp):
-            res.extend(tmp)
-    return res
+        ttype = subT[i]['type']
+        if(ttype == 'complex'):
+            c = ComplexTask(name=name, parent=parent)
+            resC.append(c)
+            tmpC, tmpS = addTaskAux(c, subT[i]['list'], [], [])
+            if (tmpC):
+                resC.extend(tmpC)
+
+            if (tmpS):
+                resS.extend(tmpS)
+        elif(ttype == 'simple'):
+            mode = subT[i]['modality']
+            s = SimpleTask(name=name, modality=mode, parent=parent)
+            resS.append(s)
+    return resC, resS
 
 
 
