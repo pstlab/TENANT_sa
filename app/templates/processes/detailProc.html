@@ -32,9 +32,51 @@
 
 <div class="section-item">
     <div class="process">
-        <!--for element in process.tasks -->
+        {% for element in process.complex_tasks %}
         <div class="row">
+            {% if element.parent is none %}
+            <div class='subtask' id=contain{{element.id}}>
+                <label hidden>{{element.id}}</label>
+                <label> Complex task name: {{element.name}}</label> &nbsp
+            <!-- <button class='complexST'>Add a complex sub-task</button>
+            <button class='simpleST'>Add a simple sub-task</button></div> -->
+            </div>
+            {% else %}
+            <script type="text/javascript">
+                tdiv = $("#contain" + '{{element.parent.id}}')
+                res = '';
+                res += ("<div class='subtask' id=contain" + '{{element.id}}' + ">");
+                res += ("<label class='ctaskid' hidden>" + '{{element.id}}' + "</label>");
+                res += ("<label> Complex task name: " + '{{element.name}}' + "</label> &nbsp;");
+                res += ('</div>')
+                tdiv.append(res);
+            </script>
+            {% endif %}
         </div>
+        {% endfor %}
+        {% for element in process.simple_tasks %}
+        <div class="row">
+            {% if element.parent is none %}
+            <div class='subtask' id=contain{{element.id}}>
+                <label hidden>{{element.id}}</label>
+                <label> Simple task name: {{element.name}}</label> &nbsp
+                <label> Collaborative modality: {{element.modality}}</label>
+            </div>
+            {% else %}
+            <script type="text/javascript">
+                tdiv = $("#contain" + '{{element.parent.id}}')
+                res = '';
+                res += ("<div class='subtask' id=Scontain" + '{{element.id}}' + ">");
+                res += ("<label class='staskid' hidden>" + '{{element.id}}' + "</label>");
+                res += ("<label> Simple task name: " + '{{element.name}}' + "</label> &nbsp;");
+                res += ("<label> Collaborative modality: " + '{{element.modality}}' + "</label>");
+                res += ('</div>')
+                tdiv.append(res);
+            </script>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
     </div>
 </div>
 
