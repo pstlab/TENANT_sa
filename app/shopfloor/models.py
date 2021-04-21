@@ -14,8 +14,10 @@ class Resource(Base):
     
     #capacity
 
+    # ManyToOne
     aggregate_resource_id = Column(Integer, ForeignKey('aggregate_resources.id'))
     aggregate_resource = relationship("AggregateResource", back_populates='resources')
+
     #TODO relationship with some functions
 
     def __repr__(self):
@@ -31,6 +33,7 @@ class AggregateResource(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(128),  nullable=False, unique=True)
 
+    # OneToMany
     resources = relationship("Resource", back_populates='aggregate_resource')
 
     def __repr__(self):

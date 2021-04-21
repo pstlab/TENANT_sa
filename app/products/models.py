@@ -12,7 +12,7 @@ class Product(Base):
     name = Column(String(128),  nullable=False, unique=True)
 
     # ManyToOne
-    product_family_id = Column(Integer, ForeignKey('product_families.id'))
+    product_family_id = Column(Integer, ForeignKey('product_families.id', use_alter=True))
     product_family = relationship("ProductFamily", back_populates='products')
     # OneToMay
     demands = relationship("Demand", back_populates='product')

@@ -98,14 +98,11 @@ $(document).ready(function() {
 
            //Built the string to append to display the task
            var res = '';
-           res += ("<div id=contain" + generalID + ">");
+           res += ("<div class='subtask' id=contain" + generalID + ">");
            res += ("<label class='ctaskid' hidden>"+ generalID +'</label>');
-           if(specialID !== 0) {
-               res += ('&nbsp;&nbsp;');
-            }
            res += ("<label> Complex task name: " + name + "</label> &nbsp;");
            res += ("<button class='complexST'>Add a complex sub-task</button>");
-           res += ("<button class='simpleST'>Add a simple sub-task</button></div></br>")
+           res += ("<button class='simpleST'>Add a simple sub-task</button></div>")
            if(specialID === 0) {
                 $("#result").append(res);
            }
@@ -150,12 +147,10 @@ $(document).ready(function() {
  
             //Built the string to append to display the task
             var res = '';
-            res += ("<div id=contain" + generalID + ">");
+            res += ("<div class='subtask' id=contain" + generalID + ">");
             res += ("<label class='staskid' hidden>"+ generalID +'</label>');
-            if(specialID !== 0) {
-                res += ('&nbsp;&nbsp;');
-             }
             res += ("<label> Simple task name: " + name + "</label> &nbsp;");
+            res += ("<label> Collaborative modality: " + mod + "</label>");
             if(specialID === 0) {
                  $("#result").append(res);
             }

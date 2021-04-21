@@ -97,6 +97,11 @@ body
     text-decoration: none;
 }
 
+.subtask {
+    padding-left: 2%;
+    margin-bottom: 1%;
+}
+
 #footer 
 {    
     margin: 0;
