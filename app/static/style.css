@@ -1,0 +1,114 @@
+body
+{
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    background-color: white;
+    min-width: 500px;
+}
+
+#header 
+{
+    margin: 0;
+    padding: 2%;
+    min-height: 100px;
+}
+
+.logo {
+    height: 150px;
+}
+
+#content
+{
+    margin: 0px;
+    padding: 0px;
+    width: 98%;
+    margin-left: 1%;
+}
+
+.section 
+{
+    width: 98%;
+    margin:0;
+    padding: 1%;
+    padding-top: 1.5%;
+    padding-bottom: 1.5%;
+    border: 1px solid grey;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 5px lightgrey;
+}
+
+.section .section-title 
+{   
+    margin: 0;
+    padding: 1%;
+    font-size: x-large;
+    font-weight: bold;
+    border-bottom: 1px solid lightgray;
+    background-color: white;
+}
+
+.section .section-content 
+{
+    margin: 0;
+    padding: 1%;
+    align-content: center;
+    text-align: justify;
+    background-color: white;
+}
+
+.section-content .section-item
+{
+    margin: 0;
+    padding: 0;
+    margin-top: 1%;
+    margin-bottom: 2%;
+    background-color: white;
+}
+
+.section-item .process
+{
+    width: 98%;
+    margin: 0;
+    padding: 1%;
+    background-color: dimgray;
+    color: white;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 5px lightgrey;
+}
+
+.navbar {
+    width: 98%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbarB {
+    margin: 0.5%;
+}
+
+.navbar .navbarB a {
+    float: left;
+    font-size: 16px;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.subtask {
+    padding-left: 2%;
+    margin-bottom: 1%;
+}
+
+#footer 
+{    
+    margin: 0;
+    margin-top: 100px;
+    padding: 2%;
+    padding-top: 5%;
+    border: none;
+    background-color: white;
+    min-height: 100px;
+}

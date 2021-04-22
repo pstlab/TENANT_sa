@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %} Demands {% endblock %}
+
+{% block lib %}
+<script src="{{ url_for('static', filename='lib/custom/indexDem.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="section-title">
+    Enter the data of a new demand
+</div>
+
+<div class="section-content">
+    <div class="section-item">
+        <div class="section-title">
+            Active Demands
+        </div>
+        <div class="process">
+            <div class="navbar">
+                <div class='form'>
+                    <div class='demand-form'>
+                        <div>
+                            <label>Demand name</label>
+                            <input type="text" id="new-demandname" />
+                            <label>Demand type</label>
+                            <select id="new-demandtype">
+                                <option selected disabled></option>
+                                <option>CustomerOrder</option>
+                                <option>EngineeringWorkOrder</option>
+                                <option>StockOrder</option>
+                            </select>
+                            <label>Quantity </label>
+                            <input type="number" id="new-demandquantity" />
+                        </div>
+                        <div>
+                            <label>Product</label>
+                            <select id="new-demandproduct">
+                                <option selected disabled></option>
+                            </select>
+                            <label>Process</label>
+                            <select id="new-demandprocess">
+                                <option selected disabled></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar">
+                <button type="button" id="sub">Save demand</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section-item">
+    <div class="process">
+        {% for element in demands %}
+        <div class="row">
+            <div>
+                <label>Name:</label>
+                <label class="el-name">{{element.name}}</label>
+            </div>
+            <label>Type:{{element.typeDem}}<br />Quantity: {{element.quantity}}<br /></label>
+            <label> Product: {{element.product.name}}<br />Through process: {{element.process}}<br /></label>
+
+            <label class="id" hidden>{{element.id}}</label>
+
+            <a href='/demands/editDem/{{element.id}}'>
+                <button class='links'>Edit</button>
+            </a>
+            <button class='removeDem'>Remove</button>
+        </div>
+        <hr size="2" color="black">
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $("#new-demandproduct").find("option:gt(0)").remove();
+    '{% for element in products %}'
+    $('#new-demandproduct').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+    '{% endfor %}'
+
+    $("#new-demandprocess").find("option:gt(0)").remove();
+    '{% for element in processes %}'
+    $('#new-demandprocess').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+    '{% endfor %}'
+
+    if (sessionStorage.getItem('selectedtem')) {
+        $('#new-demandproduct').val(sessionStorage.getItem('selectedtem'));
+    }
+</script>
+{% endblock %}

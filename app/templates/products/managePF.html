@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %} Product Families {% endblock %}
+
+{% block lib %}
+<script src="{{ url_for('static', filename='lib/custom/indexProdFamilies.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="section-title">
+  Add a new product family
+</div>
+<div class="section-content">
+  <div class="section-item">
+    <div class="process">
+      <div class="navbar">
+        <div class='form'>
+          <div class='demand-form'>
+            <label>Product Family name</label>
+            <input type="text" id="new-pfname" />
+            <label>Default process</label>
+            <select id="new-defaultpf">
+              <option selected disabled></option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="navbar">
+        <button type="button" id="sub">Save product family</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-item">
+  <div class="section-title">
+    Product families
+  </div>
+  <div class="process">
+      {% for element in families %}
+      <div>
+          <div class="row mainproperties">
+            <label>Product family name:</label>
+            <input type="text" class="pfname" value={{element.name}} />
+            <label>Default process:</label>
+            <select class="defaultpf">
+              <option selected disabled value={{element.process.id}}>{{element.process}}</option>
+            </select>
+
+            <label class="id" hidden>{{element.id}}</label>
+            <button class='removePF'>Remove</button>
+          </div>
+            {% for product in element.products %}
+            <div class="row"> 
+              <label class="prodid" hidden>{{product.id}}</label>
+              <label>Product: {{product}}</label>
+              <button class='removeP'>Remove from the product family</button>
+            </div>
+            {% endfor %}
+          <hr size="2" color="black">
+        </div>
+      {% endfor %}
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $("#new-defaultpf").find("option:gt(0)").remove();
+    $(".defaultpf").find("option:gt(0)").remove();
+    '{% for element in processes %}'
+        $('#new-defaultpf').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+        $('.defaultpf').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+    '{% endfor %}'
+    $('#new-defaultpf').append('<option value=none> None </option>');
+    $('.defaultpf').append('<option value=none> None </option>');
+</script>
+{% endblock %}

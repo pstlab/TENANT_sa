@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %} Interface {% endblock %}
+
+{% block content %}
+<div class="section-title">
+    Choose what you want to manage
+</div>
+
+<div class="section-content">
+    <div class="section-item">
+        <div class="process">
+            <div class="navbar">
+                <button class="navbarB">
+                    <a href="/sf">Shopfloor (resources)</a>
+                </button>
+                <button class="navbarB">
+                    <a href="/products">Products</a>
+                </button>
+                <button class="navbarB">
+                    <a href="/demands">Demands</a>
+                </button>
+                <button class="navbarB">
+                    <a href="/process">Process</a>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

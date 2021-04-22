@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %} Add a Product {% endblock %}
+
+{% block lib %}
+<script src="{{ url_for('static', filename='lib/custom/indexProd.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="section-title">
+  Enter the data of the new product
+</div>
+
+<div class="section-content">
+          <!--
+    <div class="section-item">
+        <div class="process">
+            <div class="navbar">
+                <div class='form'>
+                    <div class='product-form'>
+    -->
+    <div>
+        <label>Product name</label>
+        <input type="text" id="new-productname" />
+    </div>
+    <div>
+        <label>Product family (Optional)</label>
+        <select id="new-productfamily">
+            <option selected disabled></option>
+        </select>
+    </div>
+        <!-- 
+</div> 
+</div>
+</div>
+<div class="navbar">
+-->
+<a href='/products/'>
+<button>Back</button>
+</a>
+<button type="button" id="sub">Save product</button>
+<!--
+</div>
+</div>
+</div>
+-->
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $("#new-productfamily").find("option:gt(0)").remove();
+    '{% for element in prodfamilies %}'
+        $('#new-productfamily').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+    '{% endfor %}'
+    $('#new-productfamily').append('<option value=none> None </option>');
+</script>
+{% endblock %}

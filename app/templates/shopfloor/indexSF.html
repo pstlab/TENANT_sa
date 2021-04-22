@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %} Shopfloor {% endblock %}
+
+{% block lib %}
+<script src="{{ url_for('static', filename='lib/custom/indexRes.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="section-title">
+    Choose an operation
+</div>
+
+<div class="section-content">
+    <div class="section-item">
+        <div class="process">
+            <div class="navbar">
+                <button class="navbarB">
+                    <a href="/sf/newRes">Add a new resource</a>
+                </button>
+                <button class="navbarB">
+                    <a href="/sf/manageAggr">Manage aggregate resources</a>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section-item">
+    <div class="process">
+        {% for element in resources %}
+            <div class="row">
+                <h3>Name: {{element.name}}</h3>
+                <h3>Type: {{element.typeRes}}</h3>
+                {% if element.aggregate_resource is not none %}
+                <h4>Part of: {{element.aggregate_resource.name}}</h4>
+                {% endif %}
+                <label class="id" hidden>{{element.id}}</label>
+                <a href='/sf/editRes/{{element.id}}'>
+                    <button>Edit</button>
+                </a>
+                <button class='removeRes'>Remove</button>
+            </div>
+            <hr size="2" color="black">
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

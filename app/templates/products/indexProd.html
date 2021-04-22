@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %} Products {% endblock %}
+
+{% block lib %}
+<script src="{{ url_for('static', filename='lib/custom/indexProd.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="section-title">
+    Choose an operation
+</div>
+
+<div class="section-content">
+    <div class="section-item">
+        <div class="process">
+            <div class="navbar">
+                <button class="navbarB">
+                    <a href="/products/newProd">Add a new product</a>
+                </button>
+                <button class="navbarB">
+                    <a href="/products/PF">Manage product families</a>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section-item">
+    <div class="process">
+        {% for element in products %}
+            <div class="row">
+                <div>
+                    <h3>{{element.name}}</h3>
+                    {% if element.product_family is not none %}
+                    <label>Product Family: {{element.product_family.name}}</label>
+                    {% endif %}
+                    {% for dem in element.demands %}
+                    <label>Associate demand: {{dem}}</label>
+                    {% endfor %}
+                    <!--TODO <label>Associate process</label>-->
+                </div>
+                <label class="id" hidden>{{element.id}}</label>
+                <a href='/products/editProd/{{element.id}}'>
+                    <button>Edit</button>
+                </a>
+                <button class='removeProd'>Remove</button>
+            </div>
+            <hr size="2" color="black">
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

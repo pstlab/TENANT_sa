@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %} Processes {% endblock %}
+
+{% block lib %}
+<script src="{{ url_for('static', filename='lib/custom/indexProc.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="section-title">
+    Choose an operation
+</div>
+
+<div class="section-content">
+    <div class="section-item">
+        <div class="process">
+            <div class="navbar">
+                <button class="navbarB">
+                    <a href="/process/newProc">Add a new process</a>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section-item">
+    <div class="process">
+        {% for element in processes %}
+            <div class="row">
+                <h3>{{element.name}} <h5> Product: {{element.product.name}}</h5></h3>
+                <label class="id" hidden>{{element.id}}</label>
+                <a href='/process/viewProc/{{element.id}}'>
+                    <button>Detail</button>
+                </a>
+                <button class='removeProc'>Remove</button>
+            </div>
+            <hr size="2" color="black">
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %} Edit a Product {% endblock %}
+
+{% block lib %}
+<script src="{{ url_for('static', filename='lib/custom/indexProd.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="section-title">
+  Modify the data of the product
+</div>
+
+<div class="section-content">
+          <!--
+    <div class="section-item">
+        <div class="process">
+            <div class="navbar">
+                <div class='form'>
+                    <div class='product-form'>
+    -->
+    <input id="productid" hidden value={{product.id}}></input>
+    <div>
+        <label>Product name</label>
+        <input type="text" id="productname" value={{product.name}} />
+    </div>
+    <div>
+        <label>Product family (Optional)</label>
+        <select id="productfamily">
+            <option selected disabled value={{product.product_family.id}}>{{product.product_family}}</option>
+        </select>
+    </div>
+        <!-- 
+</div> 
+</div>
+</div>
+<div class="navbar">
+-->
+<a href='/products/'>
+<button>Back</button>
+</a>
+<button type="button" id="edit">Save product</button>
+<!--
+</div>
+</div>
+</div>
+-->
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $("#productfamily").find("option:gt(0)").remove();
+    '{% for element in prodfamilies %}'
+        $('#productfamily').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+    '{% endfor %}'
+    $('#productfamily').append('<option value=none> None </option>');
+</script>
+{% endblock %}

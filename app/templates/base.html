@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css" />
+
+    <title>{% block title %} {% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- include jQuery library -->
+    <script src="{{ url_for('static', filename='lib/jquery-3.4.1.js') }}"></script>
+
+    <!-- custom library -->
+    {% block lib %} {% endblock %}
+  </head>
+
+  <body>
+    <div id="header">
+      <a href="/">
+        <img class="logo" src="{{ url_for('static', filename='img/Sharework_logo_color.png') }}" />
+      </a>
+    </div>
+
+    <div id="content">
+      <div class="section">
+        {% block content %} {% endblock %}
+      </div>
+    </div>
+  </body>
+
+  <div id="footer">
+  </div>
+
+  {% block script %} {% endblock %}
+
+</html>
