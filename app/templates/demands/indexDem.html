@@ -40,8 +40,17 @@
                             </select>
                             <label>Process</label>
                             <select id="new-demandprocess">
-                                <option selected disabled></option>
                             </select>
+                            <script type="text/javascript">
+                                var divProd = document.getElementById('new-demandproduct');
+                                var divProc = $("#new-demandprocess");
+                                divProc.find("option:gt(0)").remove();
+                                divProc.append('<option selected disabled></option>');
+                                '{% for element in processes %}'
+                                    divProc.append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+                                '{% endfor %}'
+                                divProc.append('<option value=none> None </option>');
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -82,11 +91,6 @@
     $("#new-demandproduct").find("option:gt(0)").remove();
     '{% for element in products %}'
     $('#new-demandproduct').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
-    '{% endfor %}'
-
-    $("#new-demandprocess").find("option:gt(0)").remove();
-    '{% for element in processes %}'
-    $('#new-demandprocess').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
     '{% endfor %}'
 
     if (sessionStorage.getItem('selectedtem')) {

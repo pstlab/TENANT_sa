@@ -62,7 +62,6 @@ def edit(demId):
     global proc
     dem = app.session.query(Demand).filter_by(id=demId).first()
     prod = app.session.query(Product).all()
-    proc = dem.product.processes
     return render_template("demands/modDem.html", demand=dem, products=prod, processes=proc)
 
 @mod_demands.route('/editDem/<demId>', methods=['POST'])
