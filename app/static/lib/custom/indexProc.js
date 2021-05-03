@@ -304,10 +304,8 @@ $(document).ready(function() {
         var t2 = document.getElementById("new-t2").value;
 
         // Needed only to show the name of the task on the page
-        var t1name = document.getElementById("new-t1");
-        t1name = t1name.options[t1name.selectedIndex].text;
-        var t2name = document.getElementById("new-t2");
-        t2name = t2name.options[t2name.selectedIndex].text;
+        var t1name = $("#new-t1 option:selected").text();
+        var t2name = $("#new-t2 option:selected").text();
 
         
         if(t1 === "" || t2 === "") {
