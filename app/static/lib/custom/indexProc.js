@@ -6,6 +6,7 @@ $(document).ready(function() {
     const SUPP = "Supportive";
 
     var tasks = [];
+    var constraints = [];
 
     var ComplexTask = class ComplexTask {
         constructor(id, name, list) {
@@ -26,15 +27,26 @@ $(document).ready(function() {
 
     };
 
+    var Constraint = class Constraint {
+        constructor(id, t1, t2) {
+            this.id = id;
+            this.t1 = t1;
+            this.t2 = t2;
+        }
+    };
+
     $(".containComplex").hide();
     $(".containSimple").hide();
+    $(".constraintForm").hide();
 
     /*******************************************
      *  Show the form for each complex task     
     ******************************************/
+   //TODO refactorize to have only a parametric function
    $("#complex").click(function() {
     $(".containComplex").show();
     $(".containSimple").hide();
+    $(".constraintForm").hide();
    });
 
    /*******************************************
@@ -43,6 +55,7 @@ $(document).ready(function() {
     $("#simple").click(function() {
         $(".containComplex").hide();
         $(".containSimple").show();
+        $(".constraintForm").hide();
     });
 
     /*******************************************
@@ -54,6 +67,7 @@ $(document).ready(function() {
         specialID = Number(tmp)
         $(".containComplex").show();
         $(".containSimple").hide();
+        $(".constraintForm").hide();
     });
 
     /*******************************************
@@ -65,6 +79,16 @@ $(document).ready(function() {
         specialID = Number(tmp)
         $(".containComplex").hide();
         $(".containSimple").show();
+        $(".constraintForm").hide();
+    });
+    
+    /**************************************
+    *  Show the form to add a constraint
+    **************************************/
+     $("#constraint").click(function() {
+        $(".containComplex").hide();
+        $(".containSimple").hide();
+        $(".constraintForm").show();
     });
 
     //TODO Refactor per unire i due metodi che cambiano di poche istruzioni
@@ -110,6 +134,9 @@ $(document).ready(function() {
                var el = '#contain' + specialID;
                $(el).append(res);
            }
+
+            //add the new task to the list for add a constraint
+            $('#new-t1').append('<option value=' + generalID + '>' + name + '</option>');
 
            //reset the variables for the next task
            generalID += 1;
@@ -158,6 +185,9 @@ $(document).ready(function() {
                 var el = '#contain' + specialID;
                 $(el).append(res);
             }
+
+            //add the new task to the list for add a constraint
+            $('#new-t1').append('<option value=' + generalID + '>' + name + '</option>');
  
             //reset the variables for the next task
             generalID += 1;
@@ -198,7 +228,7 @@ $(document).ready(function() {
 
         else {
             var data = [];
-            data.push({'name':processName, 'product':processProduct, 'tasks':tasks});
+            data.push({'name':processName, 'product':processProduct, 'tasks':tasks, 'constraints':constrains});
             //create the json data
             var js_data = JSON.stringify(data);
             $.ajax({                        
@@ -231,5 +261,90 @@ $(document).ready(function() {
             location.replace("/process/");
         });
     });
+
+    /**************************************
+    *  Add all the siblings to the
+    *  select input while choosing
+    *  the tasks of a constraint
+    **************************************/
+   $("#new-t1").change(function() {
+        var idToMatch = parseInt(this.value);
+
+        var siblings = getSiblings(idToMatch, tasks);
+
+        $("#new-t2").find("option:gt(0)").remove();
+        
+        for(var i=0; i<siblings.length; i++) {
+            var t = siblings[i];
+            if(t.id !== idToMatch){
+                $('#new-t2').append('<option value=' + t.id + '>' + t.name + '</option>');
+            }
+        }
+   });
+   //AUXILIARY FUNCTION to get the siblings of a task
+   function getSiblings(idToMatch, listToCheck) {
+        var higher = listToCheck.find(x => x.id === idToMatch);
+        if(higher !== undefined) {
+            return listToCheck;
+        }
+        else {
+            for (var index in listToCheck) {
+                return getSiblings(idToMatch, listToCheck[index].list);
+            }
+        }
+   }
+
+    /**************************************
+    *   Save a constrains
+    **************************************/
+     var constraintID = 0
+     $("#doneConstraint").click(function() {
+        //take the elements
+        var t1 = document.getElementById("new-t1").value;
+        var t2 = document.getElementById("new-t2").value;
+
+        // Needed only to show the name of the task on the page
+        var t1name = document.getElementById("new-t1");
+        t1name = t1name.options[t1name.selectedIndex].text;
+        var t2name = document.getElementById("new-t2");
+        t2name = t2name.options[t2name.selectedIndex].text;
+
+        
+        if(t1 === "" || t2 === "") {
+            window.alert("Enter all the information of the constraint!")
+        }
+        else {
+            document.getElementById("new-t1").value = '';
+            document.getElementById("new-t2").value = '';
+
+            //build the constraint object
+            var tmp = new Constraint(constraintID, t1, t2);
+ 
+            constraints.push(tmp);
+ 
+            //Built the string to append to display the task
+            var res = '';
+            res += ("<div>");
+            res += ("<label class='constraintid' hidden>"+ constraintID +'</label>');
+            res += ("<label> Task: " + t1name + "</label> &nbsp;");
+            res += ("<label> BEFORE </label> &nbsp; &nbsp;");
+            res += ("<label> Task: " + t2name + "</label> &nbsp;");
+            res += ("</div>");
+            
+            $("#constraintlist").append(res);
+ 
+            //reset the variables for the next constraint
+            constraintID += 1;
+            $(".constraintForm").hide();
+        }
+    });
+
+    /**************************************
+    *  Remove a constraint
+    **************************************/
+
+    /**************************************
+    *   Modify a constraint
+    **************************************/
     
 });

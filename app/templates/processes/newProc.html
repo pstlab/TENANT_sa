@@ -15,54 +15,75 @@
   <div>
     <label>Process name</label>
     <input type="text" id="new-processname" />
-</div>
-<div>
-  <label>It refers to the product</label>
-  <select id="new-processproduct">
-    <option selected disabled></option>
-</select>
-</div>
-<div>
-  <div id="result"></div>
-
-  <button id='complex'>Add a new complex task</button>
-  <button id='simple'>Add a new simple task</button>
-
-  <div class='containComplex'>
-    <label>Task name: </label>
-    <input type="text" id="new-Ctaskname" />
   </div>
-  <div class='containComplex'><button type="reset" id="doneComplex">Done</button></div>
-
-  <div class='containSimple'>
-    <label>Task name: </label>
-    <input type="text" id="new-Staskname" />
-    <label>Task modality: </label>
-    <select id="new-Staskmode">
+  <div>
+    <label>It refers to the product</label>
+    <select id="new-processproduct">
       <option selected disabled></option>
-      <option>Independent</option>
-      <option>Synchronous</option>
-      <option>Simultaneous</option>
-      <option>Supportive</option>
     </select>
-    <!--TODO operazioni-->
   </div>
-  <div class="containSimple"><button id="doneSimple">Done</button></div>
+  <div class="section-item">
+    <!-- <div class="process" id="result"></div> 
+    per avere lo sfondo grigio dietro i task-->
+    <div id="result"></div>
 
-</div>
-<a href='/process/'>
-  <button>Back</button>
+    <button id='complex'>Add a new complex task</button>
+    <button id='simple'>Add a new simple task</button>
+
+    <div class='containComplex'>
+      <label>Task name: </label>
+      <input type="text" id="new-Ctaskname" />
+    </div>
+    <div class='containComplex'><button type="reset" id="doneComplex">Done</button></div>
+
+    <div class='containSimple'>
+      <label>Task name: </label>
+      <input type="text" id="new-Staskname" />
+      <label>Task modality: </label>
+      <select id="new-Staskmode">
+        <option selected disabled></option>
+        <option>Independent</option>
+        <option>Synchronous</option>
+        <option>Simultaneous</option>
+        <option>Supportive</option>
+      </select>
+      <!--TODO operazioni-->
+    </div>
+    <div class="containSimple"><button id="doneSimple">Done</button></div>
+
+  </div>
+  <div class="section-item">
+
+    <div id="constraintlist"></div>
+    <button id='constraint'>Add a new constraint</button>
+
+    <div class='constraintForm'>
+      <label>Task: </label>
+      <select id="new-t1">
+        <option selected disabled></option>
+      </select>
+      <label> BEFORE </label>
+      <label>Task: </label>
+      <select id="new-t2">
+        <option selected disabled></option>
+      </select>
+    </div>
+
+    <div class='constraintForm'><button type="reset" id="doneConstraint">Done</button></div>
+
+  </div>
+  <a href='/process/'>
+    <button>Back</button>
   </a>
   <button type="button" id="sub">Save process</button>
-  <!--TODO vai a selezione vincoli-->
 </div>
 {% endblock %}
 
 {% block script %}
 <script>
-    $("#new-processproduct").find("option:gt(0)").remove();
-    '{% for element in products %}'
-        $('#new-processproduct').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
-    '{% endfor %}'
+  $("#new-processproduct").find("option:gt(0)").remove();
+  '{% for element in products %}'
+  $('#new-processproduct').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+  '{% endfor %}'
 </script>
 {% endblock %}
