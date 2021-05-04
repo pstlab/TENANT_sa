@@ -58,7 +58,7 @@ class Function(Base):
     resource = relationship("Resource", secondary=association_table, back_populates='functions')
 
     def __repr__(self):
-        return '<Function %r>' % (self.name)
+        return self.name
 
     def __str__(self):
         return self.name

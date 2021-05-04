@@ -66,7 +66,9 @@ def newR():
 def edit(resId):
     res = app.session.query(Resource).filter_by(id=resId).first()
     ar = app.session.query(AggregateResource).all()
-    return render_template("shopfloor/modRes.html", resource = res, aggregates=ar)
+    f = app.session.query(Function).all()
+    return render_template("shopfloor/modRes.html", resource = res, aggregates=ar, functions=f)
+    
 
 @mod_shopfloor.route('/editRes/<resId>', methods=['POST'])
 def editR(resId):
@@ -84,6 +86,20 @@ def editR(resId):
     res.typeRes = typeR
     ar = app.session.query(AggregateResource).filter_by(id=aggregateId).first()
     res.aggregate_resource = ar
+
+    f = []
+    functions = data[1]['functions']
+    for element in functions:
+        if (element['type'] == 'new'):
+            tmp = Function(name=element['name'])
+            app.session.add(tmp)
+        else:
+            tmp = app.session.query(Function).filter_by(id=element['name']).first()
+        f.append(tmp)
+    app.session.commit()
+
+    res.functions = f
+
 
     app.session.commit()
     res = app.session.query(Resource).all()

@@ -3,6 +3,9 @@ $(document).ready(function() {
 
     var functions = [];
 
+    var old = document.getElementsByClassName("functionId");
+    Array.from(old).forEach(elem => functions.push({type:'old', name:elem.getAttribute('value')}));
+
     var Function = class Function {
         constructor(type, name) {
             this.type = type;
@@ -48,15 +51,24 @@ $(document).ready(function() {
 
     /***************************************
      *  ADD A NEW FUNCTION
+     * from the new resource
+     * or the modified one
      **************************************/
-    $("#doneNew").click(function() {
-        var name = document.getElementById('new-functionname').value;
+    $("#new-doneNew").click(function() {
+        addNew('new-functionname', '#result');
+    });
 
+    $("#doneNew").click(function() {
+        addNew('functionname', '#resFunct');
+    });
+
+    function addNew(element, result) {
+        var name = document.getElementById(element).value;
         if(name === "") {
             window.alert("Enter all the information of the function!")
         }
         else {
-            document.getElementById('new-functionname').value = '';
+            document.getElementById(element).value = '';
 
             var tmp = new Function('new', name);
             functions.push(tmp);
@@ -66,19 +78,30 @@ $(document).ready(function() {
             res += ("<div class='function'>");
             // TODO add an id to identify which function i have to remove
             //res += ("<label class='ctaskid' hidden>"+ generalID +'</label>');
-            res += ("<label> Function: " + name + "</label> &nbsp;");
+            res += ("<label>" + name + "</label> &nbsp;");
             res += ("</div>")
-            $("#result").append(res);
+            $(result).append(res);
 
             $(".new-function").hide();
         }
-    });
+    }
+
 
     /***************************************
      *  ADD A PRE EXISTING FUNCTION
+     * from the new resource
+     * or the modified one
      **************************************/
-     $("#doneSelect").click(function() {
-        var fid = document.getElementById('selected-f').value;
+     $("#new-doneSelect").click(function() {
+        addSelected('new-selected-f', "#result");
+    });
+
+    $("#doneSelect").click(function() {
+        addSelected('selected-f', "#resFunct");
+    });
+
+    function addSelected(element, result) {
+        var fid = document.getElementById(element).value;
 
         if(fid === "") {
             window.alert("Select one function!")
@@ -88,18 +111,18 @@ $(document).ready(function() {
             functions.push(tmp);
 
             //Built the string to append to display the function
-            var fname = $("#selected-f option:selected").text();
+            var fname = $("#" + element + " option:selected").text();
             var res = '';
             res += ("<div class='function'>");
             // TODO add an id to identify which function i have to remove
             //res += ("<label class='ctaskid' hidden>"+ generalID +'</label>');
-            res += ("<label> Function: " + fname + "</label> &nbsp;");
+            res += ("<label>" + fname + "</label> &nbsp;");
             res += ("</div>")
-            $("#result").append(res);
+            $(result).append(res);
 
             $(".select-function").hide();
         }
-    });
+    }
         
     /**************************************
     *   Submit a resource
@@ -169,7 +192,7 @@ $(document).ready(function() {
         else {
             var data = [];
             data.push(resourceId)
-            data.push({'name':resourceName, 'type':type, 'aggregate':aggregate});
+            data.push({'name':resourceName, 'type':type, 'aggregate':aggregate, 'functions':functions});
 
             var myurl = '/sf/editRes/' + resourceId;
             //create the json data

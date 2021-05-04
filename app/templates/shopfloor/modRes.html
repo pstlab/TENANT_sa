@@ -32,6 +32,48 @@
             <option selected disabled value={{resource.aggregate_resource.id}}>{{resource.aggregate_resource}}</option>
         </select>
     </div>
+    <div>
+        <label>Functions:</label>
+        <div class="subtask" id="resFunct">
+        {% for element in resource.functions %}
+            <div>
+                <label class='functionId' value={{element.id}}>{{element.name}}</label>
+            </div>
+        {% endfor %}
+        </div>
+        <div>
+        <button id="addNew">Add a new function</button>
+        <button id="selectOld">Select a pre-existing function</button>
+        </div>
+
+        <div class="new-function">
+            <label>Function name: </label>
+            <input type="text" id="functionname" />
+          </div>
+          <div class="new-function">
+            <button id="doneNew">Done</button>
+          </div>
+        
+          <div class="select-function">
+            <label>Function: </label>
+              <select id="selected-f">
+              </select>
+          </div>
+          <div class="select-function">
+            <button id="doneSelect">Done</button>
+          </div>
+        
+          <script type="text/javascript">
+            var divFunc = $("#selected-f");
+            divFunc.find("option:gt(0)").remove();
+            divFunc.append('<option selected disabled></option>');
+            '{% for element in functions %}'
+            '{% if element not in resource.functions %}'
+            divFunc.append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+            '{% endif %}'
+            '{% endfor %}'
+          </script>
+    </div>
 
     <a href='/sf/'>
         <button>Back</button>
