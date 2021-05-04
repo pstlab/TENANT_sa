@@ -20,14 +20,14 @@ proc_mod.Base.metadata.create_all(bind=engine)
 
 
 #functions
-f1 = sf_mod.Function(name = 'pickAndPlaceBlue')
-f2 = sf_mod.Function(name = 'pickAndPlaceOrange')
-f3 = sf_mod.Function(name = 'pickAndPlaceWhite')
+f1 = sf_mod.Function(name = 'pickAndPlace Blue')
+f2 = sf_mod.Function(name = 'pickAndPlace Orange')
+f3 = sf_mod.Function(name = 'pickAndPlace White')
 
 #resources
-r1 = sf_mod.Resource(name = 'blueCube', typeRes='Tool')
-r2 = sf_mod.Resource(name = 'orangeCube', typeRes='Tool')
-r3 = sf_mod.Resource(name = 'whiteCube', typeRes='Tool')
+r1 = sf_mod.Resource(name = 'Blue cube', typeRes='Tool')
+r2 = sf_mod.Resource(name = 'Orange cube', typeRes='Tool')
+r3 = sf_mod.Resource(name = 'White cube', typeRes='Tool')
 
 r4 = sf_mod.Resource(name = 'Human Operator', typeRes='Operator', functions = [f1, f3])
 r5 = sf_mod.Resource(name = 'Cobot', typeRes='Operator', functions = [f1, f2])
