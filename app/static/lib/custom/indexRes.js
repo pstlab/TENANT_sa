@@ -1,5 +1,105 @@
 // function to execute on page load
 $(document).ready(function() {    
+
+    var functions = [];
+
+    var Function = class Function {
+        constructor(type, name) {
+            this.type = type;
+            this.name = name;
+        }
+    };
+
+    $(".functionForm").hide();
+    $(".new-function").hide();
+    $(".select-function").hide();
+
+    /**************************************
+     *  Show the form of function
+     *************************************/
+    $("#new-resourcetype").change(function() {
+        if( this.value === "Operator") {
+            $(".functionForm").show();
+        }
+        else {
+            $(".functionForm").hide();
+            $(".new-function").hide();
+            $(".select-function").hide();
+        }
+    });
+
+    /**************************************
+     *  Show the form to add a
+     *  NEW FUNCTION
+     **************************************/
+    $("#addNew").click(function() {
+        $(".new-function").show();
+        $(".select-function").hide();
+    });
+
+    /**************************************
+     *  Show the form to add a
+     *  PRE EXISTING FUNCTION
+     **************************************/
+     $("#selectOld").click(function() {
+        $(".new-function").hide();
+        $(".select-function").show();
+    });
+
+    /***************************************
+     *  ADD A NEW FUNCTION
+     **************************************/
+    $("#doneNew").click(function() {
+        var name = document.getElementById('new-functionname').value;
+
+        if(name === "") {
+            window.alert("Enter all the information of the function!")
+        }
+        else {
+            document.getElementById('new-functionname').value = '';
+
+            var tmp = new Function('new', name);
+            functions.push(tmp);
+
+            //Built the string to append to display the function
+            var res = '';
+            res += ("<div class='function'>");
+            // TODO add an id to identify which function i have to remove
+            //res += ("<label class='ctaskid' hidden>"+ generalID +'</label>');
+            res += ("<label> Function: " + name + "</label> &nbsp;");
+            res += ("</div>")
+            $("#result").append(res);
+
+            $(".new-function").hide();
+        }
+    });
+
+    /***************************************
+     *  ADD A PRE EXISTING FUNCTION
+     **************************************/
+     $("#doneSelect").click(function() {
+        var fid = document.getElementById('selected-f').value;
+
+        if(fid === "") {
+            window.alert("Select one function!")
+        }
+        else {
+            var tmp = new Function('old', fid);
+            functions.push(tmp);
+
+            //Built the string to append to display the function
+            var fname = $("#selected-f option:selected").text();
+            var res = '';
+            res += ("<div class='function'>");
+            // TODO add an id to identify which function i have to remove
+            //res += ("<label class='ctaskid' hidden>"+ generalID +'</label>');
+            res += ("<label> Function: " + fname + "</label> &nbsp;");
+            res += ("</div>")
+            $("#result").append(res);
+
+            $(".select-function").hide();
+        }
+    });
         
     /**************************************
     *   Submit a resource
@@ -10,15 +110,13 @@ $(document).ready(function() {
         var type = document.getElementById('new-resourcetype').value;
         var aggregate = document.getElementById('new-aggregate_resource').value;
 
-        //TODO funzioni della risorsa operatore
-
         if (resourceName === "" || type === "") {
             window.alert("Enter all the information of the resource!");
         }
 
         else {
             var data = [];
-            data.push({'name':resourceName, 'type':type, 'aggregate':aggregate});
+            data.push({'name':resourceName, 'type':type, 'aggregate':aggregate, 'functions':functions});
             //create the json data
             var js_data = JSON.stringify(data);
             $.ajax({                        
