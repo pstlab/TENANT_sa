@@ -30,10 +30,11 @@ $(document).ready(function() {
     };
 
     var Constraint = class Constraint {
-        constructor(id, t1, t2) {
+        constructor(id, t1, t2, type) {
             this.id = id;
             this.t1 = t1;
             this.t2 = t2;
+            this.type = type;
         }
     };
 
@@ -109,15 +110,14 @@ $(document).ready(function() {
         $(".constraintForm").show();
     });
 
-    //TODO Refactor per unire i due metodi che cambiano di poche istruzioni
     /*******************************************
      *  Add a complex task to the list     
     ******************************************/
-   var generalID = 1  
-   var specialID = 0
-   $("#doneComplex").click(function() {
-        addTask('complex');
-   });  
+    var generalID = 1  
+    var specialID = 0
+    $("#doneComplex").click(function() {
+            addTask('complex');
+    });  
    /*******************************************
      *  Add a simple task to the list     
     ******************************************/
@@ -126,10 +126,12 @@ $(document).ready(function() {
     });
 
     function addTask(typeOf) {
+        var simple = 'simple'
+        var complex = 'complex'
         //take the elements
-        if(typeOf === 'complex')
+        if(typeOf === complex)
             var name = document.getElementById("new-Ctaskname").value;
-        if(typeOf === 'simple') {
+        if(typeOf === simple) {
             var name = document.getElementById("new-Staskname").value;
             var mod = document.getElementById("new-Staskmode").value;
             var f1 = document.getElementById("new-func1").value;
@@ -139,8 +141,8 @@ $(document).ready(function() {
             var f2name = $("#new-func2 option:selected").text();
         }
        
-       if((typeOf === 'complex' && name === "") || 
-            (typeOf === 'simple' && (name === "" || mod === "" || f1 === ""))) {
+       if((typeOf === complex && name === "") || 
+            (typeOf === simple && (name === "" || mod === "" || f1 === ""))) {
            window.alert("Enter all the information of the task!")
        }
        else {
@@ -153,9 +155,9 @@ $(document).ready(function() {
            $(".mod2").hide();
 
            //build the task object
-            if(typeOf === 'complex')
+            if(typeOf === complex)
                 var tmp = new ComplexTask(generalID, name, []);
-            if(typeOf === 'simple')
+            if(typeOf === simple)
                 var tmp = new SimpleTask(generalID, name, mod, f1, f2);
 
            //higher level task
@@ -171,19 +173,19 @@ $(document).ready(function() {
            //Built the string to append to display the task
            var res = '';
            res += ("<div class='subtask' id=contain" + generalID + ">");
-           if(typeOf === 'complex') {
+           if(typeOf === complex) {
                 res += ("<label class='ctaskid' hidden>"+ generalID +'</label>');
                 res += ("<label> Complex task name: " + name + "</label> &nbsp;");
                 res += ("<button class='complexST'>Add a complex sub-task</button>");
                 res += ("<button class='simpleST'>Add a simple sub-task</button>")
            }
-           if(typeOf === 'simple') {
+           if(typeOf === simple) {
                 res += ("<label class='staskid' hidden>"+ generalID +'</label>');
                 res += ("<label> Simple task name: " + name + "</label> &nbsp;");
                 res += ("<label> Collaborative modality: " + mod + "</label>");
-                res += ("<div><label>Function1: " + f1name + '</label>');
+                res += ("<div><label>  Function1: " + f1name + '</label>');
                 if(f2 !== '') {
-                    res += ("<label>Function2: " + f2name + '</label>');
+                    res += ("<label>  Function2: " + f2name + '</label>');
                 }
                 res += ("</div>");
            }
@@ -232,7 +234,6 @@ $(document).ready(function() {
         if (processName === "" || processProduct === "") {
             window.alert("Enter all the information of the process!");
         }
-
         
         else if (tasks.length === 0) {
             window.alert("Enter at least one task!");
@@ -327,8 +328,11 @@ $(document).ready(function() {
             document.getElementById("new-t1").value = '';
             document.getElementById("new-t2").value = '';
 
+            var consType = getType(parseInt(t1), tasks).type;
+            consType += getType(parseInt(t2), tasks).type;
+
             //build the constraint object
-            var tmp = new Constraint(constraintID, t1, t2);
+            var tmp = new Constraint(constraintID, t1, t2, consType);
  
             constraints.push(tmp);
  
@@ -348,6 +352,18 @@ $(document).ready(function() {
             $(".constraintForm").hide();
         }
     });
+    //AUXILIARY FUNCTION to get the type of a task
+   function getType(idToMatch, listToCheck) {
+    var higher = listToCheck.find(x => x.id === idToMatch);
+    if(higher !== undefined) {
+        return higher;
+    }
+    else {
+        for (var index in listToCheck) {
+            return getType(idToMatch, listToCheck[index].list);
+        }
+    }
+}
 
     /**************************************
     *  Remove a constraint
