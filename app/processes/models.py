@@ -1,5 +1,5 @@
 # Import the database object (db)
-from sqlalchemy import Column, Integer, String, ForeignKey, Enum
+from sqlalchemy import Column, Integer, String, ForeignKey, Enum, Table
 from sqlalchemy.orm import relationship
 
 from app.database import Base
@@ -64,7 +64,12 @@ class SimpleTask(Base):
     # ManyToOne
     parent_id = Column(Integer, ForeignKey('complex_tasks.id'))
     parent = relationship("ComplexTask", back_populates='simple_tasks')
-    #Operations
+    # two relationship ManyToOne
+    f1_id = Column(Integer, ForeignKey('functions.id'))
+    f2_id = Column(Integer, ForeignKey('functions.id'))
+    f1 = relationship("Function", back_populates='simple_tasks1', foreign_keys=[f1_id])
+    f2 = relationship("Function", back_populates='simple_tasks2', foreign_keys=[f2_id])
+
 
     def __str__(self):
         return self.name

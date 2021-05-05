@@ -56,6 +56,9 @@ class Function(Base):
     
     # ManyToMany
     resource = relationship("Resource", secondary=association_table, back_populates='functions')
+    # OneToMany
+    simple_tasks1 = relationship("SimpleTask", back_populates='f1', foreign_keys='SimpleTask.f1_id')
+    simple_tasks2 = relationship("SimpleTask", back_populates='f2', foreign_keys='SimpleTask.f2_id')
 
     def __repr__(self):
         return self.name

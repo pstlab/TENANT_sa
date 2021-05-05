@@ -55,26 +55,27 @@
         </div>
         {% endfor %}
         {% for element in process.simple_tasks %}
-        <div class="row">
-            {% if element.parent is none %}
-            <div class='subtask' id=contain{{element.id}}>
-                <label hidden>{{element.id}}</label>
-                <label> Simple task name: {{element.name}}</label> &nbsp
-                <label> Collaborative modality: {{element.modality}}</label>
-            </div>
-            {% else %}
+        <div class="row" id="simpleAppend">
             <script type="text/javascript">
-                tdiv = $("#contain" + '{{element.parent.id}}')
+                '{% if element.parent is none %}'
+                    tdiv = $("#simpleAppend")
+                '{% else %}'
+                    tdiv = $("#contain" + '{{element.parent.id}}')
+                '{% endif %}'
                 res = '';
                 res += ("<div class='subtask' id=Scontain" + '{{element.id}}' + ">");
                 res += ("<label class='staskid' hidden>" + '{{element.id}}' + "</label>");
                 res += ("<label> Simple task name: " + '{{element.name}}' + "</label> &nbsp;");
                 res += ("<label> Collaborative modality: " + '{{element.modality}}' + "</label>");
-                res += ('</div>')
+                res += ("<div><label> Function 1: " + '{{element.f1.name}}' + "</label></div>");
+                '{% if element.f2 is not none %}'
+                    res += ("<div><label> Function 2: " + '{{element.f2.name}}' + "</label></div>");
+                '{% endif %}'
+                res += ("</div>");
+
                 tdiv.append(res);
             </script>
             </div>
-            {% endif %}
         </div>
         {% endfor %}
         <div class="row">

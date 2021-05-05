@@ -5,6 +5,7 @@ from .models import Process, ComplexTask, SimpleTask
 from app import app
 
 from app.products.models import Product
+from app.shopfloor.models import Function
 
 # Define the blueprint: 'process', set its url prefix: app.url/process
 mod_process = Blueprint('process', __name__, url_prefix='/process')
@@ -31,7 +32,8 @@ def remove():
 @mod_process.route('/newProc/', methods=['GET'])
 def new():
     prod = app.session.query(Product).all()
-    return render_template("processes/newProc.html", products=prod)
+    f = app.session.query(Function).all()
+    return render_template("processes/newProc.html", products=prod, functions=f)
 
 @mod_process.route('/newProc/', methods=['POST'])
 def newP():
@@ -72,7 +74,11 @@ def addTask(tasks):
             simples.extend(tmpS)
         elif(ttype == 'simple'):
             mode = tasks[i]['modality']
-            s = SimpleTask(name=name, modality=mode)
+            f1id = tasks[i]['f1']
+            f2id = tasks[i]['f2']
+            f1 = app.session.query(Function).filter_by(id=f1id).first()
+            f2 = app.session.query(Function).filter_by(id=f2id).first()
+            s = SimpleTask(name=name, modality=mode, f1=f1, f2=f2)
             simples.append(s)
     
     return complexs, simples
@@ -94,7 +100,11 @@ def addTaskAux(parent, subT, resC, resS):
                 resS.extend(tmpS)
         elif(ttype == 'simple'):
             mode = subT[i]['modality']
-            s = SimpleTask(name=name, modality=mode, parent=parent)
+            f1id = tasks[i]['f1']
+            f2id = tasks[i]['f2']
+            f1 = app.session.query(Function).filter_by(id=f1id).first()
+            f2 = app.session.query(Function).filter_by(id=f2id).first()
+            s = SimpleTask(name=name, modality=mode, parent=parent, f1=f1, f2=f2)
             resS.append(s)
     return resC, resS
 

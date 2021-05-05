@@ -37,6 +37,7 @@
     <div class='containComplex'><button type="reset" id="doneComplex">Done</button></div>
 
     <div class='containSimple'>
+      <div>
       <label>Task name: </label>
       <input type="text" id="new-Staskname" />
       <label>Task modality: </label>
@@ -47,7 +48,30 @@
         <option>Simultaneous</option>
         <option>Supportive</option>
       </select>
-      <!--TODO operazioni-->
+      </div>
+      
+      <div>
+      <label class='mod'>Function 1: </label>
+      <select id='new-func1' class='mod'>
+      </select>
+      <label class='mod2'>Function 2: </label>
+      <select id='new-func2' class='mod2'>
+      </select>
+      </div>
+
+      <script type="text/javascript">
+        var divFunc1 = $("#new-func1");
+        var divFunc2 = $("#new-func2");
+
+        divFunc1.find("option:gt(0)").remove();
+        divFunc2.find("option:gt(0)").remove();
+        divFunc1.append('<option selected disabled></option>');
+        divFunc2.append('<option selected disabled></option>');
+        '{% for element in functions %}'
+        divFunc1.append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>&nbsp;');
+        divFunc2.append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+        '{% endfor %}'
+      </script>
     </div>
     <div class="containSimple"><button id="doneSimple">Done</button></div>
 
