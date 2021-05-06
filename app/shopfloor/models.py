@@ -1,8 +1,13 @@
 # Import the database object (db)
-from sqlalchemy import Column, Integer, String, ForeignKey, Enum
+from sqlalchemy import Column, Integer, String, ForeignKey, Enum, Table
 from sqlalchemy.orm import relationship
 
 from app.database import Base
+
+association_table = Table('resources_functions', Base.metadata,
+    Column('resources_id', Integer, ForeignKey('resources.id')),
+    Column('functions_id', Integer, ForeignKey('functions.id'))
+)
 
 # Define a general resource model
 class Resource(Base):
@@ -18,7 +23,8 @@ class Resource(Base):
     aggregate_resource_id = Column(Integer, ForeignKey('aggregate_resources.id'))
     aggregate_resource = relationship("AggregateResource", back_populates='resources')
 
-    #TODO relationship with some functions
+    # ManyToMany
+    functions = relationship("Function", secondary=association_table, back_populates='resource')
 
     def __repr__(self):
         return '<Resource %r>' % (self.name)
@@ -42,3 +48,20 @@ class AggregateResource(Base):
     def __str__(self):
         return self.name
     
+class Function(Base):
+    __tablename__ = 'functions'
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(128),  nullable=False, unique=True)
+    
+    # ManyToMany
+    resource = relationship("Resource", secondary=association_table, back_populates='functions')
+    # OneToMany
+    simple_tasks1 = relationship("SimpleTask", back_populates='f1', foreign_keys='SimpleTask.f1_id')
+    simple_tasks2 = relationship("SimpleTask", back_populates='f2', foreign_keys='SimpleTask.f2_id')
+
+    def __repr__(self):
+        return self.name
+
+    def __str__(self):
+        return self.name

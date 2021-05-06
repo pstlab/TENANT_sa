@@ -13,9 +13,6 @@
 
 <div class="section-content">
     <div class="section-item">
-        <div class="section-title">
-            Active Demands
-        </div>
         <div class="process">
             <div class="navbar">
                 <div class='form'>
@@ -40,8 +37,17 @@
                             </select>
                             <label>Process</label>
                             <select id="new-demandprocess">
-                                <option selected disabled></option>
                             </select>
+                            <script type="text/javascript">
+                                var divProd = document.getElementById('new-demandproduct');
+                                var divProc = $("#new-demandprocess");
+                                divProc.find("option:gt(0)").remove();
+                                divProc.append('<option selected disabled></option>');
+                                '{% for element in processes %}'
+                                    divProc.append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+                                '{% endfor %}'
+                                divProc.append('<option value=none> None </option>');
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -54,12 +60,15 @@
 </div>
 
 <div class="section-item">
+    <div class="section-title">
+        Active Demands
+    </div>
     <div class="process">
         {% for element in demands %}
         <div class="row">
             <div>
                 <label>Name:</label>
-                <label class="el-name">{{element.name}}</label>
+                <label class="el-name">"{{element.name}}"</label>
             </div>
             <label>Type:{{element.typeDem}}<br />Quantity: {{element.quantity}}<br /></label>
             <label> Product: {{element.product.name}}<br />Through process: {{element.process}}<br /></label>
@@ -82,11 +91,6 @@
     $("#new-demandproduct").find("option:gt(0)").remove();
     '{% for element in products %}'
     $('#new-demandproduct').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
-    '{% endfor %}'
-
-    $("#new-demandprocess").find("option:gt(0)").remove();
-    '{% for element in processes %}'
-    $('#new-demandprocess').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
     '{% endfor %}'
 
     if (sessionStorage.getItem('selectedtem')) {

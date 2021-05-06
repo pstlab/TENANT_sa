@@ -12,17 +12,10 @@
 </div>
 
 <div class="section-content">
-    <!--
-    <div class="section-item">
-        <div class="process">
-            <div class="navbar">
-                <div class='form'>
-                    <div class='demand-form'>
-    -->
                         <input id="demandid" hidden value={{demand.id}}></input>
                         <div>
                             <label>Demand name</label>
-                            <input type="text" id="demandname" value={{demand.name}} />
+                            <input type="text" id="demandname" value="{{demand.name}}" />
                         </div>
                         <div>
                             <label>Demand type</label>
@@ -40,28 +33,36 @@
                             </select>
                             <label>Through process:</label>
                             <select id="demandprocess">
-                                <option selected disabled value="{{demand.process.id}}">{{demand.process}}</option>
                             </select>
+                            <script type="text/javascript">
+                                var divProd = document.getElementById('demandproduct');
+                                var divProc = $("#demandprocess");
+                                divProc.find("option:gt(0)").remove();
+                                if(divProd.value === '{{demand.product.id}}') {
+                                    divProc.append('<option selected disabled value=' + '{{demand.process.id}}' + '>' + '{{demand.process}}' + '</option>');
+                                    '{% for element in demand.product.processes %}'
+                                    divProc.append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+                                    '{% endfor %}'
+                                }
+                                else {
+                                    divProc.val('None'); 
+                                    '{% for element in processes %}'
+                                    divProc.append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+                                    '{% endfor %}'  
+                                }
+                                divProc.append('<option value=none> None </option>');
+                            </script>
                         </div>
                         <div>
                             <label>Quantity </label>
                             <input type="number" id="demandquantity" value={{demand.quantity}} />
                         </div>
-                            <!-- 
-                    </div> 
-                </div>
-            </div>
-            <div class="navbar">
-                -->
+                           
                 <a href='/demands/'>
                     <button class='links'>Back</button>
                 </a>
                 <button type="button" id="edit">Save demand</button>
-                <!--
-            </div>
-        </div>
-    </div>
-    -->
+                
 </div>
 {% endblock %}
 
@@ -71,12 +72,6 @@
     '{% for element in products %}'
         $('#demandproduct').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
     '{% endfor %}'
-
-    $("#demandprocess").find("option:gt(0)").remove();
-    '{% for element in processes %}'
-    $('#demandprocess').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
-    '{% endfor %}'
-    $('#demandprocess').append('<option value=none> None </option>');
 
     if (sessionStorage.getItem('selectedtem')) {
         $('#demandproduct').val(sessionStorage.getItem('selectedtem'));
