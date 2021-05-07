@@ -82,7 +82,7 @@ con6 = proc_mod.Constraint(tc1=c3, tc2=c5)
 
 #process
 procM = proc_mod.Process(name='Do Mosaic', product=p1,
-            complex_tasks = [c1, c2, c3, c4, c5], simple_tasks = [s11, s12, s13, s14, s15],
+            complex_tasks = [c1, c2, c3, c4, c5], simple_tasks = [s11, s12, s13, s14],
             constraints = [con1, con2, con3, con4, con5, con6])
 procR = proc_mod.Process(name='Do Row', product=p2)
 #procR1 = proc_mod.Process(name='Do Row 1', product=p2, simple_tasks = [s11, s12, s13, s14, s15])
