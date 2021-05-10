@@ -38,7 +38,9 @@
             {% if element.parent is none %}
             <div class='subtask' id=contain{{element.id}}>
                 <label hidden>{{element.id}}</label>
-                <label> Complex task name: {{element.name}}</label> &nbsp
+                <label> Complex task name: {{element.name}}</label> &nbsp; &nbsp;
+                <label> {{element.typeTask}} task</label> &nbsp;
+
             <!-- <button class='complexST'>Add a complex sub-task</button>
             <button class='simpleST'>Add a simple sub-task</button></div> -->
             </div>
@@ -48,7 +50,8 @@
                 res = '';
                 res += ("<div class='subtask' id=contain" + '{{element.id}}' + ">");
                 res += ("<label class='ctaskid' hidden>" + '{{element.id}}' + "</label>");
-                res += ("<label> Complex task name: " + '{{element.name}}' + "</label> &nbsp;");
+                res += ("<label> Complex task name: " + '{{element.name}}' + "</label> &nbsp; &nbsp;");
+                res += ("<label>" + '{{element.typeTask}}' + " task</label> &nbsp;");
                 res += ('</div>')
                 tdiv.append(res);
             </script>
