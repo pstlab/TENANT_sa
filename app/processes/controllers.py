@@ -101,7 +101,8 @@ def addTask(tasks):
         idPage = tasks[i]['id']
         #If the task it's at the higher level, simply add it to the list
         if(ttype == 'complex'):
-            c = ComplexTask(name=name)
+            complexType = tasks[i]['complexType']
+            c = ComplexTask(name=name, typeTask=complexType)
             complexs.append(c)
             # TODO find a better way
             app.session.add(c)
@@ -137,7 +138,8 @@ def addTaskAux(parent, subT, resC, resS, idPageidDbC, idPageidDbS):
         ttype = subT[i]['type']
         idPage = subT[i]['id']
         if(ttype == 'complex'):
-            c = ComplexTask(name=name, parent=parent)
+            complexType = subT[i]['complexType']
+            c = ComplexTask(name=name, parent=parent, typeTask=complexType)
             resC.append(c)
             app.session.add(c)
             app.session.commit()
@@ -164,7 +166,6 @@ def addTaskAux(parent, subT, resC, resS, idPageidDbC, idPageidDbS):
             idPageidDbS.update({idPage: idDb})
 
     return resC, resS, idPageidDbC, idPageidDbS
-
 
 
 #edit a process in the db. welcome page to view it and request (post) after the user data input

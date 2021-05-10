@@ -49,11 +49,11 @@ p6 = prod_mod.Product(name = 'Row 5')
 pf1 = prod_mod.ProductFamily(name = 'Rows', products = [p2, p3, p4, p5, p6])
 
 #complex tasks
-c1 = proc_mod.ComplexTask(name='Do Row 1')
-c2 = proc_mod.ComplexTask(name='Do Row 2')
-c3 = proc_mod.ComplexTask(name='Do Row 3')
-c4 = proc_mod.ComplexTask(name='Do Row 4')
-c5 = proc_mod.ComplexTask(name='Do Row 5')
+c1 = proc_mod.ComplexTask(name='Do Row 1', typeTask='Conjunctive')
+c2 = proc_mod.ComplexTask(name='Do Row 2', typeTask='Conjunctive')
+c3 = proc_mod.ComplexTask(name='Do Row 3', typeTask='Conjunctive')
+c4 = proc_mod.ComplexTask(name='Do Row 4', typeTask='Conjunctive')
+c5 = proc_mod.ComplexTask(name='Do Row 5', typeTask='Conjunctive')
 #c12 = proc_mod.ComplexTask(name='two', parent=c1)
 
 # c11 = proc_mod.ComplexTask(name='Do Cell A1')

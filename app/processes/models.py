@@ -37,6 +37,7 @@ class ComplexTask(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(128), nullable=False, unique=False)
+    typeTask = Column(Enum('Conjunctive', 'Disjunctive'))
 
     # ManyToOne
     process_id = Column(Integer, ForeignKey('processes.id'))

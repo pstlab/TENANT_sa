@@ -9,11 +9,12 @@ $(document).ready(function() {
     var constraints = [];
 
     var ComplexTask = class ComplexTask {
-        constructor(id, name, list) {
+        constructor(id, name, ct, list) {
             this.id = id;
             this.name = name;
             this.list = list;
-            this.type = 'complex'
+            this.type = 'complex';
+            this.complexType = ct;
         }
     };
 
@@ -116,7 +117,7 @@ $(document).ready(function() {
     var generalID = 1  
     var specialID = 0
     $("#doneComplex").click(function() {
-            addTask('complex');
+        addTask('complex');
     });  
    /*******************************************
      *  Add a simple task to the list     
@@ -129,8 +130,10 @@ $(document).ready(function() {
         var simple = 'simple'
         var complex = 'complex'
         //take the elements
-        if(typeOf === complex)
+        if(typeOf === complex) {
             var name = document.getElementById("new-Ctaskname").value;
+            var ctype = document.getElementById("new-Ctype").value;
+        }
         if(typeOf === simple) {
             var name = document.getElementById("new-Staskname").value;
             var mod = document.getElementById("new-Staskmode").value;
@@ -141,12 +144,13 @@ $(document).ready(function() {
             var f2name = $("#new-func2 option:selected").text();
         }
        
-       if((typeOf === complex && name === "") || 
+       if((typeOf === complex && (name === "" || ctype === "")) || 
             (typeOf === simple && (name === "" || mod === "" || f1 === ""))) {
            window.alert("Enter all the information of the task!")
        }
        else {
            document.getElementById("new-Ctaskname").value = '';
+           document.getElementById("new-Ctype").value = '';
            document.getElementById("new-Staskname").value = '';
            document.getElementById("new-Staskmode").value = '';
            document.getElementById("new-func1").value = '';
@@ -156,7 +160,7 @@ $(document).ready(function() {
 
            //build the task object
             if(typeOf === complex)
-                var tmp = new ComplexTask(generalID, name, []);
+                var tmp = new ComplexTask(generalID, name, ctype, []);
             if(typeOf === simple)
                 var tmp = new SimpleTask(generalID, name, mod, f1, f2);
 
@@ -175,7 +179,8 @@ $(document).ready(function() {
            res += ("<div class='subtask' id=contain" + generalID + ">");
            if(typeOf === complex) {
                 res += ("<label class='ctaskid' hidden>"+ generalID +'</label>');
-                res += ("<label> Complex task name: " + name + "</label> &nbsp;");
+                res += ("<label> Complex task name: " + name + "</label> &nbsp; &nbsp;");
+                res += ("<label>" + ctype + " task</label> &nbsp;");
                 res += ("<button class='complexST'>Add a complex sub-task</button>");
                 res += ("<button class='simpleST'>Add a simple sub-task</button>")
            }
