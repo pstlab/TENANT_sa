@@ -119,9 +119,11 @@ def newAR():
     # Add a new aggregate resource
     if(data[-1] == "new"):
         name = data[-2]['name']
+        parentId = data[-2]['ar']
+        parent = app.session.query(AggregateResource).filter_by(id=parentId).first()
         #TODO list of resources
 
-        ar = AggregateResource(name = name)
+        ar = AggregateResource(name = name, parent=parent)
         app.session.add(ar)
 
     #remove an aggregate resource
@@ -132,12 +134,16 @@ def newAR():
     #modify a product family
     if(data[-1] == "edit"):
         #get data from input
-        name = data[1]['name']
+        print(data)
+        name = data[-2]['name']
+        parentId = data[-2]['ar']
+        parent = app.session.query(AggregateResource).filter_by(id=parentId).first()
         #get the database values and update them
         arId = data[0]
         ar = app.session.query(AggregateResource).filter_by(id=arId).first()
 
         ar.name = name
+        ar.parent = parent
 
     #remove a resource from the aggregate resource
     if(data[-1] == 'removeRes'):
@@ -148,6 +154,17 @@ def newAR():
         res = app.session.query(Resource).filter_by(id=resId).first()
         ar = app.session.query(AggregateResource).filter_by(id=arId).first()
         ar.resources.remove(res)
+    
+    #remove an aggregate resource from the aggregate resource
+    if(data[-1] == 'removeAggRes'):
+        #get data
+        arId = data[0]['aggrRes']
+        resId = data[0]['aggResId']
+
+        toRemove = app.session.query(AggregateResource).filter_by(id=resId).first()
+        ar = app.session.query(AggregateResource).filter_by(id=arId).first()
+        ar.children.remove(toRemove)
+
         
     app.session.commit()
     ars = app.session.query(AggregateResource).all()

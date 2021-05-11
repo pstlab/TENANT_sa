@@ -16,8 +16,22 @@
       <div class="navbar">
         <div class='form'>
           <div class='demand-form'>
+
             <label>Aggregate Resource name:</label>
-            <input type="text" id="new-arname" />
+            <input type="text" id="new-arname" /> &nbsp; &nbsp;
+
+            <label>Part of (Optional)</label>
+            <select id="new-ar-aggregate">
+              <option selected disabled></option>
+            </select>
+            <script>
+              $("#new-ar-aggregate").find("option:gt(0)").remove();
+              '{% for element in aResources %}'
+                  $('#new-ar-aggregate').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+              '{% endfor %}'
+              $('#new-ar-aggregate').append('<option value=none> None </option>');
+          </script>
+
             <!--<label>Resources</label>
             <select id="new-res">
               <option selected disabled></option>
@@ -44,10 +58,33 @@
           <div class="row mainproperties">
             <label>Aggregate Resource name:</label>
             <input type="text" class="arname" value="{{element.name}}" />
+            &nbsp; &nbsp;
+
+            <label>Part of (Optional)</label>
+            <select class="ar-aggregate">
+              <option selected disabled>{{element.parent}}</option>
+            </select>
+            <script>
+              $(".ar-aggregate").find("option:gt(0)").remove();
+              '{% for element in aResources %}'
+                  $('.ar-aggregate').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+              '{% endfor %}'
+              $('.ar-aggregate').append('<option value=none> None </option>');
+            </script>
+            &nbsp; &nbsp; &nbsp;
 
             <label class="id" hidden>{{element.id}}</label>
             <button class='removeAR'>Remove</button>
           </div>
+
+          {% for ar in element.children %}
+          <div class="row"> 
+            <label class="aResid" hidden>{{ar.id}}</label>
+            <label>Aggregate Resource: {{ar.name}}</label>
+            <button class='removeAR'>Remove from the aggregate resource</button>
+          </div>
+          {% endfor %}
+
             {% for resource in element.resources %}
             <div class="row"> 
               <label class="resid" hidden>{{resource.id}}</label>
@@ -55,6 +92,7 @@
               <button class='removeR'>Remove from the aggregate resource</button>
             </div>
             {% endfor %}
+
             <!--TODO aggiungi risorsa ad aggregata-->
           <hr size="2" color="black">
         </div>

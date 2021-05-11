@@ -41,6 +41,11 @@ class AggregateResource(Base):
 
     # OneToMany
     resources = relationship("Resource", back_populates='aggregate_resource')
+    # OneToMany with other aggregate resources
+    parent_id = Column(Integer, ForeignKey('aggregate_resources.id'))
+    parent = relationship('AggregateResource', remote_side=[id], back_populates='children')
+    children = relationship('AggregateResource', back_populates='parent')
+    
 
     def __repr__(self):
         return '< Aggregate Resource %r>' % (self.name)
