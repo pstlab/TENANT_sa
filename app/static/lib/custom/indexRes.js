@@ -209,5 +209,14 @@ $(document).ready(function() {
         }
     });
 
+    // Manage the function form
+    $("#resourcetype").change(function() {
+        if( this.value === "Operator") {
+            $("#mod-functionForm").show();
+        }
+        else {
+            $("#mod-functionForm").hide();
+        }
+    });
     
 });

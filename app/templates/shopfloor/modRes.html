@@ -32,7 +32,8 @@
             <option selected disabled value={{resource.aggregate_resource.id}}>{{resource.aggregate_resource}}</option>
         </select>
     </div>
-    <div>
+
+    <div id='mod-functionForm'>
         <label>Functions:</label>
         <div class="subtask" id="resFunct">
         {% for element in resource.functions %}
@@ -89,5 +90,12 @@
     $('#aggregate_resource').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
     '{% endfor %}'
     $('#aggregate_resource').append('<option value=none> None </option>');
+
+    if( '{{resource.typeRes}}' === "Operator") {
+        $("#mod-functionForm").show();
+    }
+    else {
+        $("#mod-functionForm").hide();
+    }
 </script>
 {% endblock %}
