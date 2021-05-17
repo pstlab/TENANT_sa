@@ -1,17 +1,29 @@
 // function to execute on page load
 $(document).ready(function() {    
 
-    var functions = [];
-
-    var old = document.getElementsByClassName("functionId");
-    Array.from(old).forEach(elem => functions.push({type:'old', name:elem.getAttribute('value')}));
-
     var Function = class Function {
-        constructor(type, name) {
+        constructor(id, type, name) {
+            this.id = id;
             this.type = type;
             this.name = name;
         }
     };
+
+    var functions = [];
+
+    //The already saved functions of the resource
+    var functionID = 0
+    var old = document.getElementsByClassName("oldFunId");
+    Array.from(old).forEach(elem => {
+        functions.push(new Function(functionID, 'old', elem.getAttribute('value')));
+        //Add the local label id
+        var res = document.createElement('label');
+        res.className = 'functionId';
+        res.innerHTML = functionID;
+        res.hidden = true;
+        elem.parentNode.appendChild(res)
+        functionID += 1;
+    });
 
     $(".functionForm").hide();
     $(".new-function").hide();
@@ -70,18 +82,20 @@ $(document).ready(function() {
         else {
             document.getElementById(element).value = '';
 
-            var tmp = new Function('new', name);
+            var tmp = new Function(functionID, 'new', name);
             functions.push(tmp);
 
             //Built the string to append to display the function
             var res = '';
             res += ("<div class='function'>");
-            // TODO add an id to identify which function i have to remove
-            //res += ("<label class='ctaskid' hidden>"+ generalID +'</label>');
+            res += ("<label class='functionId' hidden>" + functionID + '</label>');
             res += ("<label>" + name + "</label> &nbsp;");
+            res += ("<button class='delFunction'>Remove</button>");
             res += ("</div>")
             $(result).append(res);
 
+            //reset the variables for the next function
+            functionID += 1;
             $(".new-function").hide();
         }
     }
@@ -107,19 +121,21 @@ $(document).ready(function() {
             window.alert("Select one function!")
         }
         else {
-            var tmp = new Function('old', fid);
+            var tmp = new Function(functionID, 'old', fid);
             functions.push(tmp);
 
             //Built the string to append to display the function
             var fname = $("#" + element + " option:selected").text();
             var res = '';
             res += ("<div class='function'>");
-            // TODO add an id to identify which function i have to remove
-            //res += ("<label class='ctaskid' hidden>"+ generalID +'</label>');
+            res += ("<label class='functionId' hidden>" + functionID + '</label>');
             res += ("<label>" + fname + "</label> &nbsp;");
-            res += ("</div>")
+            res += ("<button class='delFunction'>Remove</button>");
+            res += ("</div>");
             $(result).append(res);
 
+            //reset the variables for the next function
+            functionID += 1;
             $(".select-function").hide();
         }
     }
@@ -139,6 +155,8 @@ $(document).ready(function() {
 
         else {
             var data = [];
+            if (type !== 'Operator')
+                functions = []
             data.push({'name':resourceName, 'type':type, 'aggregate':aggregate, 'functions':functions});
             //create the json data
             var js_data = JSON.stringify(data);
@@ -192,6 +210,8 @@ $(document).ready(function() {
         else {
             var data = [];
             data.push(resourceId)
+            if (type !== 'Operator')
+                functions = []
             data.push({'name':resourceName, 'type':type, 'aggregate':aggregate, 'functions':functions});
 
             var myurl = '/sf/editRes/' + resourceId;
@@ -219,4 +239,13 @@ $(document).ready(function() {
         }
     });
     
+    /**************************************
+    *  Remove a function
+    **************************************/
+     $(document).on("click", ".delFunction", function () {
+        tmp = $(this).siblings(".functionId").html();
+        var index = functions.map(x => { return x.id;}).indexOf(tmp);
+        functions.splice(index, 1);
+        $(this).parent().remove();
+    });
 });

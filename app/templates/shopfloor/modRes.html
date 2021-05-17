@@ -37,8 +37,9 @@
         <label>Functions:</label>
         <div class="subtask" id="resFunct">
         {% for element in resource.functions %}
-            <div>
-                <label class='functionId' value={{element.id}}>{{element.name}}</label>
+            <div class='function'>
+                <label class='oldFunId' value={{element.id}}>{{element.name}}</label>
+                <button class='delFunction'>Remove</button>
             </div>
         {% endfor %}
         </div>
