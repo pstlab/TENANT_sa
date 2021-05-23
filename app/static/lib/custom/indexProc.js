@@ -69,7 +69,7 @@ $(document).ready(function () {
      * to be added from another complex task     
     ******************************************/
     $(document).on("click", ".complexST", function () {
-        tmp = $(this).siblings(".ctaskid").html();
+        tmp = $(this).siblings(".subtaskid").html();
         specialID = Number(tmp)
         $(".containComplex").show();
         $(".containSimple").hide();
@@ -81,7 +81,7 @@ $(document).ready(function () {
      * to be added from another (complex) task     
     ******************************************/
     $(document).on("click", ".simpleST", function () {
-        tmp = $(this).siblings(".ctaskid").html();
+        tmp = $(this).siblings(".subtaskid").html();
         specialID = Number(tmp)
         $(".containComplex").hide();
         $(".containSimple").show();
@@ -178,16 +178,18 @@ $(document).ready(function () {
             var res = '';
             res += ("<div class='subtask' id=contain" + generalID + ">");
             if (typeOf === complex) {
-                res += ("<label class='ctaskid' hidden>" + generalID + '</label>');
+                res += ("<label class='subtaskid' hidden>" + generalID + '</label>');
                 res += ("<label> Complex task name: " + name + "</label> &nbsp; &nbsp;");
                 res += ("<label>" + ctype + " task</label> &nbsp;");
                 res += ("<button class='complexST'>Add a complex sub-task</button>");
-                res += ("<button class='simpleST'>Add a simple sub-task</button>")
+                res += ("<button class='simpleST'>Add a simple sub-task</button> &nbsp; &nbsp;")
+                res += ("<button class='removeST'>Remove</button>")
             }
             if (typeOf === simple) {
-                res += ("<label class='staskid' hidden>" + generalID + '</label>');
+                res += ("<label class='subtaskid' hidden>" + generalID + '</label>');
                 res += ("<label> Simple task name: " + name + "</label> &nbsp;");
-                res += ("<label> Collaborative modality: " + mod + "</label>");
+                res += ("<label> Collaborative modality: " + mod + "</label> &nbsp; &nbsp;");
+                res += ("<button class='removeST'>Remove</button>")
                 res += ("<div><label>  Function1: " + f1name + '</label>');
                 if (f2 !== '') {
                     res += ("<label>  Function2: " + f2name + '</label>');
@@ -228,6 +230,68 @@ $(document).ready(function () {
             }
         }
     }
+
+    /*******************************************
+      *  Remove a task from the list     
+     ******************************************/
+     $(document).on("click", ".removeST", function () {
+        var tmp = $(this).siblings(".subtaskid").html();
+        tmp = parseInt(tmp);
+        var otherIds = removeFromList(tmp, tasks);
+        $(this).parent().remove();
+
+        //remove the task also from the list for add a constraint
+        $("#new-t1 option[value="+ tmp +"]").remove();
+        //and all the constraint with that task or its subtask
+        otherIds.push(tmp)
+        var constrainsToRemove = [];
+        for( var i=constraints.length; i--;) {
+            var t1 = parseInt(constraints[i].t1);
+            var t2 = parseInt(constraints[i].t2);
+            var tmp1 = otherIds.find(x => x === t1);
+            var tmp2 = otherIds.find(x => x === t2);
+            if( tmp1 !== undefined || tmp2 !== undefined ) {
+                constrainsToRemove.push(constraints[i].id)
+                constraints.splice(i, 1);
+            }
+        }
+        $('.constraintid').each(function(){
+            var id = $(this).html();
+            id = parseInt(id);
+            var tmp = constrainsToRemove.find(x => x === id);
+            if(tmp !== undefined) {
+                $(this).parent().remove();
+            }
+        })
+    });
+
+    //AUXILIARY FUNCTION to remove the sub-task from the right list
+    function removeFromList(tmp, itemList) {
+        var higher = itemList.find(x => x.id === tmp);
+        if (higher !== undefined) {
+            var ids = saveSubtaskId(higher.list, [])
+            var index = itemList.map(x => { return x.id;}).indexOf(tmp);
+            itemList.splice(index, 1);
+            return ids;
+        }
+        else {
+            for (var i in itemList) {
+                removeFromList(tmp, itemList[i].list);
+            }
+        }
+    }
+    //and add all its subtask to a list
+    function saveSubtaskId(itemList, ids) {
+        for(var i in itemList) {
+            ids.push(itemList[i].id);
+            if(itemList[i].list !== []) {
+                //ids.concat(saveSubtaskId(itemList[i].list, []));
+                ids.push.apply(ids, saveSubtaskId(itemList[i].list, []))
+            }
+        }
+        return ids;
+    }
+
     /**************************************
     *   Submit a process
     ***************************************/
@@ -380,9 +444,5 @@ $(document).ready(function () {
         constraints.splice(index, 1);
         $(this).parent().remove();
     });
-
-    /**************************************
-    *   Modify a constraint
-    **************************************/
 
 });
