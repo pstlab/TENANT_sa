@@ -20,9 +20,6 @@
     <label>Resource type</label>
     <select id="new-resourcetype">
       <option selected disabled></option>
-      <option>Tool</option>
-      <option>Operator</option>
-      <option>AGV</option>
     </select>
   </div>
   <div>
@@ -76,6 +73,11 @@
 
 {% block script %}
 <script>
+    $("#new-resourcetype").find("option:gt(0)").remove();
+    '{% for element in types %}'
+      $('#new-resourcetype').append('<option value=' + '{{element}}' + '>' + '{{element}}' + '</option>');
+    '{% endfor %}'
+
     $("#new-aggregate_resource").find("option:gt(0)").remove();
     '{% for element in aggregates %}'
         $('#new-aggregate_resource').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');

@@ -177,10 +177,12 @@ $(document).ready(function() {
     ***************************************/
     $(".removeRes").click(function() {
         var resId = $(this).siblings(".id").html();
+        var resType = $(this).siblings(".type").html();
 
-        var tmp =[resId, "removeRes"];
+        var data = [{'id':resId, 'type':resType}, "removeRes"];
+
         //create the json data
-        var js_data = JSON.stringify(tmp);
+        var js_data = JSON.stringify(data);
         $.ajax({                        
             url: '/sf/',
             type : 'post',
