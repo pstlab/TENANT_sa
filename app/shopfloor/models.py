@@ -10,7 +10,6 @@ TYPES_OF_RESOURCES = ('EnvironmentSensor', 'Machine', 'Tool', 'CapacityResource'
 
 
 
-
    ###     ######    ######   ########  ########  ######      ###    ######## ######## 
   ## ##   ##    ##  ##    ##  ##     ## ##       ##    ##    ## ##      ##    ##       
  ##   ##  ##        ##        ##     ## ##       ##         ##   ##     ##    ##       
@@ -68,6 +67,13 @@ class Resource(Base):
     # ManyToOne
     aggregate_resource_id = Column(Integer, ForeignKey('aggregate_resources.id'))
     aggregate_resource = relationship("AggregateResource", back_populates='resources')
+
+    def __init__(self, **kwargs):
+        self.name = kwargs.get('name')
+        self.typeRes = kwargs.get('typeRes')
+        self.description = kwargs.get('description')
+        self.capacity = kwargs.get('capacity')
+
 
     def __repr__(self):
         return '<Resource %r>' % (self.name)
@@ -142,6 +148,11 @@ class Agent(Resource):
 
     # ManyToMany
     functions = relationship("Function", secondary=association_table, back_populates='agent')
+
+    def __init__(self, **kwargs):
+        self.functions = kwargs.get('functions')
+        super(Agent, self).__init__(**kwargs)
+
 
 class Worker(Agent):
     __tablename__ = 'worker'

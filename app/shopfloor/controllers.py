@@ -57,7 +57,7 @@ def newR():
     app.session.commit()
 
     klass = globals()[typeR]
-    resource = klass(name=name, typeRes=typeR, aggregate_resource=ar)
+    resource = klass(name=name, typeRes=typeR, aggregate_resource=ar, functions=f)
 
     app.session.add(resource)
     app.session.commit()

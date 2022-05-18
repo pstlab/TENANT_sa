@@ -1,5 +1,7 @@
 // function to execute on page load
-$(document).ready(function() {    
+$(document).ready(function() {   
+    
+    var AGENTS = ["Worker", "Cobot"]
 
     var Function = class Function {
         constructor(id, type, name) {
@@ -33,7 +35,7 @@ $(document).ready(function() {
      *  Show the form of function
      *************************************/
     $("#new-resourcetype").change(function() {
-        if( this.value === "Operator") {
+        if( AGENTS.includes(this.value) ) {
             $(".functionForm").show();
         }
         else {
@@ -155,7 +157,7 @@ $(document).ready(function() {
 
         else {
             var data = [];
-            if (type !== 'Operator')
+            if(!AGENTS.includes(type))
                 functions = []
             data.push({'name':resourceName, 'type':type, 'aggregate':aggregate, 'functions':functions});
             //create the json data
@@ -212,7 +214,7 @@ $(document).ready(function() {
         else {
             var data = [];
             data.push(resourceId)
-            if (type !== 'Operator')
+            if(!AGENTS.includes(type))
                 functions = []
             data.push({'name':resourceName, 'type':type, 'aggregate':aggregate, 'functions':functions});
 
@@ -233,7 +235,7 @@ $(document).ready(function() {
 
     // Manage the function form
     $("#resourcetype").change(function() {
-        if( this.value === "Operator") {
+        if( AGENTS.includes(this.value) ) {
             $("#mod-functionForm").show();
         }
         else {
