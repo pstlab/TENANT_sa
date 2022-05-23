@@ -148,6 +148,7 @@ $(document).ready(function() {
     $("#sub").click(function(){
         //take the elements
         var resourceName = document.getElementById('new-resourcename').value;
+        var resourceDescription = document.getElementById('new-resourcedescr').value;
         var type = document.getElementById('new-resourcetype').value;
         var aggregate = document.getElementById('new-aggregate_resource').value;
 
@@ -159,7 +160,7 @@ $(document).ready(function() {
             var data = [];
             if(!AGENTS.includes(type))
                 functions = []
-            data.push({'name':resourceName, 'type':type, 'aggregate':aggregate, 'functions':functions});
+            data.push({'name':resourceName, 'description':resourceDescription, 'type':type, 'aggregate':aggregate, 'functions':functions});
             //create the json data
             var js_data = JSON.stringify(data);
             $.ajax({                        
@@ -204,6 +205,7 @@ $(document).ready(function() {
         var resourceId = document.getElementById('resourceid').value;
 
         var resourceName = document.getElementById('resourcename').value;
+        var resourceDescription = document.getElementById('resourcedescription').value;
         var type = document.getElementById('resourcetype').value;
         var aggregate = document.getElementById('aggregate_resource').value;
 
@@ -216,7 +218,7 @@ $(document).ready(function() {
             data.push(resourceId)
             if(!AGENTS.includes(type))
                 functions = []
-            data.push({'name':resourceName, 'type':type, 'aggregate':aggregate, 'functions':functions});
+            data.push({'name':resourceName, 'description':resourceDescription, 'type':type, 'aggregate':aggregate, 'functions':functions});
 
             var myurl = '/sf/editRes/' + resourceId;
             //create the json data

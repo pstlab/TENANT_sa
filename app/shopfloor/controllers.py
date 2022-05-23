@@ -41,6 +41,7 @@ def newR():
     data = request.json
     # Add a new resource
     name = data[0]['name']
+    descr = data[0]['description']
     typeR = data[0]['type']
     aggregateId = data[0]['aggregate']
     ar = app.session.query(AggregateResource).filter_by(id=aggregateId).first()
@@ -57,7 +58,7 @@ def newR():
     app.session.commit()
 
     klass = globals()[typeR]
-    resource = klass(name=name, typeRes=typeR, aggregate_resource=ar, functions=f)
+    resource = klass(name=name, description=descr, typeRes=typeR, aggregate_resource=ar, functions=f)
 
     app.session.add(resource)
     app.session.commit()
@@ -80,7 +81,8 @@ def editR(resId):
     data = request.json
     # Get the new values
     name = data[1]['name']
-    typeR = data[1]['type']
+    descr = data[1]['description']
+    # typeR = data[1]['type']
     aggregateId = data[1]['aggregate']
     resId = data[0]
 
@@ -88,13 +90,14 @@ def editR(resId):
     res = app.session.query(Resource).filter_by(id=resId).first()
 
     res.name = name
+    res.description = descr
     ar = app.session.query(AggregateResource).filter_by(id=aggregateId).first()
     res.aggregate_resource = ar
 
-    if(res.typeRes != typeR):
+    # if(res.typeRes != typeR):
         #TODO it doesn't work properly
         #The resource is still listed on the table of the old class
-        res.typeRes = typeR
+        # res.typeRes = typeR
 
     f = []
     functions = data[1]['functions']
