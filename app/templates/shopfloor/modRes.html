@@ -26,7 +26,7 @@
         <!-- <select id="resourcetype">
             <option selected disabled value={{resource.typeRes}}>{{resource.typeRes}}</option>
         </select> -->
-        <label id="resourcetype">{{resource.typeRes}}</label>
+        <label id="resourcetype" value={{resource.typeRes}}>{{resource.typeRes}}</label>
     </div>
     <div>
         <label>Aggregate Resource (Optional)</label>
@@ -99,7 +99,7 @@
     '{% endfor %}'
     $('#aggregate_resource').append('<option value=none> None </option>');
 
-    if( '{{resource.typeRes}}' === "Operator") {
+    if(AGENTS.includes('{{resource.typeRes}}')) {
         $("#mod-functionForm").show();
     }
     else {

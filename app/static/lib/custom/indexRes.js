@@ -1,8 +1,8 @@
+var AGENTS = ["Worker", "Cobot"]
+
 // function to execute on page load
 $(document).ready(function() {   
     
-    var AGENTS = ["Worker", "Cobot"]
-
     var Function = class Function {
         constructor(id, type, name) {
             this.id = id;
@@ -244,7 +244,7 @@ $(document).ready(function() {
             $("#mod-functionForm").hide();
         }
     });
-    
+
     /**************************************
     *  Remove a function
     **************************************/
