@@ -18,13 +18,15 @@
         <input type="text" id="resourcename" value="{{resource.name}}" />
     </div>
     <div>
+        <label>Resource description</label>
+        <input type="text" id="resourcedescription" value="{{resource.description}}" />
+    </div>
+    <div>
         <label>Resource type</label>
-        <select id="resourcetype">
+        <!-- <select id="resourcetype">
             <option selected disabled value={{resource.typeRes}}>{{resource.typeRes}}</option>
-            <option>Tool</option>
-            <option>Operator</option>
-            <option>AGV</option>
-        </select>
+        </select> -->
+        <label id="resourcetype" value={{resource.typeRes}}>{{resource.typeRes}}</label>
     </div>
     <div>
         <label>Aggregate Resource (Optional)</label>
@@ -86,13 +88,18 @@
 
 {% block script %}
 <script>
+    // $("#resourcetype").find("option:gt(0)").remove();
+    // '{% for element in types %}'
+    //   $('#resourcetype').append('<option value=' + '{{element}}' + '>' + '{{element}}' + '</option>');
+    // '{% endfor %}'
+
     $("#aggregate_resource").find("option:gt(0)").remove();
     '{% for element in aggregates %}'
     $('#aggregate_resource').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
     '{% endfor %}'
     $('#aggregate_resource').append('<option value=none> None </option>');
 
-    if( '{{resource.typeRes}}' === "Operator") {
+    if(AGENTS.includes('{{resource.typeRes}}')) {
         $("#mod-functionForm").show();
     }
     else {
