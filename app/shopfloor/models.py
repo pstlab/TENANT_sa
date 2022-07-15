@@ -134,6 +134,18 @@ class CapacityResource(Resource):
     def __init__(self, **kwargs):
         super(CapacityResource, self).__init__(typeRes='CapacityResource', **kwargs)
 
+#Define the model of a resource of type production object
+class ProductionObject(Resource):
+    __tablename__ = 'productionObjects'
+    id = Column(Integer, ForeignKey('resources.id', ondelete="CASCADE", onupdate="CASCADE"), primary_key=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity':'ProductionObject',
+    }
+
+    def __init__(self, **kwargs):
+        super(ProductionObject, self).__init__(typeRes='ProductionObject', **kwargs)
+
 
    ###     ######   ######     ########    ###    ########  ##       ########  ######  
   ## ##   ##    ## ##    ##       ##      ## ##   ##     ## ##       ##       ##    ## 
