@@ -25,12 +25,12 @@ f2 = sf_mod.Function(name = 'PickAndPlace Orange')
 f3 = sf_mod.Function(name = 'PickAndPlace White')
 
 #resources
-r1 = sf_mod.Resource(name = 'Blue cube', typeRes='Tool')
-r2 = sf_mod.Resource(name = 'Orange cube', typeRes='Tool')
-r3 = sf_mod.Resource(name = 'White cube', typeRes='Tool')
+r1 = sf_mod.Tool(name = 'Blue cube')
+r2 = sf_mod.Tool(name = 'Orange cube')
+r3 = sf_mod.Tool(name = 'White cube')
 
-r4 = sf_mod.Resource(name = 'Human Operator', typeRes='Operator', functions = [f1, f3])
-r5 = sf_mod.Resource(name = 'Cobot', typeRes='Operator', functions = [f1, f2])
+r4 = sf_mod.Worker(name = 'Human Operator', functions = [f1, f3])
+r5 = sf_mod.Cobot(name = 'Cobot', functions = [f1, f2])
 
 #aggregate resources
 ar1 = sf_mod.AggregateResource(name = 'Station 1', resources = [r2, r5])
