@@ -31,11 +31,10 @@ $(document).ready(function () {
     };
 
     var Constraint = class Constraint {
-        constructor(id, t1, t2, type) {
+        constructor(id, t1, t2) {
             this.id = id;
             this.t1 = t1;
             this.t2 = t2;
-            this.type = type;
         }
     };
 
@@ -117,18 +116,18 @@ $(document).ready(function () {
     var generalID = 1
     var specialID = 0
     $("#doneComplex").click(function () {
-        addTask('complex');
+        addTask('ComplexTask');
     });
     /*******************************************
       *  Add a simple task to the list     
      ******************************************/
     $("#doneSimple").click(function () {
-        addTask('simple');
+        addTask('SimpleTask');
     });
 
     function addTask(typeOf) {
-        var simple = 'simple'
-        var complex = 'complex'
+        var simple = 'SimpleTask'
+        var complex = 'ComplexTask'
         //take the elements
         if (typeOf === complex) {
             var name = document.getElementById("new-Ctaskname").value;
@@ -179,15 +178,15 @@ $(document).ready(function () {
             res += ("<div class='subtask' id=contain" + generalID + ">");
             if (typeOf === complex) {
                 res += ("<label class='subtaskid' hidden>" + generalID + '</label>');
-                res += ("<label> Complex task name: " + name + "</label> &nbsp; &nbsp;");
-                res += ("<label>" + ctype + " task</label> &nbsp;");
+                res += ("<label> Task name: " + name + "</label> &nbsp; &nbsp;");
+                res += ("<label>" + ctype + " </label> &nbsp;");
                 res += ("<button class='complexST'>Add a complex sub-task</button>");
                 res += ("<button class='simpleST'>Add a simple sub-task</button> &nbsp; &nbsp;")
                 res += ("<button class='removeST'>Remove</button>")
             }
             if (typeOf === simple) {
                 res += ("<label class='subtaskid' hidden>" + generalID + '</label>');
-                res += ("<label> Simple task name: " + name + "</label> &nbsp;");
+                res += ("<label> Task name: " + name + "</label> &nbsp;");
                 res += ("<label> Collaborative modality: " + mod + "</label> &nbsp; &nbsp;");
                 res += ("<button class='removeST'>Remove</button>")
                 res += ("<div><label>  Function1: " + f1name + '</label>');
@@ -397,11 +396,8 @@ $(document).ready(function () {
             document.getElementById("new-t1").value = '';
             document.getElementById("new-t2").value = '';
 
-            var consType = getType(parseInt(t1), tasks).type;
-            consType += getType(parseInt(t2), tasks).type;
-
             //build the constraint object
-            var tmp = new Constraint(constraintID, t1, t2, consType);
+            var tmp = new Constraint(constraintID, t1, t2);
 
             constraints.push(tmp);
 
@@ -422,18 +418,6 @@ $(document).ready(function () {
             $(".constraintForm").hide();
         }
     });
-    //AUXILIARY FUNCTION to get the type of a task
-    function getType(idToMatch, listToCheck) {
-        var higher = listToCheck.find(x => x.id === idToMatch);
-        if (higher !== undefined) {
-            return higher;
-        }
-        else {
-            for (var index in listToCheck) {
-                return getType(idToMatch, listToCheck[index].list);
-            }
-        }
-    }
 
     /**************************************
     *  Remove a constraint
