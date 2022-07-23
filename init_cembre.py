@@ -97,55 +97,83 @@ db.add_all([p1, p2, p3])
  #      #   #  #    # #    # #      #    # #    # 
  #      #    #  ####   ####  ######  ####   ####  
 
-c1 = proc_mod.ComplexTask(name='Task di root', typeTask='Conjunctive')
+c1 = proc_mod.ConjunctiveTask(name='Task di root')
+db.add(c1)
+db.commit()
 
-c11 = proc_mod.ComplexTask(name='Sposta in post 2', typeTask='Conjunctive', parent=c1)
+c11 = proc_mod.ConjunctiveTask(name='Sposta in post 2', parent=c1)
+db.add(c11)
+db.commit()
 s111 = proc_mod.SimpleTask(name='Sposta da 1 a 2', modality='Independent', parent=c11, f1=f3)
 
-c12 = proc_mod.ComplexTask(name='Main process', typeTask='Disjunctive', parent=c1)
+c12 = proc_mod.DisjunctiveTask(name='Main process', parent=c1)
+db.add(c12)
+db.commit()
 
-c121 = proc_mod.ComplexTask(name='Tutto in post 2', typeTask='Conjunctive', parent=c12)
+c121 = proc_mod.ConjunctiveTask(name='Tutto in post 2', parent=c12)
+db.add(c121)
+db.commit()
 s1211 = proc_mod.SimpleTask(name='Blocca', modality='Independent', parent=c121, f1=f13)
-c1212 = proc_mod.ComplexTask(name='Smontaggio', typeTask='Conjunctive', parent=c121)
+c1212 = proc_mod.ConjunctiveTask(name='Smontaggio', parent=c121)
+db.add(c1212)
+db.commit()
 ###
-c12121 = proc_mod.ComplexTask(name='Svita', typeTask='Disjunctive', parent=c1212)
+c12121 = proc_mod.DisjunctiveTask(name='Svita', parent=c1212)
+db.add(c12121)
+db.commit()
 s121211 = proc_mod.SimpleTask(name='Svita uomo', modality='Independent', parent=c12121, f1=f5)
 s121212 = proc_mod.SimpleTask(name='Svita robot', modality='Independent', parent=c12121, f1=f5)
-c12122 = proc_mod.ComplexTask(name='Estrazione', typeTask='Disjunctive', parent=c1212)
+c12122 = proc_mod.DisjunctiveTask(name='Estrazione', parent=c1212)
+db.add(c12122)
+db.commit()
 s121221 = proc_mod.SimpleTask(name='Estrazione uomo', modality='Independent', parent=c12122, f1=f7)
 s121222 = proc_mod.SimpleTask(name='Estrazione robot', modality='Independent', parent=c12122, f1=f7)
-c12123 = proc_mod.ComplexTask(name='Release', typeTask='Disjunctive', parent=c1212)
+c12123 = proc_mod.DisjunctiveTask(name='Release', parent=c1212)
+db.add(c12123)
+db.commit()
 s121231 = proc_mod.SimpleTask(name='Release uomo', modality='Independent', parent=c12123, f1=f3)
 s121232 = proc_mod.SimpleTask(name='Release robot', modality='Independent', parent=c12123, f1=f3)
 ###
-c1213 = proc_mod.ComplexTask(name='Assemblaggio', typeTask='Conjunctive', parent=c121)
+c1213 = proc_mod.ConjunctiveTask(name='Assemblaggio', parent=c121)
+db.add(c1213)
+db.commit()
 ###
-c12131 = proc_mod.ComplexTask(name='Picking', typeTask='Disjunctive', parent= c1213)
+c12131 = proc_mod.DisjunctiveTask(name='Picking', parent= c1213)
+db.add(c12131)
+db.commit()
 s121311 = proc_mod.SimpleTask(name='Picking uomo', modality='Independent', parent= c12131, f1=f3)
 s121312 = proc_mod.SimpleTask(name='Picking robot', modality='Independent', parent= c12131, f1=f3)
-c12132 = proc_mod.ComplexTask(name='Bloccaggio', typeTask='Disjunctive', parent= c1213)
+c12132 = proc_mod.DisjunctiveTask(name='Bloccaggio', parent= c1213)
+db.add(c12132)
+db.commit()
 s121321 = proc_mod.SimpleTask(name='Bloccaggio uomo', modality='Independent', parent= c12132, f1=f6)
 s121322 = proc_mod.SimpleTask(name='Bloccaggio robot', modality='Independent', parent= c12132, f1=f6)
-c12133 = proc_mod.ComplexTask(name='Avvita', typeTask='Disjunctive', parent= c1213)
+c12133 = proc_mod.DisjunctiveTask(name='Avvita', parent= c1213)
+db.add(c12133)
+db.commit()
 s121331 = proc_mod.SimpleTask(name='Avvita uomo', modality='Independent', parent= c12133, f1=f4)
 s121332 = proc_mod.SimpleTask(name='Avvita robot', modality='Independent', parent= c12133, f1=f4)
 ###
 s1214 = proc_mod.SimpleTask(name='Sblocca', modality='Independent', parent=c121, f1=f14)
 
-c122 = proc_mod.ComplexTask(name='Tutto in post 3', typeTask='Conjunctive', parent=c12)
+c122 = proc_mod.ConjunctiveTask(name='Tutto in post 3', parent=c12)
+db.add(c122)
+db.commit()
 s1221 = proc_mod.SimpleTask(name='Sposta da 2 a 3', modality='Independent', parent=c122, f1=f3)
 s1222 = proc_mod.SimpleTask(name='Blocca', modality='Independent', parent=c122, f1=f13)
-c1223 = proc_mod.ComplexTask(name='Smontaggio', typeTask='Conjunctive', parent=c122)
-c1224 = proc_mod.ComplexTask(name='Assemblaggio', typeTask='Conjunctive', parent=c122)
+c1223 = proc_mod.ConjunctiveTask(name='Smontaggio', parent=c122)
+c1224 = proc_mod.ConjunctiveTask(name='Assemblaggio', parent=c122)
 s1225 = proc_mod.SimpleTask(name='Sblocca', modality='Independent', parent=c122, f1=f14)
 
-c123 = proc_mod.ComplexTask(name='Misto nelle post', typeTask='Conjunctive', parent=c12)
+c123 = proc_mod.ConjunctiveTask(name='Misto nelle post', parent=c12)
+db.add(c123)
+db.commit()
 s1231 = proc_mod.SimpleTask(name='Blocca', modality='Independent', parent=c123, f1=f13)
-c1232 = proc_mod.ComplexTask(name='Smontaggio', typeTask='Conjunctive', parent=c123)
+c1232 = proc_mod.ConjunctiveTask(name='Smontaggio', parent=c123)
 s1233 = proc_mod.SimpleTask(name='Sblocca', modality='Independent', parent=c123, f1=f14)
 s1224 = proc_mod.SimpleTask(name='Sposta da 2 a 3', modality='Independent', parent=c123, f1=f3)
 s1235 = proc_mod.SimpleTask(name='Blocca', modality='Independent', parent=c123, f1=f13)
-c1236 = proc_mod.ComplexTask(name='Assemblaggio', typeTask='Conjunctive', parent=c123)
+c1236 = proc_mod.ConjunctiveTask(name='Assemblaggio', parent=c123)
 s1237 = proc_mod.SimpleTask(name='Sblocca', modality='Independent', parent=c123, f1=f14)
 
 s13 = proc_mod.SimpleTask(name='Sposta a 3', modality='Independent', parent=c1, f1=f3)
@@ -156,19 +184,22 @@ ct.extend([c121, c122, c123])
 ct.extend([c1212, c1213, c1223, c1224, c1232, c1236])
 ct.extend([c12121, c12122, c12123, c12131, c12132, c12133])
 
-st = [s13]
-st.extend([s111])
-st.extend([s1211, s1214, s1221, s1222, s1224, s1225, s1231, s1233, s1235, s1237])
-st.extend([s121211, s121212, s121221, s121222, s121231, s121232])
-st.extend([s121311, s121312, s121321, s121322, s121331, s121332])
+ct.extend([s13])
+ct.extend([s111])
+ct.extend([s1211, s1214, s1221, s1222, s1224, s1225, s1231, s1233, s1235, s1237])
+ct.extend([s121211, s121212, s121221, s121222, s121231, s121232])
+ct.extend([s121311, s121312, s121321, s121322, s121331, s121332])
+
+tc1 = proc_mod.Constraint(t1=c11, t2=c12)
+tc2 = proc_mod.Constraint(t1=c11, t2=s13)
+tc3 = proc_mod.Constraint(t1=c12, t2=s13)
+
+tc = [tc1, tc2, tc3]
 
 proc1 = proc_mod.Process(name="Processo 1", product=p1,
-            complex_tasks = ct,
-            simple_tasks = st)
+            tasks_list = ct, constraints=tc)
 
 db.add(proc1)
-
-
 
 #commit and close
 db.commit()
