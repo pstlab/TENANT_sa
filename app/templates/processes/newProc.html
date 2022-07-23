@@ -39,6 +39,10 @@
         <option value="ConjunctiveTask">Conjunctive</option>
         <option value="DisjunctiveTask">Disjunctive</option>
       </select>
+      <div>
+        <label>Task description</label>
+        <input type="text" id="new-Ctaskdescr" />
+      </div>
     </div>
     <div class='containComplex'><button type="reset" id="doneComplex">Done</button></div>
 
@@ -78,6 +82,11 @@
         divFunc2.append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
         '{% endfor %}'
       </script>
+
+      <div>
+        <label>Task description</label>
+        <input type="text" id="new-Staskdescr" />
+      </div>
     </div>
     <div class="containSimple"><button id="doneSimple">Done</button></div>
 

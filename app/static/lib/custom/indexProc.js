@@ -9,23 +9,25 @@ $(document).ready(function () {
     var constraints = [];
 
     var ComplexTask = class ComplexTask {
-        constructor(id, name, ct, list) {
+        constructor(id, name, ct, list, description) {
             this.id = id;
             this.name = name;
             this.list = list;
             this.type = 'complex';
             this.complexType = ct;
+            this.description = description;
         }
     };
 
     var SimpleTask = class SimpleTask {
-        constructor(id, name, modality, f1, f2) {
+        constructor(id, name, modality, f1, f2, description) {
             this.id = id;
             this.name = name;
             this.modality = modality;
             this.type = 'simple'
             this.f1 = f1;
             this.f2 = f2;
+            this.description = description;
         }
 
     };
@@ -132,6 +134,7 @@ $(document).ready(function () {
         if (typeOf === complex) {
             var name = document.getElementById("new-Ctaskname").value;
             var ctype = document.getElementById("new-Ctype").value;
+            var description = document.getElementById("new-Ctaskdescr").value;
         }
         if (typeOf === simple) {
             var name = document.getElementById("new-Staskname").value;
@@ -141,6 +144,7 @@ $(document).ready(function () {
             // Needed only to show the name of the task on the page
             var f1name = $("#new-func1 option:selected").text();
             var f2name = $("#new-func2 option:selected").text();
+            var description = document.getElementById("new-Staskdescr").value;
         }
 
         if ((typeOf === complex && (name === "" || ctype === "")) ||
@@ -150,18 +154,20 @@ $(document).ready(function () {
         else {
             document.getElementById("new-Ctaskname").value = '';
             document.getElementById("new-Ctype").value = '';
+            document.getElementById("new-Ctaskdescr").value = '';
             document.getElementById("new-Staskname").value = '';
             document.getElementById("new-Staskmode").value = '';
             document.getElementById("new-func1").value = '';
             document.getElementById("new-func2").value = '';
+            document.getElementById("new-Staskdescr").value = '';
             $(".mod").hide();
             $(".mod2").hide();
 
             //build the task object
             if (typeOf === complex)
-                var tmp = new ComplexTask(generalID, name, ctype, []);
+                var tmp = new ComplexTask(generalID, name, ctype, [], description);
             if (typeOf === simple)
-                var tmp = new SimpleTask(generalID, name, mod, f1, f2);
+                var tmp = new SimpleTask(generalID, name, mod, f1, f2, description);
 
             //higher level task
             if (specialID === 0) {

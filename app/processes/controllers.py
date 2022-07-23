@@ -75,12 +75,13 @@ def addTask(tasks):
         #take the values
         name = tasks[i]['name']
         ttype = tasks[i]['type']
+        tdescr = tasks[i]['description']
         idPage = tasks[i]['id']
         #If the task it's at the higher level, simply add it to the list
         if(ttype == 'complex'):
             complexType = tasks[i]['complexType']
             klass = globals()[complexType]
-            c = klass(name=name)
+            c = klass(name=name, description=tdescr)
 
             app.session.add(c)
             app.session.commit()
@@ -99,7 +100,7 @@ def addTask(tasks):
             f2id = tasks[i]['f2']
             f1 = app.session.query(Function).filter_by(id=f1id).first()
             f2 = app.session.query(Function).filter_by(id=f2id).first()
-            s = SimpleTask(name=name, modality=mode, f1=f1, f2=f2)
+            s = SimpleTask(name=name, modality=mode, f1=f1, f2=f2, description=tdescr)
             list_of_task.append(s)
             app.session.add(s)
             app.session.commit()
@@ -114,11 +115,12 @@ def addTaskAux(parent, subT, res, idPageidDb):
     for i in range(len(subT)):
         name = subT[i]['name']
         ttype = subT[i]['type']
+        tdescr = subT[i]['description']
         idPage = subT[i]['id']
         if(ttype == 'complex'):
             complexType = subT[i]['complexType']
             klass = globals()[complexType]
-            c = klass(name=name, parent=parent)
+            c = klass(name=name, parent=parent,  description=tdescr)
             res.append(c)
             app.session.add(c)
             app.session.commit()
@@ -135,7 +137,7 @@ def addTaskAux(parent, subT, res, idPageidDb):
             f2id = subT[i]['f2']
             f1 = app.session.query(Function).filter_by(id=f1id).first()
             f2 = app.session.query(Function).filter_by(id=f2id).first()
-            s = SimpleTask(name=name, modality=mode, parent=parent, f1=f1, f2=f2)
+            s = SimpleTask(name=name, modality=mode, parent=parent, f1=f1, f2=f2, description=tdescr)
             res.append(s)
             app.session.add(s)
             app.session.commit()

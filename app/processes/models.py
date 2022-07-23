@@ -46,6 +46,8 @@ class Task(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(128), nullable=False, unique=False)
 
+    description = Column(String)
+
     # ManyToOne
     process_id = Column(Integer, ForeignKey('processes.id'))
     process = relationship("Process", back_populates='tasks_list')
@@ -91,6 +93,7 @@ class ConjunctiveTask(ComplexTask):
     ----------
     name : str ----- the name of the task
     parent : ComplexTask ----- the task from which this derives in the hierarchy
+    description : str ----- (optional) a description of the task
     """
 
     __tablename__ = 'conjunctive_tasks'
@@ -112,6 +115,7 @@ class DisjunctiveTask(ComplexTask):
     ----------
     name : str ----- the name of the task
     parent : ComplexTask ----- the task from which this derives in the hierarchy
+    description : str ----- (optional) a description of the task
     """
 
     __tablename__ = 'disjunctive_tasks'
@@ -136,6 +140,7 @@ class SimpleTask(Task):
     modality : str ----- the collaborative modality of the task
     f1: Function ----- the first function needed to execute the task
     f2: Function ----- the second function needed to execute the task
+    description : str ----- (optional) a description of the task
     """
 
     __tablename__ = 'simple_tasks'
