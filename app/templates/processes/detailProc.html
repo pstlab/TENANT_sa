@@ -69,9 +69,11 @@
                     res += ("<label> Task name: " + '{{element.name}}' + "</label> &nbsp;");
                     res += ("<label> Task type: SimpleTask </label> &nbsp;");
                     res += ("<label> Collaborative modality: " + '{{element.modality}}' + "</label>");
-                    res += ("<div><label> Function 1: " + '{{element.f1.name}}' + "</label></div>");
-                    '{% if element.f2 is not none %}'
-                        res += ("<div><label> Function 2: " + '{{element.f2.name}}' + "</label></div>");
+                    res += ("<div><label> Function 1: " + '{{element.f[0].f_type}}' + "</label>");
+                    res += ("<label> Operator: " + '{{element.f[0].operator.name}}' + "</label></div>");
+                    '{% if element.f|length > 1 %}'
+                        res += ("<div><label> Function 2: " + '{{element.f[1].f_type}}' + "</label>");
+                        res += ("<label> Operator: " + '{{element.f[1].operator.name}}' + "</label></div>");
                     '{% endif %}'
                     res += ("</div>");
     

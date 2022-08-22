@@ -155,9 +155,9 @@ class ProductionObject(Resource):
 ##     ## ##    ## ##    ##       ##    ##     ## ##     ## ##       ##       ##    ## 
 ##     ##  ######   ######        ##    ##     ## ########  ######## ########  ######  
 
-association_table = Table('agent_functions', Base.metadata,
+association_table = Table('agent_capabilities', Base.metadata,
     Column('agent_id', Integer, ForeignKey('agent.id')),
-    Column('functions_id', Integer, ForeignKey('functions.id'))
+    Column('capabilities_id', Integer, ForeignKey('capabilities.id'))
 )
 
    ###     ######  ######## #### ##    ##  ######      ######## ##    ## ######## #### ######## #### ########  ######  
@@ -174,10 +174,10 @@ class _Agent(Resource):
     id = Column(Integer, ForeignKey('resources.id'), primary_key=True)
 
     # ManyToMany
-    functions = relationship("Function", secondary=association_table, back_populates='agent')
+    capabilities = relationship("Capability", secondary=association_table, back_populates='agent')
 
     def __init__(self, **kwargs):
-        self.functions = kwargs.get('functions')
+        self.capabilities = kwargs.get('capabilities')
         super(_Agent, self).__init__(**kwargs)
 
 
@@ -191,7 +191,7 @@ class Worker(_Agent):
     description : str ----- a brief description (default None)
     capacity : int ----- capacity of the operator (default 1)
     aggregate resource : AggregateResource ----- the aggregate resource of which the agent is part of (default None)
-    functions : list of Function ----- the list of function the operator can perform
+    capabilities : list of Capability ----- the list of capabilities the operator can perform
     """
 
     __tablename__ = 'worker'
@@ -214,7 +214,7 @@ class Cobot(_Agent):
     description : str ----- a brief description (default None)
     capacity : int ----- capacity of the operator (default 1)
     aggregate resource : AggregateResource ----- the aggregate resource of which the agent is part of (default None)
-    functions : list of Function ----- the list of function the operator can perform
+    capabilities : list of Capability ----- the list of capabilities the operator can perform
     """
 
     __tablename__ = 'cobot'
@@ -228,25 +228,23 @@ class Cobot(_Agent):
         super(Cobot, self).__init__(typeRes='Cobot', **kwargs)
 
 
-######## ##     ## ##    ##  ######  ######## ####  #######  ##    ##  ######  
-##       ##     ## ###   ## ##    ##    ##     ##  ##     ## ###   ## ##    ## 
-##       ##     ## ####  ## ##          ##     ##  ##     ## ####  ## ##       
-######   ##     ## ## ## ## ##          ##     ##  ##     ## ## ## ##  ######  
-##       ##     ## ##  #### ##          ##     ##  ##     ## ##  ####       ## 
-##       ##     ## ##   ### ##    ##    ##     ##  ##     ## ##   ### ##    ## 
-##        #######  ##    ##  ######     ##    ####  #######  ##    ##  ######  
+ ######     ###    ########     ###    ########  #### ##       #### ######## #### ########  ######  
+##    ##   ## ##   ##     ##   ## ##   ##     ##  ##  ##        ##     ##     ##  ##       ##    ## 
+##        ##   ##  ##     ##  ##   ##  ##     ##  ##  ##        ##     ##     ##  ##       ##       
+##       ##     ## ########  ##     ## ########   ##  ##        ##     ##     ##  ######    ######  
+##       ######### ##        ######### ##     ##  ##  ##        ##     ##     ##  ##             ## 
+##    ## ##     ## ##        ##     ## ##     ##  ##  ##        ##     ##     ##  ##       ##    ## 
+ ######  ##     ## ##        ##     ## ########  #### ######## ####    ##    #### ########  ######  
 
-class Function(Base):
-    __tablename__ = 'functions'
+
+class Capability(Base):
+    __tablename__ = 'capabilities'
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(128),  nullable=False, unique=True)
     
     # ManyToMany
-    agent = relationship("_Agent", secondary=association_table, back_populates='functions')
-    # OneToMany
-    simple_tasks1 = relationship("SimpleTask", back_populates='f1', foreign_keys='SimpleTask.f1_id')
-    simple_tasks2 = relationship("SimpleTask", back_populates='f2', foreign_keys='SimpleTask.f2_id')
+    agent = relationship("_Agent", secondary=association_table, back_populates='capabilities')
 
     def __repr__(self):
         return self.name
