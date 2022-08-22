@@ -33,8 +33,8 @@ def remove():
 @mod_shopfloor.route('/newRes/', methods=['GET'])
 def new():
     ar = app.session.query(AggregateResource).all()
-    f = app.session.query(Function).all()
-    return render_template("shopfloor/newRes.html", types=TYPES_OF_RESOURCES, aggregates=ar, functions=f)
+    c = app.session.query(Capability).all()
+    return render_template("shopfloor/newRes.html", types=TYPES_OF_RESOURCES, aggregates=ar, capabilities=c)
 
 @mod_shopfloor.route('/newRes/', methods=['POST'])
 def newR():
@@ -47,18 +47,18 @@ def newR():
     ar = app.session.query(AggregateResource).filter_by(id=aggregateId).first()
     f = []
 
-    functions = data[0]['functions']
-    for element in functions:
+    capabilities = data[0]['capabilities']
+    for element in capabilities:
         if (element['type'] == 'new'):
-            tmp = Function(name=element['name'])
+            tmp = Capability(name=element['name'])
             app.session.add(tmp)
         else:
-            tmp = app.session.query(Function).filter_by(id=element['name']).first()
+            tmp = app.session.query(Capability).filter_by(name=element['name']).first()
         f.append(tmp)
     app.session.commit()
 
     klass = globals()[typeR]
-    resource = klass(name=name, description=descr, aggregate_resource=ar, functions=f)
+    resource = klass(name=name, description=descr, aggregate_resource=ar, capabilities=f)
 
     app.session.add(resource)
     app.session.commit()
@@ -71,10 +71,9 @@ def newR():
 def edit(resId):
     res = app.session.query(Resource).filter_by(id=resId).first()
     ar = app.session.query(AggregateResource).all()
-    f = app.session.query(Function).all()
-    return render_template("shopfloor/modRes.html", resource = res, types=TYPES_OF_RESOURCES, aggregates=ar, functions=f)
+    f = app.session.query(Capability).all()
+    return render_template("shopfloor/modRes.html", resource = res, types=TYPES_OF_RESOURCES, aggregates=ar, capabilities=f)
     
-
 @mod_shopfloor.route('/editRes/<resId>', methods=['POST'])
 def editR(resId):
     #get the data from user input
@@ -100,17 +99,17 @@ def editR(resId):
         # res.typeRes = typeR
 
     f = []
-    functions = data[1]['functions']
-    for element in functions:
+    capabilities = data[1]['capabilities']
+    for element in capabilities:
         if (element['type'] == 'new'):
-            tmp = Function(name=element['name'])
+            tmp = Capability(name=element['name'])
             app.session.add(tmp)
         else:
-            tmp = app.session.query(Function).filter_by(id=element['name']).first()
+            tmp = app.session.query(Capability).filter_by(name=element['name']).first()
         f.append(tmp)
     app.session.commit()
 
-    res.functions = f
+    res.capabilities = f
 
     app.session.commit()
     res = app.session.query(Resource).all()
@@ -145,7 +144,6 @@ def newAR():
     #modify a product family
     if(data[-1] == "edit"):
         #get data from input
-        print(data)
         name = data[-2]['name']
         parentId = data[-2]['ar']
         parent = app.session.query(AggregateResource).filter_by(id=parentId).first()

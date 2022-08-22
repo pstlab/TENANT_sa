@@ -32,7 +32,7 @@
             <div class="row">
                 <h3>Name: {{element.name}}</h3>
                 <h3>Type: {{element.typeRes}}</h3>
-                {% if element.description is not none %}
+                {% if element.description is not none and element.description != "" %}
                 <h4>Description: {{element.description}}</h4>
                 {% endif %}
                 {% if element.aggregate_resource is not none %}

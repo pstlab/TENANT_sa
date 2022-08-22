@@ -17,54 +17,57 @@
     <input type="text" id="new-resourcename" />
   </div>
   <div>
-    <label>Resource description</label>
+    <label>Resource description (Optional)</label>
     <input type="text" id="new-resourcedescr" />
   </div>
   <div>
     <label>Resource type</label>
     <select id="new-resourcetype">
-      <option selected disabled></option>
     </select>
   </div>
   <div>
     <label>Aggregate Resource (Optional)</label>
     <select id="new-aggregate_resource">
-      <option selected disabled></option>
+      <option selected>None</option>
     </select>
   </div>
 
-  <label class="functionForm">Functions:</label>
+  <label class="capabilityForm">Capabilities:</label>
   <div id="result" class="subtask">
   </div>
 
-  <div class="functionForm">
-    <button id="addNew">Add a new function</button>
-    <button id="selectOld">Select a pre-existing function</button>
+  <div class="capabilityForm">
+    <button id="addNew">Add a new capability</button>
+    <button id="selectOld">Select a pre-existing capability</button>
   </div>
 
-  <div class="new-function">
-    <label>Function name: </label>
-    <input type="text" id="new-functionname" />
+  
+  <div class="new-capability">
+    <label>Capability name: </label>
+    <input type="text" id="new-capabilityname" />
   </div>
-  <div class="new-function">
+  
+  <div class="new-capability">
     <button id="new-doneNew">Done</button>
   </div>
 
-  <div class="select-function">
-    <label>Function: </label>
-      <select id="new-selected-f">
+
+  <div class="select-capability">
+    <label>Capability: </label>
+      <select id="new-selected-cap">
       </select>
   </div>
-  <div class="select-function">
+
+  <div class="select-capability">
     <button id="new-doneSelect">Done</button>
   </div>
 
   <script type="text/javascript">
-    var divFunc = $("#new-selected-f");
-    divFunc.find("option:gt(0)").remove();
-    divFunc.append('<option selected disabled></option>');
-    '{% for element in functions %}'
-    divFunc.append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+    var divCap = $("#new-selected-cap");
+    divCap.find("option:gt(0)").remove();
+    divCap.append('<option selected disabled></option>');
+    '{% for element in capabilities %}'
+    divCap.append('<option value=' + "'{{element.name}}'" + '>' + '{{element.name}}' + '</option>');
     '{% endfor %}'
   </script>
 
@@ -78,6 +81,7 @@
 {% block script %}
 <script>
     $("#new-resourcetype").find("option:gt(0)").remove();
+    $("#new-resourcetype").append('<option selected disabled></option>');
     '{% for element in types %}'
       $('#new-resourcetype').append('<option value=' + '{{element}}' + '>' + '{{element}}' + '</option>');
     '{% endfor %}'
@@ -86,6 +90,5 @@
     '{% for element in aggregates %}'
         $('#new-aggregate_resource').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
     '{% endfor %}'
-    $('#new-aggregate_resource').append('<option value=none> None </option>');
 </script>
 {% endblock %}
