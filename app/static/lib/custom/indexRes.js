@@ -137,6 +137,7 @@ $(document).ready(function() {
         //take the elements
         var resourceName = document.getElementById('new-resourcename').value;
         var resourceDescription = document.getElementById('new-resourcedescr').value;
+        var resourceCapacity = document.getElementById('new-resourcecapacity').value || "1";
         var type = document.getElementById('new-resourcetype').value;
         var aggregate = document.getElementById('new-aggregate_resource').value;
 
@@ -148,7 +149,7 @@ $(document).ready(function() {
             var data = [];
             if(!AGENTS.includes(type))
                 capabilities = []
-            data.push({'name':resourceName, 'description':resourceDescription, 'type':type, 'aggregate':aggregate, 'capabilities':capabilities});
+            data.push({'name':resourceName, 'description':resourceDescription, 'capacity':resourceCapacity, 'type':type, 'aggregate':aggregate, 'capabilities':capabilities});
             //create the json data
             var js_data = JSON.stringify(data);
             $.ajax({                        
@@ -194,6 +195,7 @@ $(document).ready(function() {
 
         var resourceName = document.getElementById('resourcename').value;
         var resourceDescription = document.getElementById('resourcedescription').value;
+        var resourceCapacity = document.getElementById('resourcecapacity').value || "1";
         //TODO remove || innerText if resource type edit will be reimplemented
         var type = document.getElementById('resourcetype').value || document.getElementById('resourcetype').innerText || document.getElementById('resourcetype').textContent;
         var aggregate = document.getElementById('aggregate_resource').value;
@@ -208,7 +210,7 @@ $(document).ready(function() {
             if(!AGENTS.includes(type)){
                 capabilities = []
             }
-            data.push({'name':resourceName, 'description':resourceDescription, 'type':type, 'aggregate':aggregate, 'capabilities':capabilities});
+            data.push({'name':resourceName, 'description':resourceDescription, 'capacity':resourceCapacity, 'type':type, 'aggregate':aggregate, 'capabilities':capabilities});
 
             var myurl = '/sf/editRes/' + resourceId;
             //create the json data

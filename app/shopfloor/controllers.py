@@ -42,6 +42,7 @@ def newR():
     # Add a new resource
     name = data[0]['name']
     descr = data[0]['description']
+    capacity = data[0]['capacity']
     typeR = data[0]['type']
     aggregateId = data[0]['aggregate']
     ar = app.session.query(AggregateResource).filter_by(id=aggregateId).first()
@@ -58,7 +59,7 @@ def newR():
     app.session.commit()
 
     klass = globals()[typeR]
-    resource = klass(name=name, description=descr, aggregate_resource=ar, capabilities=f)
+    resource = klass(name=name, description=descr, capacity=capacity, aggregate_resource=ar, capabilities=f)
 
     app.session.add(resource)
     app.session.commit()
@@ -81,6 +82,7 @@ def editR(resId):
     # Get the new values
     name = data[1]['name']
     descr = data[1]['description']
+    capacity = data[1]['capacity']
     # typeR = data[1]['type']
     aggregateId = data[1]['aggregate']
     resId = data[0]
@@ -90,6 +92,7 @@ def editR(resId):
 
     res.name = name
     res.description = descr
+    res.capacity = capacity
     ar = app.session.query(AggregateResource).filter_by(id=aggregateId).first()
     res.aggregate_resource = ar
 
