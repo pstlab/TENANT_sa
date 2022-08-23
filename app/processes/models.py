@@ -8,7 +8,15 @@ from app.database import Base
 MODALITIES = ("Independent", "Simultaneous", "Sequential", "Supportive")
 TYPES_OF_TASKS = ('ConjunctiveTask', 'DisjunctiveTask', 'SimpleTask')
 
-# Define a process model
+
+########  ########   #######   ######  ########  ######   ######  
+##     ## ##     ## ##     ## ##    ## ##       ##    ## ##    ## 
+##     ## ##     ## ##     ## ##       ##       ##       ##       
+########  ########  ##     ## ##       ######    ######   ######  
+##        ##   ##   ##     ## ##       ##             ##       ## 
+##        ##    ##  ##     ## ##    ## ##       ##    ## ##    ## 
+##        ##     ##  #######   ######  ########  ######   ######  
+
 class Process(Base):
     """
     A class used to represent a process
@@ -39,6 +47,15 @@ class Process(Base):
         return self.name
     def __repr__(self):
         return '<Process %r>' % (self.name)
+
+
+########    ###     ######  ##    ## 
+   ##      ## ##   ##    ## ##   ##  
+   ##     ##   ##  ##       ##  ##   
+   ##    ##     ##  ######  #####    
+   ##    #########       ## ##  ##   
+   ##    ##     ## ##    ## ##   ##  
+   ##    ##     ##  ######  ##    ## 
 
 class Task(Base):
     __tablename__ = 'tasks'
@@ -150,7 +167,6 @@ class SimpleTask(Task):
     # OneToMany (OneToTwo)
     f = relationship("Function", back_populates='st')
 
-
     __mapper_args__ = {
         'polymorphic_identity':'SimpleTask',
     }
@@ -198,6 +214,14 @@ class Function(Base):
     def __repr__(self):
         return '<Function %r>' % (self.f_type)
 
+
+ ######   #######  ##    ##  ######  ######## ########     ###    #### ##    ## ######## 
+##    ## ##     ## ###   ## ##    ##    ##    ##     ##   ## ##    ##  ###   ##    ##    
+##       ##     ## ####  ## ##          ##    ##     ##  ##   ##   ##  ####  ##    ##    
+##       ##     ## ## ## ##  ######     ##    ########  ##     ##  ##  ## ## ##    ##    
+##       ##     ## ##  ####       ##    ##    ##   ##   #########  ##  ##  ####    ##    
+##    ## ##     ## ##   ### ##    ##    ##    ##    ##  ##     ##  ##  ##   ###    ##    
+ ######   #######  ##    ##  ######     ##    ##     ## ##     ## #### ##    ##    ##    
 
 class Constraint(Base):
     """

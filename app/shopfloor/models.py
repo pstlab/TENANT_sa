@@ -247,7 +247,7 @@ class Capability(Base):
     agent = relationship("_Agent", secondary=association_table, back_populates='capabilities')
 
     def __repr__(self):
-        return self.name
+        return '< Capability %r>' %(self.name)
 
     def __str__(self):
         return self.name

@@ -1,11 +1,10 @@
 # Import flask dependencies
-from flask import Blueprint, render_template, request, redirect, url_for
-
+from flask import Blueprint, render_template, request
 from .models import *
 from app import app
 
 from app.products.models import Product
-from app.shopfloor.models import Function
+from app.shopfloor.models import _Agent, Capability
 
 # Define the blueprint: 'process', set its url prefix: app.url/process
 mod_process = Blueprint('process', __name__, url_prefix='/process')
@@ -32,8 +31,8 @@ def remove():
 @mod_process.route('/newProc/', methods=['GET'])
 def new():
     prod = app.session.query(Product).all()
-    f = app.session.query(Function).all()
-    return render_template("processes/newProc.html", products=prod, functions=f)
+    capabilities = app.session.query(Capability).all()
+    return render_template("processes/newProc.html", products=prod, capabilities=capabilities)
 
 @mod_process.route('/newProc/', methods=['POST'])
 def newP():
@@ -96,11 +95,26 @@ def addTask(tasks):
 
         elif(ttype == 'simple'):
             mode = tasks[i]['modality']
-            f1id = tasks[i]['f1']
-            f2id = tasks[i]['f2']
-            f1 = app.session.query(Function).filter_by(id=f1id).first()
-            f2 = app.session.query(Function).filter_by(id=f2id).first()
-            s = SimpleTask(name=name, modality=mode, f1=f1, f2=f2, description=tdescr)
+
+            capability1id = tasks[i]['f1']
+            capability2id = tasks[i]['f2']
+
+            capability1 = app.session.query(Capability).filter_by(id=capability1id).first()
+            capability2 = app.session.query(Capability).filter_by(id=capability2id).first()
+            
+            operator1id = tasks[i]['op1']
+            operator2id = tasks[i]['op2']
+            
+            operator1 = app.session.query(_Agent).filter_by(id=operator1id).first()
+            f1 = Function(f_type=capability1, operator=operator1)
+            functions = [f1]
+
+            if(capability2):
+                operator2 = app.session.query(_Agent).filter_by(id=operator2id).first()
+                f2 = Function(f_type=capability2, operator=operator2)
+                functions.append(f2)
+
+            s = SimpleTask(name=name, modality=mode, f=functions, description=tdescr)
             list_of_task.append(s)
             app.session.add(s)
             app.session.commit()
@@ -133,11 +147,27 @@ def addTaskAux(parent, subT, res, idPageidDb):
 
         elif(ttype == 'simple'):
             mode = subT[i]['modality']
-            f1id = subT[i]['f1']
-            f2id = subT[i]['f2']
-            f1 = app.session.query(Function).filter_by(id=f1id).first()
-            f2 = app.session.query(Function).filter_by(id=f2id).first()
-            s = SimpleTask(name=name, modality=mode, parent=parent, f1=f1, f2=f2, description=tdescr)
+
+            capability1id = subT[i]['f1']
+            capability2id = subT[i]['f2']
+
+            capability1 = app.session.query(Capability).filter_by(id=capability1id).first()
+            capability2 = app.session.query(Capability).filter_by(id=capability2id).first()
+            
+            operator1id = subT[i]['op1']
+            operator2id = subT[i]['op2']
+            
+            operator1 = app.session.query(_Agent).filter_by(id=operator1id).first()
+            f1 = Function(f_type=capability1, operator=operator1)
+            functions = [f1]
+
+            if(capability2):
+                operator2 = app.session.query(_Agent).filter_by(id=operator2id).first()
+                f2 = Function(f_type=capability2, operator=operator2)
+                functions.append(f2)
+
+            s = SimpleTask(name=name, modality=mode, parent=parent, f=functions, description=tdescr)
+            
             res.append(s)
             app.session.add(s)
             app.session.commit()
