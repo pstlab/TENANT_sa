@@ -71,16 +71,16 @@
         <label class='mod'>Function 1: </label>
         <select id='new-func1' class='mod'>
         </select>
-        <label class='mod'>Operator 1: </label>
-        <select id='new-operator1' class='mod'>
+        <label class='mod'>Agent 1: </label>
+        <select id='new-agent1' class='mod'>
         </select>
       </div>
       <div>
         <label class='mod2'>Function 2: </label>
         <select id='new-func2' class='mod2'>
         </select>
-        <label class='mod2'>Operator 2: </label>
-        <select id='new-operator2' class='mod2'>
+        <label class='mod2'>Agent 2: </label>
+        <select id='new-agent2' class='mod2'>
         </select>
       </div>
 
@@ -100,9 +100,9 @@
       </script>
 
       <script type="text/javascript">
-        //Add all the possible operators for a function in a simple task
+        //Add all the possible agents for a function in a simple task
         $("#new-func1").change(function () {
-          var divOp1 = $("#new-operator1");
+          var divOp1 = $("#new-agent1");
           divOp1.find("option").remove();
           divOp1.append('<option selected disabled></option>');
           '{% for element in capabilities %}'
@@ -116,7 +116,7 @@
         });
 
         $("#new-func2").change(function () {
-          var divOp2 = $("#new-operator2");
+          var divOp2 = $("#new-agent2");
           divOp2.selectedIndex = "-1";
           divOp2.find("option").remove();
           divOp2.append('<option selected disabled></option>');

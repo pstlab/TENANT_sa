@@ -189,9 +189,9 @@ class Worker(_Agent):
     ----------
     name : str ----- the name of the worker
     description : str ----- a brief description (default None)
-    capacity : int ----- capacity of the operator (default 1)
+    capacity : int ----- capacity of the agent (default 1)
     aggregate resource : AggregateResource ----- the aggregate resource of which the agent is part of (default None)
-    capabilities : list of Capability ----- the list of capabilities the operator can perform
+    capabilities : list of Capability ----- the list of capabilities the agent can perform
     """
 
     __tablename__ = 'worker'
@@ -212,9 +212,9 @@ class Cobot(_Agent):
     ----------
     name : str ----- the name of the worker
     description : str ----- a brief description (default None)
-    capacity : int ----- capacity of the operator (default 1)
+    capacity : int ----- capacity of the agent (default 1)
     aggregate resource : AggregateResource ----- the aggregate resource of which the agent is part of (default None)
-    capabilities : list of Capability ----- the list of capabilities the operator can perform
+    capabilities : list of Capability ----- the list of capabilities the agent can perform
     """
 
     __tablename__ = 'cobot'

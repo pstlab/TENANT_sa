@@ -193,7 +193,7 @@ class Function(Base):
     Attributes
     ----------
     f_type : Capability ----- the type of function (basic operation)
-    operator : Agent ----- the agent that has to perform the function
+    agent : Agent ----- the agent that has to perform the function
     """
 
     __tablename__ = 'functions'
@@ -203,8 +203,8 @@ class Function(Base):
     f_type_id = Column(Integer, ForeignKey("capabilities.id"))
     f_type = relationship("Capability")
     # ManyToOne
-    operator_id = Column(Integer, ForeignKey("agent.id"))
-    operator = relationship("_Agent")
+    agent_id = Column(Integer, ForeignKey("agent.id"))
+    agent = relationship("_Agent")
     # ManyToOne (TwoToOne)
     st_id = Column(Integer, ForeignKey('simple_tasks.id'))
     st = relationship("SimpleTask", back_populates='f')

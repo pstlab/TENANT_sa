@@ -70,10 +70,10 @@
                     res += ("<label> Task type: SimpleTask </label> &nbsp;");
                     res += ("<label> Collaborative modality: " + '{{element.modality}}' + "</label>");
                     res += ("<div><label> Function 1: " + '{{element.f[0].f_type}}' + "</label> &nbsp; &nbsp;");
-                    res += ("<label> Operator: " + '{{element.f[0].operator.name}}' + "</label></div>");
+                    res += ("<label> Agent: " + '{{element.f[0].agent.name}}' + "</label></div>");
                     '{% if element.f|length > 1 %}'
                         res += ("<div><label> Function 2: " + '{{element.f[1].f_type}}' + "</label> &nbsp; &nbsp;");
-                        res += ("<label> Operator: " + '{{element.f[1].operator.name}}' + "</label></div>");
+                        res += ("<label> Agent: " + '{{element.f[1].agent.name}}' + "</label></div>");
                     '{% endif %}'
                     res += ("</div>");
     

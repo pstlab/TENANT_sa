@@ -102,16 +102,16 @@ def addTask(tasks):
             capability1 = app.session.query(Capability).filter_by(id=capability1id).first()
             capability2 = app.session.query(Capability).filter_by(id=capability2id).first()
             
-            operator1id = tasks[i]['op1']
-            operator2id = tasks[i]['op2']
+            agent1id = tasks[i]['agent1']
+            agent2id = tasks[i]['agent2']
             
-            operator1 = app.session.query(_Agent).filter_by(id=operator1id).first()
-            f1 = Function(f_type=capability1, operator=operator1)
+            agent1 = app.session.query(_Agent).filter_by(id=agent1id).first()
+            f1 = Function(f_type=capability1, agent=agent1)
             functions = [f1]
 
             if(capability2):
-                operator2 = app.session.query(_Agent).filter_by(id=operator2id).first()
-                f2 = Function(f_type=capability2, operator=operator2)
+                agent2 = app.session.query(_Agent).filter_by(id=agent2id).first()
+                f2 = Function(f_type=capability2, agent=agent2)
                 functions.append(f2)
 
             s = SimpleTask(name=name, modality=mode, f=functions, description=tdescr)
@@ -154,16 +154,16 @@ def addTaskAux(parent, subT, res, idPageidDb):
             capability1 = app.session.query(Capability).filter_by(id=capability1id).first()
             capability2 = app.session.query(Capability).filter_by(id=capability2id).first()
             
-            operator1id = subT[i]['op1']
-            operator2id = subT[i]['op2']
+            agent1id = subT[i]['agent1']
+            agent2id = subT[i]['agent2']
             
-            operator1 = app.session.query(_Agent).filter_by(id=operator1id).first()
-            f1 = Function(f_type=capability1, operator=operator1)
+            agent1 = app.session.query(_Agent).filter_by(id=agent1id).first()
+            f1 = Function(f_type=capability1, agent=agent1)
             functions = [f1]
 
             if(capability2):
-                operator2 = app.session.query(_Agent).filter_by(id=operator2id).first()
-                f2 = Function(f_type=capability2, operator=operator2)
+                agent2 = app.session.query(_Agent).filter_by(id=agent2id).first()
+                f2 = Function(f_type=capability2, agent=agent2)
                 functions.append(f2)
 
             s = SimpleTask(name=name, modality=mode, parent=parent, f=functions, description=tdescr)

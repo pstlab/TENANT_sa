@@ -20,15 +20,15 @@ $(document).ready(function () {
     };
 
     var SimpleTask = class SimpleTask {
-        constructor(id, name, modality, f1, op1, f2, op2, description) {
+        constructor(id, name, modality, f1, agent1, f2, agent2, description) {
             this.id = id;
             this.name = name;
             this.modality = modality;
             this.type = 'simple'
             this.f1 = f1;
-            this.op1 = op1;
+            this.agent1 = agent1;
             this.f2 = f2;
-            this.op2 = op2;
+            this.agent2 = agent2;
             this.description = description;
         }
 
@@ -142,14 +142,14 @@ $(document).ready(function () {
             var name = document.getElementById("new-Staskname").value;
             var mod = document.getElementById("new-Staskmode").value;
             var f1 = document.getElementById("new-func1").value;
-            var op1 = document.getElementById("new-operator1").value;
+            var agent1 = document.getElementById("new-agent1").value;
             var f2 = document.getElementById("new-func2").value;
-            var op2 = document.getElementById("new-operator2").value;
+            var agent2 = document.getElementById("new-agent2").value;
             // Needed only to show the name of the task on the page
             var f1name = $("#new-func1 option:selected").text();
-            var op1name = $("#new-operator1 option:selected").text();
+            var agent1name = $("#new-agent1 option:selected").text();
             var f2name = $("#new-func2 option:selected").text();
-            var op2name = $("#new-operator2 option:selected").text();
+            var agent2name = $("#new-agent2 option:selected").text();
             var description = document.getElementById("new-Staskdescr").value;
         }
 
@@ -165,8 +165,8 @@ $(document).ready(function () {
             document.getElementById("new-Staskmode").value = '';
             document.getElementById("new-func1").value = '';
             document.getElementById("new-func2").value = '';
-            document.getElementById("new-operator1").value = '';
-            document.getElementById("new-operator2").value = '';
+            document.getElementById("new-agent1").value = '';
+            document.getElementById("new-agent2").value = '';
             document.getElementById("new-Staskdescr").value = '';
             $(".mod").hide();
             $(".mod2").hide();
@@ -175,7 +175,7 @@ $(document).ready(function () {
             if (typeOf === complex)
                 var tmp = new ComplexTask(generalID, name, ctype, [], description);
             if (typeOf === simple)
-                var tmp = new SimpleTask(generalID, name, mod, f1, op1, f2, op2, description);
+                var tmp = new SimpleTask(generalID, name, mod, f1, agent1, f2, agent2, description);
 
             //higher level task
             if (specialID === 0) {
@@ -204,10 +204,10 @@ $(document).ready(function () {
                 res += ("<label> Collaborative modality: " + mod + "</label> &nbsp; &nbsp;");
                 res += ("<button class='removeST'>Remove</button>")
                 res += ("<div><label>  Function1: " + f1name + '</label> &nbsp; &nbsp;');
-                res += ("<label>  Operator1: " + op1name + '</label></div>');
+                res += ("<label>  Agent1: " + agent1name + '</label></div>');
                 if (f2 !== '') {
                     res += ("<div><label>  Function2: " + f2name + '</label> &nbsp; &nbsp;');
-                    res += ("<label>  Operator2: " + op2name + '</label>');
+                    res += ("<label>  Agent2: " + agent2name + '</label>');
                 }
                 res += ("</div>");
             }
