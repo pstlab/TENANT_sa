@@ -18,22 +18,22 @@ prod_mod.Base.metadata.create_all(bind=engine)
 dem_mod.Base.metadata.create_all(bind=engine)
 proc_mod.Base.metadata.create_all(bind=engine)
 
-#functions
-f1 = sf_mod.Function(name = 'Pick Object')
-f2 = sf_mod.Function(name = 'Place Object')
-f3 = sf_mod.Function(name = 'PickAndPlace Object')
-f4 = sf_mod.Function(name = 'Screw')
-f5 = sf_mod.Function(name = 'Unscrew')
-f6 = sf_mod.Function(name = 'Assemble')
-f7 = sf_mod.Function(name = 'Disassemble')
-f8 = sf_mod.Function(name = 'Manual Guidance')
-f9 = sf_mod.Function(name = 'Motion')
-f10 = sf_mod.Function(name = 'Move/Navigate')
-f11 = sf_mod.Function(name = 'Weld')
-f12 = sf_mod.Function(name = 'Inspect')
+#capabilities
+c1 = sf_mod.Capability(name = 'Pick Object')
+c2 = sf_mod.Capability(name = 'Place Object')
+c3 = sf_mod.Capability(name = 'PickAndPlace Object')
+c4 = sf_mod.Capability(name = 'Screw')
+c5 = sf_mod.Capability(name = 'Unscrew')
+c6 = sf_mod.Capability(name = 'Assemble')
+c7 = sf_mod.Capability(name = 'Disassemble')
+c8 = sf_mod.Capability(name = 'Manual Guidance')
+c9 = sf_mod.Capability(name = 'Motion')
+c10 = sf_mod.Capability(name = 'Move/Navigate')
+c11 = sf_mod.Capability(name = 'Weld')
+c12 = sf_mod.Capability(name = 'Inspect')
 
 #add all
-db.add_all([f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12])
+db.add_all([c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12])
 
 #commit and close
 db.commit()
