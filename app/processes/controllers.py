@@ -1,11 +1,10 @@
 # Import flask dependencies
-from flask import Blueprint, render_template, request, redirect, url_for
-
-from .models import Process, ComplexTask, SimpleTask, Constraint
+from flask import Blueprint, render_template, request
+from .models import *
 from app import app
 
 from app.products.models import Product
-from app.shopfloor.models import Function
+from app.shopfloor.models import _Agent, Capability
 
 # Define the blueprint: 'process', set its url prefix: app.url/process
 mod_process = Blueprint('process', __name__, url_prefix='/process')
@@ -32,8 +31,8 @@ def remove():
 @mod_process.route('/newProc/', methods=['GET'])
 def new():
     prod = app.session.query(Product).all()
-    f = app.session.query(Function).all()
-    return render_template("processes/newProc.html", products=prod, functions=f)
+    capabilities = app.session.query(Capability).all()
+    return render_template("processes/newProc.html", products=prod, capabilities=capabilities)
 
 @mod_process.route('/newProc/', methods=['POST'])
 def newP():
@@ -44,42 +43,21 @@ def newP():
     p = app.session.query(Product).filter_by(id=pId).first()
 
     tasks = data[0]['tasks']
-    cT, sT, idPageidDbC, idPageidDbS = addTask(tasks)
+    t_list, idPageidDb = addTask(tasks)
 
     c = data[0]['constraints']
     cons = []
     for element in c:
         id1 = int(element['t1'])
         id2 = int(element['t2'])
-
-        cType = element['type']
-        if (cType == 'complexcomplex'):
-            id1 = idPageidDbC.get(id1)
-            id2 = idPageidDbC.get(id2)
-            t1 = app.session.query(ComplexTask).filter_by(id=id1).first()
-            t2 = app.session.query(ComplexTask).filter_by(id=id2).first()
-            tmp = Constraint(tc1=t1, tc2=t2)
-        if(cType == 'complexsimple'):
-            id1 = idPageidDbC.get(id1)
-            id2 = idPageidDbS.get(id2)
-            t1 = app.session.query(ComplexTask).filter_by(id=id1).first()
-            t2 = app.session.query(SimpleTask).filter_by(id=id2).first()
-            tmp = Constraint(tc1=t1, ts2=t2)
-        if(cType == 'simplecomplex'):
-            id1 = idPageidDbS.get(id1)
-            id2 = idPageidDbC.get(id2)
-            t1 = app.session.query(SimpleTask).filter_by(id=id1).first()
-            t2 = app.session.query(ComplexTask).filter_by(id=id2).first()
-            tmp = Constraint(ts1=t1, tc2=t2)
-        if(cType == 'simplesimple'):
-            id1 = idPageidDbS.get(id1)
-            id2 = idPageidDbS.get(id2)
-            t1 = app.session.query(SimpleTask).filter_by(id=id1).first()
-            t2 = app.session.query(SimpleTask).filter_by(id=id2).first()
-            tmp = Constraint(ts1=t1, ts2=t2)
+        id1 = idPageidDb.get(id1)
+        id2 = idPageidDb.get(id2)
+        t1 = app.session.query(Task).filter_by(id=id1).first()
+        t2 = app.session.query(Task).filter_by(id=id2).first()
+        tmp = Constraint(t1=t1, t2=t2)
         cons.append(tmp)
 
-    process = Process(name=name, product=p, complex_tasks=cT, simple_tasks=sT, constraints=cons)
+    process = Process(name=name, product=p, tasks_list=t_list, constraints=cons)
 
     app.session.add(process)
     app.session.commit()
@@ -90,83 +68,113 @@ def newP():
 #AUXILIARY FUNCTIONS to define the complex tasks objects
 # and associate all to the process
 def addTask(tasks):
-    complexs = []
-    simples = []
-    idPageidDbC = {}
-    idPageidDbS = {}
+    list_of_task = []
+    idPageidDb = {}
     for i in range(len(tasks)):
         #take the values
         name = tasks[i]['name']
         ttype = tasks[i]['type']
+        tdescr = tasks[i]['description']
         idPage = tasks[i]['id']
         #If the task it's at the higher level, simply add it to the list
         if(ttype == 'complex'):
             complexType = tasks[i]['complexType']
-            c = ComplexTask(name=name, typeTask=complexType)
-            complexs.append(c)
-            # TODO find a better way
+            klass = globals()[complexType]
+            c = klass(name=name, description=tdescr)
+
             app.session.add(c)
             app.session.commit()
             idDb = c.id
-            idPageidDbC.update({idPage: idDb})
+            idPageidDb.update({idPage: idDb})
+            list_of_task.append(c)
 
             subT = tasks[i]['list']
             #then iterate on its subtasks, but iff it's a complex one
-            tmpC, tmpS, idPageidDbC, idPageidDbS = addTaskAux(c, subT, [], [], idPageidDbC, idPageidDbS)
-            complexs.extend(tmpC)
-            simples.extend(tmpS)
+            tmp_list, idPageidDb = addTaskAux(c, subT, [], idPageidDb)
+            list_of_task.extend(tmp_list)
+
         elif(ttype == 'simple'):
             mode = tasks[i]['modality']
-            f1id = tasks[i]['f1']
-            f2id = tasks[i]['f2']
-            f1 = app.session.query(Function).filter_by(id=f1id).first()
-            f2 = app.session.query(Function).filter_by(id=f2id).first()
-            s = SimpleTask(name=name, modality=mode, f1=f1, f2=f2)
-            simples.append(s)
+
+            capability1id = tasks[i]['f1']
+            capability2id = tasks[i]['f2']
+
+            capability1 = app.session.query(Capability).filter_by(id=capability1id).first()
+            capability2 = app.session.query(Capability).filter_by(id=capability2id).first()
+            
+            agent1id = tasks[i]['agent1']
+            agent2id = tasks[i]['agent2']
+            
+            agent1 = app.session.query(_Agent).filter_by(id=agent1id).first()
+            f1 = Function(f_type=capability1, agent=agent1)
+            functions = [f1]
+
+            if(capability2):
+                agent2 = app.session.query(_Agent).filter_by(id=agent2id).first()
+                f2 = Function(f_type=capability2, agent=agent2)
+                functions.append(f2)
+
+            s = SimpleTask(name=name, modality=mode, f=functions, description=tdescr)
+            list_of_task.append(s)
             app.session.add(s)
             app.session.commit()
             idDb = s.id
-            idPageidDbS.update({idPage: idDb})
+            idPageidDb.update({idPage: idDb})
     
-    return complexs, simples, idPageidDbC, idPageidDbS
-            
-def addTaskAux(parent, subT, resC, resS, idPageidDbC, idPageidDbS):
+    return list_of_task, idPageidDb
+
+def addTaskAux(parent, subT, res, idPageidDb):
     if(not subT):
-        return [], [], idPageidDbC, idPageidDbS
+        return [], idPageidDb
     for i in range(len(subT)):
         name = subT[i]['name']
         ttype = subT[i]['type']
+        tdescr = subT[i]['description']
         idPage = subT[i]['id']
         if(ttype == 'complex'):
             complexType = subT[i]['complexType']
-            c = ComplexTask(name=name, parent=parent, typeTask=complexType)
-            resC.append(c)
+            klass = globals()[complexType]
+            c = klass(name=name, parent=parent,  description=tdescr)
+            res.append(c)
             app.session.add(c)
             app.session.commit()
             idDb = c.id
-            idPageidDbC.update({idPage: idDb})
+            idPageidDb.update({idPage: idDb})
 
-            tmpC, tmpS, idPageidDbC, idPageidDbS = addTaskAux(c, subT[i]['list'], [], [], idPageidDbC, idPageidDbS)
-            if (tmpC):
-                resC.extend(tmpC)
+            tmp, idPageidDb = addTaskAux(c, subT[i]['list'], [], idPageidDb)
+            if (tmp):
+                res.extend(tmp)
 
-            if (tmpS):
-                resS.extend(tmpS)
         elif(ttype == 'simple'):
             mode = subT[i]['modality']
-            f1id = subT[i]['f1']
-            f2id = subT[i]['f2']
-            f1 = app.session.query(Function).filter_by(id=f1id).first()
-            f2 = app.session.query(Function).filter_by(id=f2id).first()
-            s = SimpleTask(name=name, modality=mode, parent=parent, f1=f1, f2=f2)
-            resS.append(s)
+
+            capability1id = subT[i]['f1']
+            capability2id = subT[i]['f2']
+
+            capability1 = app.session.query(Capability).filter_by(id=capability1id).first()
+            capability2 = app.session.query(Capability).filter_by(id=capability2id).first()
+            
+            agent1id = subT[i]['agent1']
+            agent2id = subT[i]['agent2']
+            
+            agent1 = app.session.query(_Agent).filter_by(id=agent1id).first()
+            f1 = Function(f_type=capability1, agent=agent1)
+            functions = [f1]
+
+            if(capability2):
+                agent2 = app.session.query(_Agent).filter_by(id=agent2id).first()
+                f2 = Function(f_type=capability2, agent=agent2)
+                functions.append(f2)
+
+            s = SimpleTask(name=name, modality=mode, parent=parent, f=functions, description=tdescr)
+            
+            res.append(s)
             app.session.add(s)
             app.session.commit()
             idDb = s.id
-            idPageidDbS.update({idPage: idDb})
+            idPageidDb.update({idPage: idDb})
 
-    return resC, resS, idPageidDbC, idPageidDbS
-
+    return res, idPageidDb
 
 #edit a process in the db. welcome page to view it and request (post) after the user data input
 @mod_process.route('/viewProc/<procId>', methods=['GET'])

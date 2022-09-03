@@ -33,72 +33,62 @@
 <div class="section-item">
     <div class="process">
         <h4>List of tasks:</h4>
-        {% for element in process.complex_tasks %}
-        <div class="row">
-            {% if element.parent is none %}
-            <div class='subtask' id=contain{{element.id}}>
-                <label hidden>{{element.id}}</label>
-                <label> Complex task name: {{element.name}}</label> &nbsp; &nbsp;
-                <label> {{element.typeTask}} task</label> &nbsp;
-
-            <!-- <button class='complexST'>Add a complex sub-task</button>
-            <button class='simpleST'>Add a simple sub-task</button></div> -->
+        {% for element in process.tasks_list %}
+            {% if element.typeTask!='SimpleTask' %}
+            <div class="row">
+                {% if element.parent_id is none %}
+                <div class='subtask' id=contain{{element.id}}>
+                    <label hidden>{{element.id}}</label>
+                    <label> Task name: {{element.name}}</label> &nbsp; &nbsp;
+                    <label> Task type: {{element.typeTask}}</label> &nbsp;
+                </div>
+                {% else %}
+                <script type="text/javascript">
+                    tdiv = $("#contain" + '{{element.parent_id}}')
+                    res = '';
+                    res += ("<div class='subtask' id=contain" + '{{element.id}}' + ">");
+                    res += ("<label class='ctaskid' hidden>" + '{{element.id}}' + "</label>");
+                    res += ("<label> Task name: " + '{{element.name}}' + "</label> &nbsp; &nbsp;");
+                    res += ("<label> Task type: " + '{{element.typeTask}}' + "</label> &nbsp;");
+                    res += ('</div>')
+                    tdiv.append(res);
+                </script>
+                {% endif %}
             </div>
             {% else %}
-            <script type="text/javascript">
-                tdiv = $("#contain" + '{{element.parent.id}}')
-                res = '';
-                res += ("<div class='subtask' id=contain" + '{{element.id}}' + ">");
-                res += ("<label class='ctaskid' hidden>" + '{{element.id}}' + "</label>");
-                res += ("<label> Complex task name: " + '{{element.name}}' + "</label> &nbsp; &nbsp;");
-                res += ("<label>" + '{{element.typeTask}}' + " task</label> &nbsp;");
-                res += ('</div>')
-                tdiv.append(res);
-            </script>
+            <div class="row" id="simpleAppend">
+                <script type="text/javascript">
+                    '{% if element.parent_id is none %}'
+                        tdiv = $("#simpleAppend")
+                    '{% else %}'
+                        tdiv = $("#contain" + '{{element.parent_id}}')
+                    '{% endif %}'
+                    res = '';
+                    res += ("<div class='subtask' id=Scontain" + '{{element.id}}' + ">");
+                    res += ("<label class='staskid' hidden>" + '{{element.id}}' + "</label>");
+                    res += ("<label> Task name: " + '{{element.name}}' + "</label> &nbsp;");
+                    res += ("<label> Task type: SimpleTask </label> &nbsp;");
+                    res += ("<label> Collaborative modality: " + '{{element.modality}}' + "</label>");
+                    res += ("<div><label> Function 1: " + '{{element.f[0].f_type}}' + "</label> &nbsp; &nbsp;");
+                    res += ("<label> Agent: " + '{{element.f[0].agent.name}}' + "</label></div>");
+                    '{% if element.f|length > 1 %}'
+                        res += ("<div><label> Function 2: " + '{{element.f[1].f_type}}' + "</label> &nbsp; &nbsp;");
+                        res += ("<label> Agent: " + '{{element.f[1].agent.name}}' + "</label></div>");
+                    '{% endif %}'
+                    res += ("</div>");
+    
+                    tdiv.append(res);
+                </script>
+            </div>
             {% endif %}
-        </div>
         {% endfor %}
-        {% for element in process.simple_tasks %}
-        <div class="row" id="simpleAppend">
-            <script type="text/javascript">
-                '{% if element.parent is none %}'
-                    tdiv = $("#simpleAppend")
-                '{% else %}'
-                    tdiv = $("#contain" + '{{element.parent.id}}')
-                '{% endif %}'
-                res = '';
-                res += ("<div class='subtask' id=Scontain" + '{{element.id}}' + ">");
-                res += ("<label class='staskid' hidden>" + '{{element.id}}' + "</label>");
-                res += ("<label> Simple task name: " + '{{element.name}}' + "</label> &nbsp;");
-                res += ("<label> Collaborative modality: " + '{{element.modality}}' + "</label>");
-                res += ("<div><label> Function 1: " + '{{element.f1.name}}' + "</label></div>");
-                '{% if element.f2 is not none %}'
-                    res += ("<div><label> Function 2: " + '{{element.f2.name}}' + "</label></div>");
-                '{% endif %}'
-                res += ("</div>");
-
-                tdiv.append(res);
-            </script>
-        </div>
-        {% endfor %}
+        
         <h4>Constraints:</h4>
         {% for element in process.constraints %}
         <div>
-            <label> Task:
-                {% if element.tc1 is not none %}
-                '{{element.tc1}}'
-                {% else %}
-                '{{element.ts1}}'
-                {% endif %}
-            </label>
+            <label> Task: '{{element.t1}}' </label>
             <label> BEFORE </label>
-            <label> Task:
-                {% if element.tc2 is not none %}
-                '{{element.tc2}}'
-                {% else %}
-                '{{element.ts2}}'
-                {% endif %}
-            </label>
+            <label> Task: '{{element.t2}}' </label>
         </div>
         {% endfor %}
     </div>

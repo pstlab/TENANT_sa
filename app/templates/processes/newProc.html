@@ -16,12 +16,14 @@
     <label>Process name</label>
     <input type="text" id="new-processname" />
   </div>
+
   <div>
     <label>It refers to the product</label>
     <select id="new-processproduct">
       <option selected disabled></option>
     </select>
   </div>
+
   <div class="section-item">
     <!-- <div class="process" id="result"></div> 
     per avere lo sfondo grigio dietro i task-->
@@ -36,9 +38,13 @@
       <label>Type of task: </label>
       <select id="new-Ctype">
         <option selected disabled></option>
-        <option>Conjunctive</option>
-        <option>Disjunctive</option>
+        <option value="ConjunctiveTask">Conjunctive</option>
+        <option value="DisjunctiveTask">Disjunctive</option>
       </select>
+      <div>
+        <label>Task description</label>
+        <input type="text" id="new-Ctaskdescr" />
+      </div>
     </div>
     <div class='containComplex'><button type="reset" id="doneComplex">Done</button></div>
 
@@ -50,34 +56,81 @@
       <select id="new-Staskmode">
         <option selected disabled></option>
         <option>Independent</option>
-        <option>Synchronous</option>
         <option>Simultaneous</option>
+        <option>Sequential</option>
         <option>Supportive</option>
       </select>
       </div>
+
+      <div>
+        <label>Task description</label>
+        <input type="text" id="new-Staskdescr" />
+      </div>
       
       <div>
-      <label class='mod'>Function 1: </label>
-      <select id='new-func1' class='mod'>
-      </select>
-      <label class='mod2'>Function 2: </label>
-      <select id='new-func2' class='mod2'>
-      </select>
+        <label class='mod'>Function 1: </label>
+        <select id='new-func1' class='mod'>
+        </select>
+        <label class='mod'>Agent 1: </label>
+        <select id='new-agent1' class='mod'>
+        </select>
+      </div>
+      <div>
+        <label class='mod2'>Function 2: </label>
+        <select id='new-func2' class='mod2'>
+        </select>
+        <label class='mod2'>Agent 2: </label>
+        <select id='new-agent2' class='mod2'>
+        </select>
       </div>
 
       <script type="text/javascript">
+        //Add all the possible functions in a simple task
         var divFunc1 = $("#new-func1");
         var divFunc2 = $("#new-func2");
 
         divFunc1.find("option:gt(0)").remove();
-        divFunc2.find("option:gt(0)").remove();
         divFunc1.append('<option selected disabled></option>');
+        divFunc2.find("option:gt(0)").remove();
         divFunc2.append('<option selected disabled></option>');
-        '{% for element in functions %}'
-        divFunc1.append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>&nbsp;');
-        divFunc2.append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+        '{% for element in capabilities %}'
+        divFunc1.append('<option value=' + "'{{element.id}}'" + '>' + '{{element.name}}' + '</option>&nbsp;');
+        divFunc2.append('<option value=' + "'{{element.id}}'" + '>' + '{{element.name}}' + '</option>');
         '{% endfor %}'
       </script>
+
+      <script type="text/javascript">
+        //Add all the possible agents for a function in a simple task
+        $("#new-func1").change(function () {
+          var divOp1 = $("#new-agent1");
+          divOp1.find("option").remove();
+          divOp1.append('<option selected disabled></option>');
+          '{% for element in capabilities %}'
+            if('{{element.id}}' == this.value) {
+              '{% for age in element.agent %}'
+                divOp1.append('<option value=' + "'{{age.id}}'" + '>' + '{{age.name}}' + '</option>&nbsp;');
+              '{% endfor %}'
+            //for ag in element.agent if a.typeRes
+            }
+          '{% endfor %}'
+        });
+
+        $("#new-func2").change(function () {
+          var divOp2 = $("#new-agent2");
+          divOp2.selectedIndex = "-1";
+          divOp2.find("option").remove();
+          divOp2.append('<option selected disabled></option>');
+          '{% for element in capabilities %}'
+            if('{{element.id}}' == this.value){
+              '{% for age in element.agent %}'
+                divOp2.append('<option value=' + "'{{age.id}}'" + '>' + '{{age.name}}' + '</option>&nbsp;');
+              '{% endfor %}'
+            //for ag in element.agent if a.typeRes
+            }
+          '{% endfor %}'
+        });
+      </script>
+
     </div>
     <div class="containSimple"><button id="doneSimple">Done</button></div>
 

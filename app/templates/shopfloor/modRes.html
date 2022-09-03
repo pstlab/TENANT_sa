@@ -22,11 +22,14 @@
         <input type="text" id="resourcedescription" value="{{resource.description}}" />
     </div>
     <div>
+        <label>Resource capacity</label>
+        <input type="number" id="resourcecapacity" value="{{resource.capacity}}" placeholder="{{resource.capacity}}" />
+    </div>
+    <div>
         <label>Resource type</label>
         <!-- <select id="resourcetype">
-            <option selected disabled value={{resource.typeRes}}>{{resource.typeRes}}</option>
         </select> -->
-        <label id="resourcetype" value={{resource.typeRes}}>{{resource.typeRes}}</label>
+        <label id="resourcetype">{{resource.typeRes}}</label>
     </div>
     <div>
         <label>Aggregate Resource (Optional)</label>
@@ -35,45 +38,45 @@
         </select>
     </div>
 
-    <div id='mod-functionForm'>
-        <label>Functions:</label>
-        <div class="subtask" id="resFunct">
-        {% for element in resource.functions %}
-            <div class='function'>
-                <label class='oldFunId' value={{element.id}}>{{element.name}}</label>
-                <button class='delFunction'>Remove</button>
+    <div id='mod-capabilityForm'>
+        <label>Capabilities:</label>
+        <div class="subtask" id="resCap">
+        {% for element in resource.capabilities %}
+            <div class='capability'>
+                <label class='oldCapId capabilityId' value="{{element.name}}">{{element.name}}</label>
+                <button class='delCapability'>Remove</button>
             </div>
         {% endfor %}
         </div>
         <div>
-        <button id="addNew">Add a new function</button>
-        <button id="selectOld">Select a pre-existing function</button>
+        <button id="addNew">Add a new capability</button>
+        <button id="selectOld">Select a pre-existing capability</button>
         </div>
 
-        <div class="new-function">
-            <label>Function name: </label>
-            <input type="text" id="functionname" />
+        <div class="new-capability">
+            <label>Capability name: </label>
+            <input type="text" id="capabilityname" />
           </div>
-          <div class="new-function">
+          <div class="new-capability">
             <button id="doneNew">Done</button>
           </div>
         
-          <div class="select-function">
-            <label>Function: </label>
-              <select id="selected-f">
+          <div class="select-capability">
+            <label>Capability: </label>
+              <select id="selected-cap">
               </select>
           </div>
-          <div class="select-function">
+          <div class="select-capability">
             <button id="doneSelect">Done</button>
           </div>
         
           <script type="text/javascript">
-            var divFunc = $("#selected-f");
-            divFunc.find("option:gt(0)").remove();
-            divFunc.append('<option selected disabled></option>');
-            '{% for element in functions %}'
-            '{% if element not in resource.functions %}'
-            divFunc.append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+            var divCap = $("#selected-cap");
+            divCap.find("option:gt(0)").remove();
+            divCap.append('<option selected disabled></option>');
+            '{% for element in capabilities %}'
+            '{% if element not in resource.capabilities %}'
+            divCap.append('<option value=' + "'{{element.name}}'" + '>' + '{{element.name}}' + '</option>');            
             '{% endif %}'
             '{% endfor %}'
           </script>
@@ -89,6 +92,7 @@
 {% block script %}
 <script>
     // $("#resourcetype").find("option:gt(0)").remove();
+    // $('#resourcetype').append('<option selected disabled value=' + "'{{resource.typeRes}}'" + '>' + "'{{resource.typeRes}}'" + '</option>');' 
     // '{% for element in types %}'
     //   $('#resourcetype').append('<option value=' + '{{element}}' + '>' + '{{element}}' + '</option>');
     // '{% endfor %}'
@@ -100,10 +104,10 @@
     $('#aggregate_resource').append('<option value=none> None </option>');
 
     if(AGENTS.includes('{{resource.typeRes}}')) {
-        $("#mod-functionForm").show();
+        $("#mod-capabilityForm").show();
     }
     else {
-        $("#mod-functionForm").hide();
+        $("#mod-capabilityForm").hide();
     }
 </script>
 {% endblock %}

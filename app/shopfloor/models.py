@@ -72,7 +72,8 @@ class Resource(Base):
         self.name = kwargs.get('name')
         self.typeRes = kwargs.get('typeRes')
         self.description = kwargs.get('description')
-        self.capacity = kwargs.get('capacity')
+        self.capacity = kwargs.get('capacity') or 1
+        self.aggregate_resource = kwargs.get('aggregate_resource')
 
 
     def __repr__(self):
@@ -91,6 +92,10 @@ class EnvironmentSensor(Resource):
         'polymorphic_identity':'EnvironmentSensor',
     }
 
+    def __init__(self, **kwargs):
+        # self.producingObservationOf = kwargs.get('producingObservationOf')
+        super(EnvironmentSensor, self).__init__(typeRes='EnvironmentSensor', **kwargs)
+
 #Define the model of a resource of type machine
 class Machine(Resource):
     __tablename__ = 'machine'
@@ -101,6 +106,10 @@ class Machine(Resource):
         'polymorphic_identity':'Machine',
     }
 
+    def __init__(self, **kwargs):
+        super(Machine, self).__init__(typeRes='Machine', **kwargs)
+
+
 #Define the model of a resource of type tool
 class Tool(Resource):
     __tablename__ = 'tool'
@@ -109,6 +118,9 @@ class Tool(Resource):
     __mapper_args__ = {
         'polymorphic_identity':'Tool',
     }
+
+    def __init__(self, **kwargs):
+        super(Tool, self).__init__(typeRes='Tool', **kwargs)
 
 #Define the model of a resource of type capacity resource
 class CapacityResource(Resource):
@@ -119,6 +131,21 @@ class CapacityResource(Resource):
         'polymorphic_identity':'CapacityResource',
     }
 
+    def __init__(self, **kwargs):
+        super(CapacityResource, self).__init__(typeRes='CapacityResource', **kwargs)
+
+#Define the model of a resource of type production object
+class ProductionObject(Resource):
+    __tablename__ = 'productionObjects'
+    id = Column(Integer, ForeignKey('resources.id', ondelete="CASCADE", onupdate="CASCADE"), primary_key=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity':'ProductionObject',
+    }
+
+    def __init__(self, **kwargs):
+        super(ProductionObject, self).__init__(typeRes='ProductionObject', **kwargs)
+
 
    ###     ######   ######     ########    ###    ########  ##       ########  ######  
   ## ##   ##    ## ##    ##       ##      ## ##   ##     ## ##       ##       ##    ## 
@@ -128,9 +155,9 @@ class CapacityResource(Resource):
 ##     ## ##    ## ##    ##       ##    ##     ## ##     ## ##       ##       ##    ## 
 ##     ##  ######   ######        ##    ##     ## ########  ######## ########  ######  
 
-association_table = Table('agent_functions', Base.metadata,
+association_table = Table('agent_capabilities', Base.metadata,
     Column('agent_id', Integer, ForeignKey('agent.id')),
-    Column('functions_id', Integer, ForeignKey('functions.id'))
+    Column('capabilities_id', Integer, ForeignKey('capabilities.id'))
 )
 
    ###     ######  ######## #### ##    ##  ######      ######## ##    ## ######## #### ######## #### ########  ######  
@@ -142,19 +169,31 @@ association_table = Table('agent_functions', Base.metadata,
 ##     ##  ######     ##    #### ##    ##  ######      ######## ##    ##    ##    ####    ##    #### ########  ######  
 
 # Define the model of a resource of type agent
-class Agent(Resource):
+class _Agent(Resource):
     __tablename__ = 'agent'
     id = Column(Integer, ForeignKey('resources.id'), primary_key=True)
 
     # ManyToMany
-    functions = relationship("Function", secondary=association_table, back_populates='agent')
+    capabilities = relationship("Capability", secondary=association_table, back_populates='agent')
 
     def __init__(self, **kwargs):
-        self.functions = kwargs.get('functions')
-        super(Agent, self).__init__(**kwargs)
+        self.capabilities = kwargs.get('capabilities')
+        super(_Agent, self).__init__(**kwargs)
 
 
-class Worker(Agent):
+class Worker(_Agent):
+    """
+    A class used to represent a human worker
+
+    Attributes
+    ----------
+    name : str ----- the name of the worker
+    description : str ----- a brief description (default None)
+    capacity : int ----- capacity of the agent (default 1)
+    aggregate resource : AggregateResource ----- the aggregate resource of which the agent is part of (default None)
+    capabilities : list of Capability ----- the list of capabilities the agent can perform
+    """
+
     __tablename__ = 'worker'
     id = Column(Integer, ForeignKey('agent.id'), primary_key=True)
 
@@ -162,7 +201,22 @@ class Worker(Agent):
         'polymorphic_identity':'Worker'
     }
 
-class Cobot(Agent):
+    def __init__(self, **kwargs):
+        super(Worker, self).__init__(typeRes='Worker', **kwargs)
+
+class Cobot(_Agent):
+    """
+    A class used to represent a collaborative robot
+
+    Attributes
+    ----------
+    name : str ----- the name of the worker
+    description : str ----- a brief description (default None)
+    capacity : int ----- capacity of the agent (default 1)
+    aggregate resource : AggregateResource ----- the aggregate resource of which the agent is part of (default None)
+    capabilities : list of Capability ----- the list of capabilities the agent can perform
+    """
+
     __tablename__ = 'cobot'
     id = Column(Integer, ForeignKey('agent.id'), primary_key=True)
 
@@ -170,29 +224,30 @@ class Cobot(Agent):
         'polymorphic_identity':'Cobot'
     }
 
+    def __init__(self, **kwargs):
+        super(Cobot, self).__init__(typeRes='Cobot', **kwargs)
 
-######## ##     ## ##    ##  ######  ######## ####  #######  ##    ##  ######  
-##       ##     ## ###   ## ##    ##    ##     ##  ##     ## ###   ## ##    ## 
-##       ##     ## ####  ## ##          ##     ##  ##     ## ####  ## ##       
-######   ##     ## ## ## ## ##          ##     ##  ##     ## ## ## ##  ######  
-##       ##     ## ##  #### ##          ##     ##  ##     ## ##  ####       ## 
-##       ##     ## ##   ### ##    ##    ##     ##  ##     ## ##   ### ##    ## 
-##        #######  ##    ##  ######     ##    ####  #######  ##    ##  ######  
 
-class Function(Base):
-    __tablename__ = 'functions'
+ ######     ###    ########     ###    ########  #### ##       #### ######## #### ########  ######  
+##    ##   ## ##   ##     ##   ## ##   ##     ##  ##  ##        ##     ##     ##  ##       ##    ## 
+##        ##   ##  ##     ##  ##   ##  ##     ##  ##  ##        ##     ##     ##  ##       ##       
+##       ##     ## ########  ##     ## ########   ##  ##        ##     ##     ##  ######    ######  
+##       ######### ##        ######### ##     ##  ##  ##        ##     ##     ##  ##             ## 
+##    ## ##     ## ##        ##     ## ##     ##  ##  ##        ##     ##     ##  ##       ##    ## 
+ ######  ##     ## ##        ##     ## ########  #### ######## ####    ##    #### ########  ######  
+
+
+class Capability(Base):
+    __tablename__ = 'capabilities'
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(128),  nullable=False, unique=True)
     
     # ManyToMany
-    agent = relationship("Agent", secondary=association_table, back_populates='functions')
-    # OneToMany
-    simple_tasks1 = relationship("SimpleTask", back_populates='f1', foreign_keys='SimpleTask.f1_id')
-    simple_tasks2 = relationship("SimpleTask", back_populates='f2', foreign_keys='SimpleTask.f2_id')
+    agent = relationship("_Agent", secondary=association_table, back_populates='capabilities')
 
     def __repr__(self):
-        return self.name
+        return '< Capability %r>' %(self.name)
 
     def __str__(self):
         return self.name
