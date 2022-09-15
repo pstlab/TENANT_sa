@@ -104,14 +104,19 @@ def addTask(tasks):
             
             agent1id = tasks[i]['agent1']
             agent2id = tasks[i]['agent2']
+
+            product1id = tasks[i]['product1']
+            product2id = tasks[i]['product2']
             
             agent1 = app.session.query(_Agent).filter_by(id=agent1id).first()
-            f1 = Function(f_type=capability1, agent=agent1)
+            product1 = app.session.query(Product).filter_by(id=product1id).first()
+            f1 = Function(f_type=capability1, agent=agent1, target_product=product1)
             functions = [f1]
 
             if(capability2):
                 agent2 = app.session.query(_Agent).filter_by(id=agent2id).first()
-                f2 = Function(f_type=capability2, agent=agent2)
+                product2 = app.session.query(Product).filter_by(id=product2id).first()
+                f2 = Function(f_type=capability2, agent=agent2, target_product=product2)
                 functions.append(f2)
 
             s = SimpleTask(name=name, modality=mode, f=functions, description=tdescr)
@@ -156,14 +161,19 @@ def addTaskAux(parent, subT, res, idPageidDb):
             
             agent1id = subT[i]['agent1']
             agent2id = subT[i]['agent2']
+
+            product1id = subT[i]['product1']
+            product2id = subT[i]['product2']
             
             agent1 = app.session.query(_Agent).filter_by(id=agent1id).first()
-            f1 = Function(f_type=capability1, agent=agent1)
+            product1 = app.session.query(Product).filter_by(id=product1id).first()
+            f1 = Function(f_type=capability1, agent=agent1, target_product=product1)
             functions = [f1]
 
             if(capability2):
                 agent2 = app.session.query(_Agent).filter_by(id=agent2id).first()
-                f2 = Function(f_type=capability2, agent=agent2)
+                product2 = app.session.query(Product).filter_by(id=product2id).first()
+                f2 = Function(f_type=capability2, agent=agent2, target_product=product2)
                 functions.append(f2)
 
             s = SimpleTask(name=name, modality=mode, parent=parent, f=functions, description=tdescr)

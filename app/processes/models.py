@@ -194,6 +194,7 @@ class Function(Base):
     ----------
     f_type : Capability ----- the type of function (basic operation)
     agent : Agent ----- the agent that has to perform the function
+    target_product : Product ----- the product on which the function has effects
     """
 
     __tablename__ = 'functions'
@@ -208,6 +209,11 @@ class Function(Base):
     # ManyToOne (TwoToOne)
     st_id = Column(Integer, ForeignKey('simple_tasks.id'))
     st = relationship("SimpleTask", back_populates='f')
+    #ManyToOne
+    target_product_id = Column(Integer, ForeignKey('products.id'))
+    target_product = relationship("Product", back_populates="functions")
+
+
 
     def __str__(self):
         return self.name

@@ -74,6 +74,9 @@
         <label class='mod'>Agent 1: </label>
         <select id='new-agent1' class='mod'>
         </select>
+        <label class='mod'>Target product 1: </label>
+        <select id='new-product1' class='mod'>
+        </select>
       </div>
       <div>
         <label class='mod2'>Function 2: </label>
@@ -81,6 +84,9 @@
         </select>
         <label class='mod2'>Agent 2: </label>
         <select id='new-agent2' class='mod2'>
+        </select>
+        <label class='mod2'>Target product 2: </label>
+        <select id='new-product2' class='mod2'>
         </select>
       </div>
 
@@ -167,6 +173,8 @@
   $("#new-processproduct").find("option:gt(0)").remove();
   '{% for element in products %}'
   $('#new-processproduct').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+  $('#new-product1').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+  $('#new-product2').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
   '{% endfor %}'
 </script>
 {% endblock %}
