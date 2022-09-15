@@ -4,7 +4,7 @@ from .models import *
 from app import app
 
 from app.products.models import Product
-from app.shopfloor.models import _Agent, Capability
+from app.shopfloor.models import _Agent, Capability, Resource
 
 # Define the blueprint: 'process', set its url prefix: app.url/process
 mod_process = Blueprint('process', __name__, url_prefix='/process')
@@ -32,7 +32,8 @@ def remove():
 def new():
     prod = app.session.query(Product).all()
     capabilities = app.session.query(Capability).all()
-    return render_template("processes/newProc.html", products=prod, capabilities=capabilities)
+    resources = app.session.query(Resource).filter(Resource.typeRes!="Cobot", Resource.typeRes!="Worker").all()
+    return render_template("processes/newProc.html", products=prod, capabilities=capabilities, resources=resources)
 
 @mod_process.route('/newProc/', methods=['POST'])
 def newP():
@@ -107,16 +108,27 @@ def addTask(tasks):
 
             product1id = tasks[i]['product1']
             product2id = tasks[i]['product2']
+
+            resources1id = tasks[i]['resources1']
+            resources2id = tasks[i]['resources2']
             
             agent1 = app.session.query(_Agent).filter_by(id=agent1id).first()
             product1 = app.session.query(Product).filter_by(id=product1id).first()
-            f1 = Function(f_type=capability1, agent=agent1, target_product=product1)
+            resources1 = []
+            for r_id in resources1id:
+                r = app.session.query(Resource).filter_by(id=r_id).first()
+                resources1.append(r)
+            f1 = Function(f_type=capability1, agent=agent1, target_product=product1, required_resources=resources1)
             functions = [f1]
 
             if(capability2):
                 agent2 = app.session.query(_Agent).filter_by(id=agent2id).first()
                 product2 = app.session.query(Product).filter_by(id=product2id).first()
-                f2 = Function(f_type=capability2, agent=agent2, target_product=product2)
+                resources2 = []
+                for r_id in resources2id:
+                    r = app.session.query(Resource).filter_by(id=r_id).first()
+                    resources2.append(r)
+                f2 = Function(f_type=capability2, agent=agent2, target_product=product2, required_resources=resources2)
                 functions.append(f2)
 
             s = SimpleTask(name=name, modality=mode, f=functions, description=tdescr)
@@ -164,16 +176,27 @@ def addTaskAux(parent, subT, res, idPageidDb):
 
             product1id = subT[i]['product1']
             product2id = subT[i]['product2']
+
+            resources1id = subT[i]['resources1']
+            resources2id = subT[i]['resources2']
             
             agent1 = app.session.query(_Agent).filter_by(id=agent1id).first()
             product1 = app.session.query(Product).filter_by(id=product1id).first()
-            f1 = Function(f_type=capability1, agent=agent1, target_product=product1)
+            resources1 = []
+            for r_id in resources1id:
+                r = app.session.query(Resource).filter_by(id=r_id).first()
+                resources1.append(r)
+            f1 = Function(f_type=capability1, agent=agent1, target_product=product1, required_resources=resources1)
             functions = [f1]
 
             if(capability2):
                 agent2 = app.session.query(_Agent).filter_by(id=agent2id).first()
                 product2 = app.session.query(Product).filter_by(id=product2id).first()
-                f2 = Function(f_type=capability2, agent=agent2, target_product=product2)
+                resources2 = []
+                for r_id in resources2id:
+                    r = app.session.query(Resource).filter_by(id=r_id).first()
+                    resources2.append(r)
+                f2 = Function(f_type=capability2, agent=agent2, target_product=product2, required_resources=resources2)
                 functions.append(f2)
 
             s = SimpleTask(name=name, modality=mode, parent=parent, f=functions, description=tdescr)

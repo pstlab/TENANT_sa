@@ -185,6 +185,10 @@ class SimpleTask(Task):
 ##       ##     ## ##   ### ##    ##    ##     ##  ##     ## ##   ### ##    ## 
 ##        #######  ##    ##  ######     ##    ####  #######  ##    ##  ######  
 
+association_table = Table('functions_resources', Base.metadata,
+    Column('resources_id', Integer, ForeignKey('resources.id')),
+    Column('functions_id', Integer, ForeignKey('functions.id'))
+)
 
 class Function(Base):
     """
@@ -195,6 +199,7 @@ class Function(Base):
     f_type : Capability ----- the type of function (basic operation)
     agent : Agent ----- the agent that has to perform the function
     target_product : Product ----- the product on which the function has effects
+    required_resources: list of Resource ----- the resources needed to perform the function
     """
 
     __tablename__ = 'functions'
@@ -212,6 +217,8 @@ class Function(Base):
     #ManyToOne
     target_product_id = Column(Integer, ForeignKey('products.id'))
     target_product = relationship("Product", back_populates="functions")
+    #ManyToMany
+    required_resources = relationship("Resource", secondary=association_table)
 
 
 

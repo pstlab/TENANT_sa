@@ -20,8 +20,8 @@ $(document).ready(function () {
     };
 
     var SimpleTask = class SimpleTask {
-        constructor(id, name, modality, f1, agent1, product1,
-             f2, agent2, product2, description) {
+        constructor(id, name, modality, f1, agent1, product1, resources1,
+             f2, agent2, product2, resources2, description) {
             this.id = id;
             this.name = name;
             this.modality = modality;
@@ -29,9 +29,11 @@ $(document).ready(function () {
             this.f1 = f1;
             this.agent1 = agent1;
             this.product1 = product1;
+            this.resources1 = resources1;
             this.f2 = f2;
             this.agent2 = agent2;
             this.product2 = product2;
+            this.resources2 = resources2;
             this.description = description;
         }
 
@@ -45,11 +47,15 @@ $(document).ready(function () {
         }
     };
 
+    $('#new-res1').multiSelect();
+    $('#new-res2').multiSelect();
+
     $(".containComplex").hide();
     $(".containSimple").hide();
     $(".constraintForm").hide();
     $(".mod").hide();
     $(".mod2").hide();
+    $(".ms-container").hide();
 
     /*******************************************
      *  Show the form for each complex task     
@@ -100,11 +106,14 @@ $(document).ready(function () {
     $("#new-Staskmode").change(function () {
         mod = this.value;
         $(".mod").show();
+        $("#ms-new-res1").show();
         if (mod !== IND) {
             $(".mod2").show();
+            $("#ms-new-res2").show();
         }
         else {
             $(".mod2").hide();
+            $("#ms-new-res2").hide();
         }
     });
 
@@ -147,16 +156,22 @@ $(document).ready(function () {
             var f1 = document.getElementById("new-func1").value;
             var agent1 = document.getElementById("new-agent1").value;
             var product1 = document.getElementById("new-product1").value;
+            var resources1 = document.getElementById("new-res1").selectedOptions;
+                resources1 = Array.from(resources1, (x)=>(x.value));
             var f2 = document.getElementById("new-func2").value;
             var agent2 = document.getElementById("new-agent2").value;
             var product2 = document.getElementById("new-product2").value;
+            var resources2 = document.getElementById("new-res2").selectedOptions;
+                resources2 = Array.from(resources1, (x)=>(x.value));
             // Needed only to show the name of the task on the page
             var f1name = $("#new-func1 option:selected").text();
             var agent1name = $("#new-agent1 option:selected").text();
             var product1name = $("#new-product1 option:selected").text();
+            var resources1name = $("#new-res1 option:selected").text();
             var f2name = $("#new-func2 option:selected").text();
             var agent2name = $("#new-agent2 option:selected").text();
             var product2name = $("#new-product2 option:selected").text();
+            var resources2name = $("#new-res2 option:selected").text();
             var description = document.getElementById("new-Staskdescr").value;
         }
 
@@ -178,13 +193,15 @@ $(document).ready(function () {
             document.getElementById("new-product2").value = '';
             document.getElementById("new-Staskdescr").value = '';
             $(".mod").hide();
+            $("#ms-new-res1").hide();
             $(".mod2").hide();
+            $("#ms-new-res2").hide();
 
             //build the task object
             if (typeOf === complex)
                 var tmp = new ComplexTask(generalID, name, ctype, [], description);
             if (typeOf === simple)
-                var tmp = new SimpleTask(generalID, name, mod, f1, agent1, product1, f2, agent2, product2, description);
+                var tmp = new SimpleTask(generalID, name, mod, f1, agent1, product1, resources1, f2, agent2, product2, resources2, description);
 
             //higher level task
             if (specialID === 0) {
@@ -215,10 +232,12 @@ $(document).ready(function () {
                 res += ("<div><label>  Function1: " + f1name + '</label> &nbsp; &nbsp;');
                 res += ("<label>  Agent1: " + agent1name + '</label> &nbsp; &nbsp;');
                 res += ("<label> Target Product: " + product1name + '</label></div>');
+                res += ("<div><label>  Required Resources: " + resources1name + '</label></div>');
                 if (f2 !== '') {
                     res += ("<div><label>  Function2: " + f2name + '</label> &nbsp; &nbsp;');
                     res += ("<label>  Agent2: " + agent2name + '</label> &nbsp; &nbsp;');
                     res += ("<label> Target Product: " + product2name + '</label></div>');
+                    res += ("<div><label>  Required Resources: " + resources2name + '</label></div>');
 
                 }
                 res += ("</div>");
