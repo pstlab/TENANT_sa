@@ -6,7 +6,7 @@ from app.database import Base
 
 TYPES_OF_RESOURCES = ('EnvironmentSensor', 'Machine', 'Tool', 'CapacityResource',
                       'Worker', 'Cobot',
-                      'ProductionObject', 'WorkPiece') #Those two are probably products
+                      'ProductionObject')
 
 
 

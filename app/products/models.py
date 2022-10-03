@@ -18,6 +18,8 @@ class Product(Base):
     demands = relationship("Demand", back_populates='product')
     # OneToMany
     processes = relationship("Process", back_populates='product')
+    # OneToMany
+    functions = relationship("Function", back_populates='target_product')
 
     def __repr__(self):
         return '<Product %r>' % (self.name)

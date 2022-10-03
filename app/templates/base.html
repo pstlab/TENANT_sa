@@ -3,6 +3,7 @@
 
   <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='multi-select.css') }}" type="text/css" media="screen" />
 
     <title>{% block title %} {% endblock %}</title>
     <meta charset="UTF-8">
@@ -10,6 +11,7 @@
 
     <!-- include jQuery library -->
     <script src="{{ url_for('static', filename='lib/jquery-3.4.1.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/jquery.multi-select.js') }}" type="text/javascript"></script>
 
     <!-- custom library -->
     {% block lib %} {% endblock %}

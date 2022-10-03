@@ -74,6 +74,15 @@
         <label class='mod'>Agent 1: </label>
         <select id='new-agent1' class='mod'>
         </select>
+        <label class='mod'>Target product 1: </label>
+        <select id='new-product1' class='mod'>
+          <option selected disabled></option>
+        </select>
+      </div>
+      <div>
+        <label class='mod'>&nbsp;&nbsp;&nbsp;&nbsp;Choose the required resources: </label>
+        <select multiple id='new-res1' class='mod'>
+        </select>
       </div>
       <div>
         <label class='mod2'>Function 2: </label>
@@ -81,6 +90,15 @@
         </select>
         <label class='mod2'>Agent 2: </label>
         <select id='new-agent2' class='mod2'>
+        </select>
+        <label class='mod2'>Target product 2: </label>
+        <select id='new-product2' class='mod2'>
+          <option selected disabled></option>
+        </select>
+      </div>
+      <div>
+        <label class='mod2'>&nbsp;&nbsp;&nbsp;&nbsp;Choose the required resources: </label>
+        <select multiple id='new-res2' class='mod2'>
         </select>
       </div>
 
@@ -165,8 +183,19 @@
 {% block script %}
 <script>
   $("#new-processproduct").find("option:gt(0)").remove();
+  $("#new-product1").find("option:gt(0)").remove();
+  $("#new-product2").find("option:gt(0)").remove();
   '{% for element in products %}'
   $('#new-processproduct').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+  $('#new-product1').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+  $('#new-product2').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}}' + '</option>');
+  '{% endfor %}'
+
+  $("#new-res1").find("option:gt(0)").remove();
+  $("#new-res2").find("option:gt(0)").remove();
+  '{% for element in resources %}'
+  $('#new-res1').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}} ' + '</option>');
+  $('#new-res2').append('<option value=' + '{{element.id}}' + '>' + '{{element.name}} ' + '</option>');
   '{% endfor %}'
 </script>
 {% endblock %}
